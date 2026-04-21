@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Roboto_Slab } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Roboto_Slab, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Header from "@/components/shared/header";
+import Footer from "@/components/shared/footer";
+import { UnderConstructionPopup } from "@/components/temp/underConstruction";
+import { CartProvider } from "@/lib/context/cart-context";
+import CartDrawer from "@/components/cart/cart-drawer";
 
-const robotoSlabHeading = Roboto_Slab({subsets:['latin'],variable:'--font-heading'});
+const robotoSlabHeading = Roboto_Slab({ subsets: ['latin'], variable: '--font-heading' });
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,6 +21,12 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+const fontHeading = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-heading",
+})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -30,9 +41,19 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable, robotoSlabHeading.variable)}
+      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable, robotoSlabHeading.variable, fontHeading.variable)}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col" cz-shortcut-listen="true">
+        { /*Deze under construction popup kan ik later weer weghalen ;)*/}
+        <CartProvider>
+          <UnderConstructionPopup />
+
+          <Header />
+          {children}
+          <Footer /> 
+          <CartDrawer />
+        </CartProvider>
+      </body>
     </html>
   );
 }
