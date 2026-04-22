@@ -34,7 +34,7 @@ const Footer: FC = () => {
             <Link href="/" className="flex items-center gap-3 mb-6">
               <div className="relative h-12 w-12 rounded overflow-hidden">
                 <Image
-                  src="/images/banner.png"
+                  src="/images/logo.jpg"
                   alt="By Lé Handcrafted Art"
                   fill
                   className="object-cover"
@@ -42,7 +42,7 @@ const Footer: FC = () => {
               </div>
               <div>
                 <span className="text-xl font-medium text-foreground block">
-                  By Lé
+                  Art by Lé
                 </span>
                 <span className="text-xs font-sans tracking-wide text-muted-foreground">
                   Handcrafted Art

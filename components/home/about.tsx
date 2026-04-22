@@ -5,7 +5,7 @@ import { FC } from "react"
 const stats = [
   { value: "20+", label: "Original Pieces" },
   { value: "5", label: "Months Experience" },
-  { value: "2", label: "Satisfied Customers" },
+  { value: "3", label: "Satisfied Customers" },
   { value: "100%", label: "Handcrafted" },
 ]
 

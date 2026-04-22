@@ -38,7 +38,7 @@ import { ReactFormState } from "react-dom/client"
             <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
               <Check className="h-5 w-5 text-secondary-foreground" />
             </div>
-            <span>Thank you for subscribing!</span>
+            <span>Thank you for your interest in my store!</span>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">

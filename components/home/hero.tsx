@@ -24,7 +24,7 @@ const Hero: FC = () => {
           Handcrafted with passion
         </p>
         
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-foreground mb-6 text-balance">
+        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-oker mb-6 text-balance">
           Art That Speaks <br />
           <span className="font-medium italic">to Your Soul</span>
         </h1>

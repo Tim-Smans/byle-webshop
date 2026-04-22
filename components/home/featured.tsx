@@ -87,7 +87,7 @@ const FeaturedPieces: FC = () => {
           <p className="text-sm font-sans font-medium tracking-[0.3em] uppercase text-secondary mb-4">
             Curated Selection
           </p>
-          <h2 className="text-4xl sm:text-5xl font-light tracking-tight text-foreground mb-4">
+          <h2 className="text-oker text-4xl sm:text-5xl font-light tracking-tight text-foreground mb-4">
             Featured <span className="italic font-medium">Pieces</span>
           </h2>
           <p className="max-w-2xl mx-auto text-muted-foreground text-lg">

@@ -16,7 +16,7 @@
   --secondary-foreground: oklch(0.98 0.01 75);
   --muted: oklch(0.90 0.02 75);
   --muted-foreground: oklch(0.45 0.02 75);
-  --accent: oklch(0.60 0.16 35);
+  --accent: #ac4e16;
   --accent-foreground: oklch(0.98 0.01 75);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.98 0.01 75);
@@ -103,4 +103,8 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted-foreground);
+}
+
+.text-oker{
+  color: #ac4e16;
 }

@@ -30,8 +30,8 @@ const Header: FC = () => {
               className="object-cover rounded"
             />
           </div>
-          <span className="hidden sm:block text-xl font-heading tracking-wide text-foreground">
-            By Lé
+          <span className="hidden text-oker sm:block text-xl font-heading tracking-wide text-foreground">
+            Art by Lé
           </span>
         </Link>
 
