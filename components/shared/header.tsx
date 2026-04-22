@@ -6,23 +6,26 @@ import { FC, useState } from "react"
 import { Menu, X, ShoppingBag, Search, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/lib/context/cart-context"
+import { useAuth } from "@/lib/context/auth-context"
+import UserMenu from "../auth/user-menu"
 
 const navigation = [
-    { name: "Shop", href: "#shop" },
-    { name: "Collections", href: "#collections" },
-    { name: "About", href: "#about" },
-    { name: "Contact", href: "#contact" },
+  { name: "Shop", href: "#shop" },
+  { name: "Collections", href: "#collections" },
+  { name: "About", href: "#about" },
+  { name: "Contact", href: "#contact" },
 ]
 
 const Header: FC = () => {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(true)
-    const { cart, openCart } = useCart()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(true)
+  const { cart, openCart } = useCart()
+  const { user, openAuth } = useAuth()
 
-    return(
-            <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
         <Link href="/" className="flex items-center gap-3">
-          <div className="relative h-10 w-10">
+          <div className="relative h-15 w-15">
             <Image
               src="/images/logo.jpg"
               alt="By Lé Handcrafted Art"
@@ -54,13 +57,10 @@ const Header: FC = () => {
             <Search className="h-5 w-5" />
             <span className="sr-only">Search</span>
           </Button>
-          <Button variant="ghost" size="icon" className="hidden sm:flex">
-            <User className="h-5 w-5" />
-            <span className="sr-only">Account</span>
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="icon" 
+          <UserMenu/>
+          <Button
+            variant="ghost"
+            size="icon"
             className="relative"
             onClick={openCart}
           >
@@ -104,11 +104,38 @@ const Header: FC = () => {
                 {item.name}
               </Link>
             ))}
+
+            <div className="pt-4 mt-4 border-t border-border">
+              {user ? (
+                <div className="flex items-center gap-3 py-3">
+                  <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center">
+                    <span className="text-sm font-medium text-primary-foreground">
+                      {user.firstName[0]}{user.lastName[0]}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="font-medium text-foreground">{user.firstName} {user.lastName}</p>
+                    <p className="text-sm text-muted-foreground">{user.email}</p>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false)
+                    openAuth("login")
+                  }}
+                  className="flex items-center gap-3 py-3 text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <User className="h-5 w-5" />
+                  Sign In / Register
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
     </header>
-    )
+  )
 }
 
 export default Header

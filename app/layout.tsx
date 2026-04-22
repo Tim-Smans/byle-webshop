@@ -7,6 +7,8 @@ import Footer from "@/components/shared/footer";
 import { UnderConstructionPopup } from "@/components/temp/underConstruction";
 import { CartProvider } from "@/lib/context/cart-context";
 import CartDrawer from "@/components/cart/cart-drawer";
+import { AuthProvider } from "@/lib/context/auth-context";
+import AuthModal from "@/components/auth/auth-modal";
 
 const robotoSlabHeading = Roboto_Slab({ subsets: ['latin'], variable: '--font-heading' });
 
@@ -46,12 +48,15 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col" cz-shortcut-listen="true">
         { /*Deze under construction popup kan ik later weer weghalen ;)*/}
         <CartProvider>
-          <UnderConstructionPopup />
+          <AuthProvider>
+            <UnderConstructionPopup />
 
-          <Header />
-          {children}
-          <Footer /> 
-          <CartDrawer />
+            <Header />
+            {children}
+            <Footer />
+            <CartDrawer />
+            <AuthModal />
+          </AuthProvider>
         </CartProvider>
       </body>
     </html>

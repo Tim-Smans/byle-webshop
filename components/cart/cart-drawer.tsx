@@ -7,7 +7,7 @@ import { useCart } from "@/lib/context/cart-context"
 import { FC } from "react"
 
 const CartDrawer: FC = () => {
-    const { cart, isOpen, closeCart, removeItem, updateQuantity, clearCart, isLoading } = useCart()
+    const { cart, isOpen, closeCart, removeItem, clearCart, isLoading } = useCart()
 
     if (!isOpen) return null
     return (
@@ -96,29 +96,6 @@ const CartDrawer: FC = () => {
                                         </div>
 
                                         <div className="mt-auto flex items-center justify-between">
-                                            {/* Quantity Controls */}
-                                            <div className="flex items-center gap-2">
-                                                <Button
-                                                    variant="outline"
-                                                    size="icon"
-                                                    className="h-7 w-7"
-                                                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                >
-                                                    <Minus className="h-3 w-3" />
-                                                </Button>
-                                                <span className="w-8 text-center font-sans text-sm">
-                                                    {item.quantity}
-                                                </span>
-                                                <Button
-                                                    variant="outline"
-                                                    size="icon"
-                                                    className="h-7 w-7"
-                                                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                >
-                                                    <Plus className="h-3 w-3" />
-                                                </Button>
-                                            </div>
-
                                             {/* Price */}
                                             <p className="font-medium">
                                                 ${(item.product.price * item.quantity).toLocaleString()}

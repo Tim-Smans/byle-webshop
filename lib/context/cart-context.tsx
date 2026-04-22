@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react"
 import type { Cart, Product } from "../types"
-import { cartService } from "../cart-service"
+import { cartService } from "../services/cart-service"
 
 interface CartContextValue {
   cart: Cart

@@ -9,7 +9,7 @@ const Hero: FC = () => {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/banner.jpg"
+          src="/images/banner_new.jpg"
           alt="Textured art background"
           fill
           className="object-cover"
@@ -25,12 +25,12 @@ const Hero: FC = () => {
         </p>
         
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-oker mb-6 text-balance">
-          Art That Speaks <br />
-          <span className="font-medium italic">to Your Soul</span>
+          Art created from feeling <br />
+          <span className="font-medium italic">to be felt in silence</span>
         </h1>
         
         <p className="mx-auto max-w-2xl text-lg sm:text-xl text-muted-foreground leading-relaxed mb-10">
-          Handmade mixed media art created with Powertex and painting techniques. Each piece is carefully built in layers, resulting in unique, textured artworks with a soft and natural feel.
+          Here you’ll find handmade mixed media art, created using Powertex and intuitive acrylic painting techniques. Each piece is carefully built in layers, resulting in unique, textured artworks with a soft, natural feel.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

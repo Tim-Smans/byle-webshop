@@ -1,4 +1,4 @@
-import type { Cart, CartItem, Product, ICartService } from "./types"
+import type { Cart, CartItem, Product, ICartService } from "../types"
 
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`

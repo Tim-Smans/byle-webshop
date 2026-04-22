@@ -5,12 +5,12 @@
 
 :root {
   --background: oklch(0.95 0.015 75);
-  --foreground: oklch(0.15 0.02 75);
+  --foreground: #6b4426;
   --card: oklch(0.98 0.01 75);
   --card-foreground: oklch(0.15 0.02 75);
   --popover: oklch(0.98 0.01 75);
   --popover-foreground: oklch(0.15 0.02 75);
-  --primary: oklch(0.25 0.02 75);
+  --primary: #6b4426;
   --primary-foreground: oklch(0.95 0.015 75);
   --secondary: oklch(0.55 0.12 180);
   --secondary-foreground: oklch(0.98 0.01 75);
@@ -106,5 +106,5 @@
 }
 
 .text-oker{
-  color: #ac4e16;
+  color: #cc4b1b;
 }
