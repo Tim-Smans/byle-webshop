@@ -10,7 +10,7 @@ const stats = [
 ]
 
 const About: FC = () => {
-     return (
+  return (
     <section id="about" className="py-24 bg-muted/30">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -18,7 +18,7 @@ const About: FC = () => {
           <div className="relative">
             <div className="relative aspect-4/5 rounded-lg overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=800&h=1000&fit=crop"
+                src="/Images/about_me_image.jpg"
                 alt="Artist at work"
                 fill
                 className="object-cover"
@@ -34,25 +34,28 @@ const About: FC = () => {
             <p className="text-sm font-sans font-medium tracking-[0.3em] uppercase text-secondary mb-4">
               My Story
             </p>
-            <h2 className="text-4xl sm:text-5xl font-light tracking-tight text-foreground mb-6">
+            <h2 className="text-4xl text-oker sm:text-5xl font-light tracking-tight text-foreground mb-6">
               Art Born From <br />
               <span className="italic font-medium">Passion & Heart</span>
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed mb-8">
               <p>
-                By Lé Handcrafted Art began in a small studio filled with the scent of 
-                oil paints and the quiet rhythm of creation. Every piece we create is 
-                an invitation to pause, feel, and connect.
+                Hi I’m Lé
+                The creator behind Art by Lé. I work intuitively, letting shapes, colors, and textures guide me. 
+                My pieces often evolve slowly over several days, layer by layer, until they feel balanced and complete.
+                Creating is more than making art for me, it’s a moment of calm,
+                 a way to gently disconnect from daily life. As a stay-at-home mom, 
+                 living with chronic pain, these creative moments are deeply meaningful and help me reconnect with both peace and inner strength.
               </p>
               <p>
-                We believe that art should evoke emotion, tell stories, and transform 
-                the spaces it inhabits. Each brushstroke is intentional, each texture 
-                meaningful—crafted with the same care I&apos;d give to a piece destined 
-                for our own walls.
+                I’m naturally drawn to soft, earthy tones with subtle metallic accents. But sometimes, 
+                I simply follow my feeling and allow something more expressive or unexpected to emerge, and that spontaneity is part of what makes each piece unique.
+                Every artwork is made with time, care, and attention. No two pieces are ever the same.
+                Thank you for visiting my small creative world
               </p>
             </div>
 
-            <Button 
+            <Button
               size="lg"
               className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-sans font-medium tracking-wide mb-12"
             >

@@ -3,26 +3,26 @@
 import Link from "next/link"
 import Image from "next/image"
 import { FC, useState } from "react"
-import { Menu, X, ShoppingBag, Search, User } from "lucide-react"
+import { Menu, X, Search, User, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useCart } from "@/lib/context/cart-context"
+import { useFavorites } from "@/lib/context/favorites-context"
 
 const navigation = [
-    { name: "Shop", href: "#shop" },
-    { name: "Collections", href: "#collections" },
-    { name: "About", href: "#about" },
-    { name: "Contact", href: "#contact" },
+  { name: "Shop", href: "#shop" },
+  { name: "Collections", href: "#collections" },
+  { name: "About", href: "#about" },
+  { name: "Contact", href: "#contact" },
 ]
 
 const Header: FC = () => {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(true)
-    const { cart, openCart } = useCart()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(true)
+  const { favorites, openFavorites } = useFavorites()
 
-    return(
-            <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
         <Link href="/" className="flex items-center gap-3">
-          <div className="relative h-10 w-10">
+          <div className="relative h-15 w-15">
             <Image
               src="/images/logo.jpg"
               alt="By Lé Handcrafted Art"
@@ -58,16 +58,16 @@ const Header: FC = () => {
             <User className="h-5 w-5" />
             <span className="sr-only">Account</span>
           </Button>
-          <Button 
-            variant="ghost" 
-            size="icon" 
+          <Button
+            variant="ghost"
+            size="icon"
             className="relative"
-            onClick={openCart}
+            onClick={openFavorites}
           >
-            <ShoppingBag className="h-5 w-5" />
-            {cart.itemCount > 0 && (
+            <Star className="h-5 w-5" />
+            {favorites.itemCount > 0 && (
               <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-accent text-[10px] font-sans font-medium text-accent-foreground flex items-center justify-center">
-                {cart.itemCount > 9 ? "9+" : cart.itemCount}
+                {favorites.itemCount > 9 ? "9+" : favorites.itemCount}
               </span>
             )}
             <span className="sr-only">Cart</span>
@@ -108,7 +108,7 @@ const Header: FC = () => {
         </div>
       )}
     </header>
-    )
+  )
 }
 
 export default Header

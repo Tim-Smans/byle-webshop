@@ -11,24 +11,25 @@ export interface Product {
 }
 
 // Cart types
-export interface CartItem {
+export interface FavoritesItem {
   id: string // unique cart item id
   product: Product
   quantity: number
   addedAt: Date
 }
 
-export interface Cart {
-  items: CartItem[]
+export interface Favorites {
+  items: FavoritesItem[]
   total: number
   itemCount: number
 }
 
 // Cart service interface - implement this for database integration
-export interface ICartService {
-  getCart(): Promise<Cart>
-  addItem(product: Product, quantity?: number): Promise<Cart>
-  removeItem(cartItemId: string): Promise<Cart>
-  updateQuantity(cartItemId: string, quantity: number): Promise<Cart>
-  clearCart(): Promise<Cart>
+export interface IFavoritesService {
+  getFavorites(): Promise<Favorites>
+  addItem(product: Product, quantity?: number): Promise<Favorites>
+  removeItem(cartItemId: string): Promise<Favorites>
+  updateQuantity(cartItemId: string, quantity: number): Promise<Favorites>
+  clearFavorites(): Promise<Favorites>
+  includesFavorite(cartItemId: string) : Promise<boolean>
 }

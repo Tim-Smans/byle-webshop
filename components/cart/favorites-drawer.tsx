@@ -1,13 +1,19 @@
 "use client"
 
 import Image from "next/image"
-import { X, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react"
+import { X, ShoppingBag, Trash2, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useCart } from "@/lib/context/cart-context"
+import { useFavorites } from "@/lib/context/favorites-context"
 import { FC } from "react"
 
-const CartDrawer: FC = () => {
-    const { cart, isOpen, closeCart, removeItem, updateQuantity, clearCart, isLoading } = useCart()
+const FavoritesDrawer: FC = () => {
+    const { favorites, isOpen, closeFavorites, removeItem, clearFavorites, isLoading } = useFavorites()
+
+    const etsyUrl = process.env.NEXT_PUBLIC_ETSY_STORE_URL;
+
+    if (!etsyUrl) {
+    throw new Error("NEXT_PUBLIC_ETSY_STORE_URL is not defined");
+    }
 
     if (!isOpen) return null
     return (
@@ -15,7 +21,7 @@ const CartDrawer: FC = () => {
             {/* Backdrop */}
             <div
                 className="fixed inset-0 bg-foreground/40 backdrop-blur-sm z-50"
-                onClick={closeCart}
+                onClick={closeFavorites}
             />
 
             {/* Drawer */}
@@ -23,17 +29,17 @@ const CartDrawer: FC = () => {
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-border">
                     <div className="flex items-center gap-3">
-                        <ShoppingBag className="h-5 w-5" />
-                        <h2 className="text-xl font-medium">Your Cart</h2>
-                        {cart.itemCount > 0 && (
+                        <Star className="h-5 w-5" />
+                        <h2 className="text-xl font-medium">Your Favorites</h2>
+                        {favorites.itemCount > 0 && (
                             <span className="px-2 py-0.5 text-xs font-sans font-medium bg-accent text-accent-foreground rounded-full">
-                                {cart.itemCount}
+                                {favorites.itemCount}
                             </span>
                         )}
                     </div>
-                    <Button variant="ghost" size="icon" onClick={closeCart}>
+                    <Button variant="ghost" size="icon" onClick={closeFavorites}>
                         <X className="h-5 w-5" />
-                        <span className="sr-only">Close cart</span>
+                        <span className="sr-only">Close favorites</span>
                     </Button>
                 </div>
 
@@ -43,22 +49,22 @@ const CartDrawer: FC = () => {
                         <div className="flex items-center justify-center h-full">
                             <div className="animate-spin h-8 w-8 border-2 border-accent border-t-transparent rounded-full" />
                         </div>
-                    ) : cart.items.length === 0 ? (
+                    ) : favorites.items.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-center px-6">
                             <ShoppingBag className="h-16 w-16 text-muted-foreground/30 mb-4" />
                             <h3 className="text-xl font-medium text-foreground mb-2">
-                                Your cart is empty
+                                Your favorites are empty
                             </h3>
                             <p className="text-muted-foreground mb-6">
-                                Discover our collection and add some beautiful pieces to your cart.
+                                Discover our collection and add some beautiful pieces to your favorites.
                             </p>
-                            <Button onClick={closeCart}>
+                            <Button onClick={closeFavorites}>
                                 Continue Shopping
                             </Button>
                         </div>
                     ) : (
                         <div className="px-6 py-4 space-y-4">
-                            {cart.items.map((item) => (
+                            {favorites.items.map((item) => (
                                 <div
                                     key={item.id}
                                     className="flex gap-4 p-4 bg-muted/30 rounded-lg"
@@ -96,29 +102,6 @@ const CartDrawer: FC = () => {
                                         </div>
 
                                         <div className="mt-auto flex items-center justify-between">
-                                            {/* Quantity Controls */}
-                                            <div className="flex items-center gap-2">
-                                                <Button
-                                                    variant="outline"
-                                                    size="icon"
-                                                    className="h-7 w-7"
-                                                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                >
-                                                    <Minus className="h-3 w-3" />
-                                                </Button>
-                                                <span className="w-8 text-center font-sans text-sm">
-                                                    {item.quantity}
-                                                </span>
-                                                <Button
-                                                    variant="outline"
-                                                    size="icon"
-                                                    className="h-7 w-7"
-                                                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                >
-                                                    <Plus className="h-3 w-3" />
-                                                </Button>
-                                            </div>
-
                                             {/* Price */}
                                             <p className="font-medium">
                                                 ${(item.product.price * item.quantity).toLocaleString()}
@@ -132,40 +115,42 @@ const CartDrawer: FC = () => {
                 </div>
 
                 {/* Footer */}
-                {cart.items.length > 0 && (
+                {favorites.items.length > 0 && (
                     <div className="border-t border-border px-6 py-4 space-y-4">
                         {/* Subtotal */}
                         <div className="flex items-center justify-between">
                             <span className="text-muted-foreground font-sans">Subtotal</span>
                             <span className="text-xl font-medium">
-                                ${cart.total.toLocaleString()}
+                                ${favorites.total.toLocaleString()}
                             </span>
                         </div>
 
                         <p className="text-sm text-muted-foreground font-sans">
-                            Shipping and taxes calculated at checkout
+                            Final prices and taxes will be calculated on Etsy
                         </p>
 
                         {/* Actions */}
                         <div className="space-y-2">
-                            <Button className="w-full py-6 text-base font-sans tracking-wide">
-                                Proceed to Checkout
+                            <Button asChild className="w-full py-6 text-base font-sans tracking-wide">
+                                <a target="blank" href={etsyUrl}>   
+                                    Go to Etsy store
+                                </a>
                             </Button>
                             <Button
                                 variant="outline"
                                 className="w-full font-sans"
-                                onClick={closeCart}
+                                onClick={closeFavorites}
                             >
                                 Continue Shopping
                             </Button>
                         </div>
 
-                        {/* Clear Cart */}
+                        {/* Clear Favorites */}
                         <button
                             className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors font-sans underline"
-                            onClick={clearCart}
+                            onClick={clearFavorites}
                         >
-                            Clear Cart
+                            Clear Favorites
                         </button>
                     </div>
                 )}
@@ -174,4 +159,4 @@ const CartDrawer: FC = () => {
     )
 }
 
-export default CartDrawer
+export default FavoritesDrawer

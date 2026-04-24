@@ -3,9 +3,10 @@
 import { FC, useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Heart, ShoppingBag } from "lucide-react"
-import { useCart } from "@/lib/context/cart-context"
-import { CartItem, Product } from "@/lib/types"
+import { Heart } from "lucide-react"
+import { useFavorites } from "@/lib/context/favorites-context"
+import { Product } from "@/lib/types"
+import { favoritesService } from "@/lib/favorites-service"
 
 const artPieces = [
   {
@@ -67,7 +68,7 @@ const artPieces = [
 const FeaturedPieces: FC = () => {
     const [favorites, setFavorites] = useState<number[]>([])
 
-    const { addItem } = useCart();
+    const { addItem } = useFavorites();
 
     const toggleFavorite = (id: number) => {
         setFavorites(prev =>
@@ -119,22 +120,12 @@ const FeaturedPieces: FC = () => {
                       size="icon"
                       variant="secondary"
                       className="h-10 w-10 rounded-full bg-foreground/90 backdrop-blur-sm hover:bg-foreground"
-                      onClick={() => toggleFavorite(piece.id)}
+                      onClick={() => handleAddItem({...piece})}
                     >
                       <Heart 
-                        className={`h-5 w-5 ${favorites.includes(piece.id) ? 'fill-accent text-accent' : ''}`} 
+                        className={`h-5 w-5`} 
                       />
                       <span className="sr-only">Add to favorites</span>
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="secondary"
-                      className="h-10 w-10 rounded-full bg-foreground/90 backdrop-blur-sm hover:bg-foreground"
-                      onClick={() => 
-                        handleAddItem({...piece})}
-                    >
-                      <ShoppingBag className="h-5 w-5" />
-                      <span className="sr-only">Add to cart</span>
                     </Button>
                   </div>
                 </div>
