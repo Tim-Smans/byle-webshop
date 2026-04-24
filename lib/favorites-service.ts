@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:lib/favorites-service.ts
 import type { Favorites, FavoritesItem, Product, IFavoritesService } from "./types"
-========
-import type { Cart, CartItem, Product, ICartService } from "../types"
->>>>>>>> d785179fef0256701e4716f7cc2c24e75284244c:lib/services/cart-service.ts
 
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`

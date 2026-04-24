@@ -5,15 +5,8 @@ import { cn } from "@/lib/utils";
 import Header from "@/components/shared/header";
 import Footer from "@/components/shared/footer";
 import { UnderConstructionPopup } from "@/components/temp/underConstruction";
-<<<<<<< HEAD
 import { FavoritesProvider } from "@/lib/context/favorites-context";
 import CartDrawer from "@/components/cart/favorites-drawer";
-=======
-import { CartProvider } from "@/lib/context/cart-context";
-import CartDrawer from "@/components/cart/cart-drawer";
-import { AuthProvider } from "@/lib/context/auth-context";
-import AuthModal from "@/components/auth/auth-modal";
->>>>>>> d785179fef0256701e4716f7cc2c24e75284244c
 
 const robotoSlabHeading = Roboto_Slab({ subsets: ['latin'], variable: '--font-heading' });
 
@@ -52,7 +45,6 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col" cz-shortcut-listen="true">
         { /*Deze under construction popup kan ik later weer weghalen ;)*/}
-<<<<<<< HEAD
         <FavoritesProvider>
           <UnderConstructionPopup />
 
@@ -61,19 +53,6 @@ export default function RootLayout({
           <Footer /> 
           <CartDrawer />
         </FavoritesProvider>
-=======
-        <CartProvider>
-          <AuthProvider>
-            <UnderConstructionPopup />
-
-            <Header />
-            {children}
-            <Footer />
-            <CartDrawer />
-            <AuthModal />
-          </AuthProvider>
-        </CartProvider>
->>>>>>> d785179fef0256701e4716f7cc2c24e75284244c
       </body>
     </html>
   );
