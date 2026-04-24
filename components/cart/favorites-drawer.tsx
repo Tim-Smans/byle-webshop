@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { useFavorites } from "@/lib/context/favorites-context"
 import { FC } from "react"
 
+<<<<<<< HEAD:components/cart/favorites-drawer.tsx
 const FavoritesDrawer: FC = () => {
     const { favorites, isOpen, closeFavorites, removeItem, clearFavorites, isLoading } = useFavorites()
 
@@ -14,6 +15,10 @@ const FavoritesDrawer: FC = () => {
     if (!etsyUrl) {
     throw new Error("NEXT_PUBLIC_ETSY_STORE_URL is not defined");
     }
+=======
+const CartDrawer: FC = () => {
+    const { cart, isOpen, closeCart, removeItem, clearCart, isLoading } = useCart()
+>>>>>>> d785179fef0256701e4716f7cc2c24e75284244c:components/cart/cart-drawer.tsx
 
     if (!isOpen) return null
     return (

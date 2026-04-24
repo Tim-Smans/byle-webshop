@@ -34,13 +34,18 @@ const About: FC = () => {
             <p className="text-sm font-sans font-medium tracking-[0.3em] uppercase text-secondary mb-4">
               My Story
             </p>
+<<<<<<< HEAD
             <h2 className="text-4xl text-oker sm:text-5xl font-light tracking-tight text-foreground mb-6">
+=======
+            <h2 className="text-4xl sm:text-5xl font-light text-oker tracking-tight text-foreground mb-6">
+>>>>>>> d785179fef0256701e4716f7cc2c24e75284244c
               Art Born From <br />
               <span className="italic font-medium">Passion & Heart</span>
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed mb-8">
               <p>
                 Hi I’m Lé
+<<<<<<< HEAD
                 The creator behind Art by Lé. I work intuitively, letting shapes, colors, and textures guide me. 
                 My pieces often evolve slowly over several days, layer by layer, until they feel balanced and complete.
                 Creating is more than making art for me, it’s a moment of calm,
@@ -50,6 +55,13 @@ const About: FC = () => {
               <p>
                 I’m naturally drawn to soft, earthy tones with subtle metallic accents. But sometimes, 
                 I simply follow my feeling and allow something more expressive or unexpected to emerge, and that spontaneity is part of what makes each piece unique.
+=======
+                The creator behind Art by Lé. I work intuitively, letting shapes, colors, and textures guide me. My pieces often evolve slowly over several days, layer by layer, until they feel balanced and complete.
+                Creating is more than making art for me, it’s a moment of calm, a way to gently disconnect from daily life. As a stay-at-home mom, living with chronic pain, these creative moments are deeply meaningful and help me reconnect with both peace and inner strength.
+              </p>
+              <p>
+                I’m naturally drawn to soft, earthy tones with subtle metallic accents. But sometimes, I simply follow my feeling and allow something more expressive or unexpected to emerge, and that spontaneity is part of what makes each piece unique.
+>>>>>>> d785179fef0256701e4716f7cc2c24e75284244c
                 Every artwork is made with time, care, and attention. No two pieces are ever the same.
                 Thank you for visiting my small creative world
               </p>
