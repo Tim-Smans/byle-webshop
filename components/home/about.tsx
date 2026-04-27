@@ -1,15 +1,37 @@
+"use client"
+
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { FC } from "react"
-
-const stats = [
-  { value: "20+", label: "Original Pieces" },
-  { value: "5", label: "Months Experience" },
-  { value: "3", label: "Satisfied Customers" },
-  { value: "100%", label: "Handcrafted" },
-]
+import { FC, useEffect, useState } from "react"
+import { getStats, saveStatistics } from "@/lib/services/stats-service"
+import { useAdmin } from "@/lib/hooks/use-admin"
+import { EditStatisticsDialog, Statistic } from "../dialogs/edit-statistics"
 
 const About: FC = () => {
+  const [stats, setStats] = useState<Statistic[]>([])
+  const [isEditOpen, setIsEditOpen] = useState(false)
+  const isAdmin = useAdmin();
+
+  useEffect(() => {
+    const getStatsFromDb = async () => {
+      const stats = await getStats();
+
+      if (stats) {
+        setStats(stats)
+      }
+    }
+
+    getStatsFromDb();
+  }, [])
+
+  const handleSaveStats = async (newStats: Statistic[]) => {
+    await saveStatistics(newStats)
+
+    var stats = await getStats()
+
+    setStats(stats ?? [])
+  }
+
   return (
     <section id="about" className="py-24 bg-muted/30">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -41,14 +63,14 @@ const About: FC = () => {
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed mb-8">
               <p>
                 Hi I’m Lé
-                The creator behind Art by Lé. I work intuitively, letting shapes, colors, and textures guide me. 
+                The creator behind Art by Lé. I work intuitively, letting shapes, colors, and textures guide me.
                 My pieces often evolve slowly over several days, layer by layer, until they feel balanced and complete.
                 Creating is more than making art for me, it’s a moment of calm,
-                 a way to gently disconnect from daily life. As a stay-at-home mom, 
-                 living with chronic pain, these creative moments are deeply meaningful and help me reconnect with both peace and inner strength.
+                a way to gently disconnect from daily life. As a stay-at-home mom,
+                living with chronic pain, these creative moments are deeply meaningful and help me reconnect with both peace and inner strength.
               </p>
               <p>
-                I’m naturally drawn to soft, earthy tones with subtle metallic accents. But sometimes, 
+                I’m naturally drawn to soft, earthy tones with subtle metallic accents. But sometimes,
                 I simply follow my feeling and allow something more expressive or unexpected to emerge, and that spontaneity is part of what makes each piece unique.
                 Every artwork is made with time, care, and attention. No two pieces are ever the same.
                 Thank you for visiting my small creative world
@@ -62,15 +84,34 @@ const About: FC = () => {
               Learn More About Me
             </Button>
 
+            {
+              isAdmin ?
+                <Button
+                  size="lg"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-sans font-medium tracking-wide mb-12"
+                  onClick={() => setIsEditOpen(true)}
+                > 
+                  Admin: Edit Statistics
+                </Button>
+                : null
+            }
+
+            <EditStatisticsDialog
+              open={isEditOpen}
+              onOpenChange={setIsEditOpen}
+              statistics={stats}
+              onSave={handleSaveStats}
+            />            
+
             {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
               {stats.map((stat) => (
-                <div key={stat.label} className="text-center sm:text-left">
+                <div key={stat.id} className="text-center sm:text-left">
                   <p className="text-3xl sm:text-4xl font-light text-foreground mb-1">
                     {stat.value}
                   </p>
                   <p className="text-sm font-sans text-muted-foreground tracking-wide">
-                    {stat.label}
+                    {stat.title}
                   </p>
                 </div>
               ))}

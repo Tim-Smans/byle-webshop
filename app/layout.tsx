@@ -7,6 +7,7 @@ import Footer from "@/components/shared/footer";
 import { UnderConstructionPopup } from "@/components/temp/underConstruction";
 import { FavoritesProvider } from "@/lib/context/favorites-context";
 import CartDrawer from "@/components/cart/favorites-drawer";
+import { EditStatisticsDialog } from "@/components/dialogs/edit-statistics";
 
 const robotoSlabHeading = Roboto_Slab({ subsets: ['latin'], variable: '--font-heading' });
 

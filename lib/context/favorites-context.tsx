@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react"
 import type { Favorites, Product } from "../types"
-import { favoritesService } from "../favorites-service"
+import { favoritesService } from "../services/favorites-service"
 
 interface FavoritesContextValue {
   favorites: Favorites

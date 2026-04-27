@@ -69,3 +69,9 @@ export interface IAuthService {
   logout(): Promise<void>
   updateProfile(userId: string, data: Partial<User>): Promise<AuthResult>
 }
+
+interface Statistic {
+  id: number,
+  title: string
+  value: string
+}
