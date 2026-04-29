@@ -10,7 +10,7 @@ import { useAdmin } from "@/lib/hooks/use-admin"
 import AdminModeButton from "../admin/admin-mode-button"
 
 const navigation = [
-  { name: "Shop", href: "#shop" },
+  { name: "Shop", href: "shop" },
   { name: "Collections", href: "#collections" },
   { name: "About", href: "#about" },
   { name: "Contact", href: "#contact" },

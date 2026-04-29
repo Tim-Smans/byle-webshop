@@ -1,13 +1,23 @@
+import { StripeIssuingCardNumberDisplayElement } from "@stripe/stripe-js"
+
 // Product types
 export interface Product {
-  id: number
-  name: string
-  artist: string
-  price: number
-  image: string
-  category: string
-  size: string
-  description?: string
+  id: string,
+  title: string,
+  artist: string,
+  dimensions: string,
+  price: number,
+  description: string,
+  isFeatured: boolean,
+  frame: string,
+  structure: string,
+  presentation: string,
+  edition: string,
+  finish: string,
+  isSold: boolean,
+  collection: string,
+  images: Image[],
+  labels: Label[]
 }
 
 // Cart types
@@ -70,8 +80,44 @@ export interface IAuthService {
   updateProfile(userId: string, data: Partial<User>): Promise<AuthResult>
 }
 
-interface Statistic {
-  id: number,
+export interface Statistic {
+  id: string,
   title: string
   value: string
+}
+
+export interface ArtPiece {
+  id: string,
+  title: string,
+  artist: string,
+  dimensions: string,
+  price: number,
+  description: string,
+  isFeatured: boolean,
+  frame: string,
+  structure: string,
+  presentation: string,
+  edition: string,
+  finish: string,
+  isSold: boolean,  
+  collection: string,
+  images: Image[],
+  labels: Label[]
+} 
+
+export interface Image {
+  id: string,
+  pieceId: string,
+  url: string
+}
+
+export interface Label {
+  id: string,
+  title: string
+}
+
+export interface PieceLabel {
+  id: string,
+  pieceId: string,
+  labelId: string
 }

@@ -72,8 +72,8 @@ const FavoritesDrawer: FC = () => {
                                     {/* Image */}
                                     <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-md">
                                         <Image
-                                            src={item.product.image}
-                                            alt={item.product.name}
+                                            src={item.product.images[0].url}
+                                            alt={item.product.title}
                                             fill
                                             className="object-cover"
                                         />
@@ -84,10 +84,10 @@ const FavoritesDrawer: FC = () => {
                                         <div className="flex justify-between">
                                             <div>
                                                 <h3 className="font-medium text-foreground">
-                                                    {item.product.name}
+                                                    {item.product.title}
                                                 </h3>
                                                 <p className="text-sm text-muted-foreground font-sans">
-                                                    {item.product.size}
+                                                    {item.product.dimensions}
                                                 </p>
                                             </div>
                                             <Button
