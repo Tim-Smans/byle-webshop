@@ -6,14 +6,13 @@ import { FC, useState } from "react"
 import { Menu, X, Search, User, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useFavorites } from "@/lib/context/favorites-context"
-import { useAdmin } from "@/lib/hooks/use-admin"
 import AdminModeButton from "../admin/admin-mode-button"
 
 const navigation = [
-  { name: "Shop", href: "shop" },
-  { name: "Collections", href: "#collections" },
-  { name: "About", href: "#about" },
-  { name: "Contact", href: "#contact" },
+  { name: "Shop", href: "/shop" },
+  { name: "Collections", href: "/#collections" },
+  { name: "About", href: "/#about" },
+  { name: "Contact", href: "/contact" },
 ]
 
 const Header: FC = () => {

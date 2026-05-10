@@ -8,6 +8,7 @@ import { UnderConstructionPopup } from "@/components/temp/underConstruction";
 import { FavoritesProvider } from "@/lib/context/favorites-context";
 import CartDrawer from "@/components/cart/favorites-drawer";
 import { EditStatisticsDialog } from "@/components/dialogs/edit-statistics";
+import { FeedbackProvider } from "@/lib/context/feedback-context";
 
 const robotoSlabHeading = Roboto_Slab({ subsets: ['latin'], variable: '--font-heading' });
 
@@ -47,14 +48,16 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col" cz-shortcut-listen="true">
         { /*Deze under construction popup kan ik later weer weghalen ;)*/}
         <FavoritesProvider>
-          <UnderConstructionPopup />
+          <FeedbackProvider>
+            <UnderConstructionPopup />
 
-          <Header />
-          {children}
-          <Footer /> 
-          <CartDrawer />
+            <Header />
+            {children}
+            <Footer />
+            <CartDrawer />
+          </FeedbackProvider>
         </FavoritesProvider>
       </body>
-    </html>
+    </html >
   );
 }

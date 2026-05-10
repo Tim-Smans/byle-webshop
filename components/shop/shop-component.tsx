@@ -4,10 +4,13 @@ import { FC, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import Image from "next/image"
-import { ArtPiece, Product } from "@/lib/types";
+import { ArtPiece, Collection, Product } from "@/lib/types";
 import { useFavorites } from "@/lib/context/favorites-context";
-import { getArtPieces } from "@/lib/services/art-piece-service";
-import { Heart } from "lucide-react";
+import { deleteArtPiece, getArtPieces, isArtPieceFeatured, toggleArtPieceSold } from "@/lib/services/art-piece-service";
+import { Heart, Pencil, ShoppingBasket, Star, TrashIcon } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { getCollections } from "@/lib/services/collection-service";
+import { toggleArtPieceFeatured } from "@/lib/services/art-piece-service";
 import {
     Pagination,
     PaginationContent,
@@ -16,22 +19,112 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useFeedback } from "@/lib/context/feedback-context";
+import { FaStar } from "react-icons/fa";
+import { useAdmin } from "@/lib/hooks/use-admin";
 
 const ShopComponent: FC = () => {
     const [artPieces, setArtPieces] = useState<ArtPiece[]>([])
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [searchTerm, setSearchTerm] = useState<string>("")
+    const [collections, setCollections] = useState<Collection[]>([])
+    const [selectedCollectionId, setSelectedCollectionId] = useState<string>("all")
+
+    const { showError } = useFeedback();
+    const isAdmin = useAdmin();
 
     const ITEMS_PER_PAGE = 6
 
-    const filteredArtPieces = artPieces.filter((piece) =>
-        piece.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        piece.artist.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        piece.collection?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        piece.labels.some(label =>
-            label.title.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-    );
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const collectionIdFromUrl = searchParams.get("collectionId")
+
+        if (collectionIdFromUrl) {
+            setSelectedCollectionId(collectionIdFromUrl)
+        }
+    }, [searchParams])
+
+    const handleToggleFeatured = async (id: string) => {
+        var artPieceFeatured = await isArtPieceFeatured(id)
+
+        if (artPieces.filter(x => x.isFeatured).length >= 6 && !artPieceFeatured) {
+            showError('Je mag maar maximaal 6 uitgelichte stukken selecteren, haal wat oude stukken weg voor je er nieuwe selecteerd.');
+            return
+        }
+
+        setArtPieces((prev) =>
+            prev.map((p) =>
+                p.id === id ? { ...p, isFeatured: !p.isFeatured } : p
+            )
+        );
+
+        try {
+            await toggleArtPieceFeatured(id);
+        } catch (err) {
+            console.error(err);
+
+            setArtPieces((prev) =>
+                prev.map((p) =>
+                    p.id === id ? { ...p, isFeatured: !p.isFeatured } : p
+                )
+            );
+        }
+    };
+
+    const handleDeleteArtPiece = async (id: string) => {
+        setArtPieces((prev) => prev.filter((p) => p.id !== id))
+
+        var error = await deleteArtPiece(id)
+
+        if (error != undefined) {
+            showError('Er ging iets mis bij het verwijderen van kunstwerk met id: ' + id)
+        }
+    }
+
+    const handleSold = async (id: string) => {
+        // optimistic update
+        setArtPieces((prev) =>
+            prev.map((p) =>
+                p.id === id
+                    ? { ...p, isSold: !p.isSold }
+                    : p
+            )
+        );
+
+        try {
+            await toggleArtPieceSold(id);
+        } catch (err) {
+            console.error(err);
+
+            // rollback bij error
+            setArtPieces((prev) =>
+                prev.map((p) =>
+                    p.id === id
+                        ? { ...p, isSold: !p.isSold }
+                        : p
+                )
+            );
+
+            showError("Er ging iets mis bij het aanpassen van de verkoopstatus.");
+        }
+    };
+
+    const filteredArtPieces = artPieces.filter((piece) => {
+        const matchesSearch =
+            piece.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            piece.artist.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            piece.labels.some(label =>
+                label.title.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+        const matchesCollection =
+            selectedCollectionId === "all" ||
+            piece.collectionId === selectedCollectionId;
+
+        return matchesSearch && matchesCollection;
+    });
 
     const totalPages = Math.ceil(filteredArtPieces.length / ITEMS_PER_PAGE);
 
@@ -47,20 +140,41 @@ const ShopComponent: FC = () => {
     }
 
     useEffect(() => {
-        const getArtPiecesFromDb = async () => {
+        const loadData = async () => {
             const artPieces = await getArtPieces();
+            const collections = await getCollections();
 
             if (artPieces) {
-                setArtPieces(artPieces)
+                const sortedArtPieces = [...artPieces].sort(
+                    (a, b) =>
+                        new Date(b.creationTime).getTime() -
+                        new Date(a.creationTime).getTime()
+                );
+
+                setArtPieces(sortedArtPieces);
+            }
+
+            if (collections) {
+                setCollections(collections)
             }
         }
 
-        getArtPiecesFromDb();
+        loadData();
     }, [])
+
+    const isNewArtPiece = (creationTime: string) => {
+        const createdDate = new Date(creationTime);
+        const now = new Date();
+
+        const diffInMs = now.getTime() - createdDate.getTime();
+        const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+        return diffInDays <= 3;
+    };
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchTerm]);
+    }, [searchTerm, selectedCollectionId]);
 
     return (
         <section id="shop" className="py-24 bg-muted/30">
@@ -68,18 +182,27 @@ const ShopComponent: FC = () => {
                 {/* Section Header */}
                 <div className="text-center mb-16">
                     <p className="text-sm font-sans font-medium tracking-[0.3em] uppercase text-secondary mb-4">
-                        Browse my collection
+                        Kijk rond tussen mijn kunstwerken
                     </p>
                     <h2 className="text-oker text-4xl sm:text-5xl font-light tracking-tight text-foreground mb-4">
-                        My <span className="italic font-medium">Shop</span>
+                        Mijn <span className="italic font-medium">Winkel</span>
                     </h2>
                     <p className="max-w-2xl mx-auto text-muted-foreground text-lg">
                         Discover all of my works, each one a testament to the beauty
                         of handcrafted artistry. You can use the filters to make your browsing experience more.
                     </p>
+                    {
+                        isAdmin ?
+                            <Button asChild className="max-w-2xl mx-auto mt-5 p-6">
+                                <Link href={'admin/artpiece/create'}>
+                                    Voeg nieuw kunstwerk toe
+                                </Link>
+                            </Button>
+                            : null
+                    }
                 </div>
 
-                <div className="mb-10 w-full">
+                <div className="mb-10 w-full flex gap-4">
                     <input
                         type="text"
                         placeholder="Search by title, artist or label..."
@@ -96,6 +219,46 @@ const ShopComponent: FC = () => {
                             focus:ring-2
                             focus:ring-primary"
                     />
+
+                    <select
+                        value={selectedCollectionId}
+                        onChange={(e) => {
+                            const value = e.target.value;
+
+                            setSelectedCollectionId(value);
+                            setCurrentPage(1);
+
+                            if (value === "all") {
+                                router.push("/shop");
+                            } else {
+                                router.push(`/shop?collectionId=${value}`);
+                            }
+                        }}
+                        className="
+                            min-w-[240px]
+                            px-4
+                            py-3
+                            border
+                            rounded-lg
+                            bg-background
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-primary
+                        "
+                    >
+                        <option value="all">
+                            All collections
+                        </option>
+
+                        {collections.map((collection) => (
+                            <option
+                                key={collection.id}
+                                value={collection.id}
+                            >
+                                {collection.title}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
                 {/* Art Grid */}
@@ -108,7 +271,7 @@ const ShopComponent: FC = () => {
                             {/* Image Container */}
                             <div className="relative aspect-3/4 overflow-hidden">
                                 <Image
-                                    src={piece.images[0].url}
+                                    src={piece.images[0]?.url}
                                     alt={piece.title}
                                     fill
                                     className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -128,14 +291,67 @@ const ShopComponent: FC = () => {
                                             />
                                             <span className="sr-only">Add to favorites</span>
                                         </Button>
+                                        {
+                                            isAdmin ?
+                                                <>
+                                                    <Button
+                                                        size="icon"
+                                                        variant="secondary"
+                                                        className={`h-10 w-10 rounded-full backdrop-blur-sm ${piece.isFeatured
+                                                            ? "bg-yellow-500 hover:bg-yellow-600"
+                                                            : "bg-foreground/90 hover:bg-foreground"
+                                                            }`}
+                                                        onClick={() => handleToggleFeatured(piece.id)}
+                                                    >
+                                                        {piece.isFeatured ? <FaStar /> : <Star />}
+                                                        <span className="sr-only">Toggle featured</span>
+                                                    </Button>
+                                                    <Button
+                                                        size="icon"
+                                                        variant="secondary"
+                                                        className={`h-10 w-10 rounded-full backdrop-blur-sm bg-red-500 hover:bg-red-600`}
+                                                        onClick={() => handleDeleteArtPiece(piece.id)}
+                                                    >
+                                                        <TrashIcon />
+                                                        <span className="sr-only">Verwijder kunstwerk</span>
+                                                    </Button>
+                                                    <Button
+                                                        size="icon"
+                                                        variant="secondary"
+                                                        className={`h-10 w-10 rounded-full backdrop-blur-sm bg-green-500 hover:bg-green-600`}
+                                                        asChild
+                                                    >
+                                                        <Link href={'admin/artpiece/' + piece.id}>
+                                                            <Pencil />
+                                                            <span className="sr-only">Update kunstwerk</span>
+                                                        </Link>
+                                                    </Button>
+                                                    <Button
+                                                        size="icon"
+                                                        variant="secondary"
+                                                        className={`h-10 w-10 rounded-full backdrop-blur-sm bg-blue-500 hover:bg-blue-600`}
+                                                        onClick={() => handleSold(piece.id)}
+                                                    >
+                                                        <ShoppingBasket />
+                                                        <span className="sr-only">Stuk verkocht</span>
+                                                    </Button>
+                                                </>
+                                                : null
+                                        }
                                     </div>
                                 </div>
 
-                                {/* Category Badge */}
-                                <div className="absolute top-4 left-4">
+                                {/* Badges */}
+                                <div className="absolute top-4 left-4 flex flex-col gap-2">
                                     <span className="px-3 py-1 text-xs font-sans font-medium tracking-wide bg-background/90 backdrop-blur-sm rounded-full">
                                         {piece.labels[0].title}
                                     </span>
+
+                                    {isNewArtPiece(piece.creationTime) && (
+                                        <span className="px-3 py-1 text-xs font-bold tracking-wide bg-oker text-white rounded-full shadow">
+                                            NEW
+                                        </span>
+                                    )}
                                 </div>
                             </div>
 
@@ -153,7 +369,7 @@ const ShopComponent: FC = () => {
                                 </div>
                                 <div className="flex items-center justify-between mt-4">
                                     <p className="text-2xl font-light text-foreground">
-                                        ${piece.price.toLocaleString("en-US")}
+                                        {piece.isSold ? <span className="text-red-700">VERKOCHT</span> : '€ ' + piece.price.toLocaleString("en-US")}
                                     </p>
                                     <Link href={`/art/${piece.id}`}>
                                         <Button

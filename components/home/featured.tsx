@@ -3,22 +3,54 @@
 import { FC, useEffect, useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Heart } from "lucide-react"
+import { Heart, Star } from "lucide-react"
 import { useFavorites } from "@/lib/context/favorites-context"
 import { ArtPiece, Product } from "@/lib/types"
-import { getArtPieces } from "@/lib/services/art-piece-service"
+import { getArtPieces, toggleArtPieceFeatured } from "@/lib/services/art-piece-service"
 import Link from "next/link"
+import { FaStar } from "react-icons/fa"
+import { useAdmin } from "@/lib/hooks/use-admin"
 
 
 const FeaturedPieces: FC = () => {
   const [favorites, setFavorites] = useState<number[]>([])
   const [artPieces, setArtPieces] = useState<ArtPiece[]>([])
 
+  const isAdmin = useAdmin();
+  
   const { addItem } = useFavorites();
 
   const handleAddItem = (product: Product) => {
     addItem(product, 1)
   }
+
+  const handleToggleFeatured = async (id: string) => {
+    let updatedPieces: ArtPiece[] = [];
+
+    setArtPieces((prev) => {
+      const updated = prev.map((p) =>
+        p.id === id ? { ...p, isFeatured: !p.isFeatured } : p
+      );
+
+      updatedPieces = updated.filter((p) => p.isFeatured);
+
+      return updatedPieces;
+    });
+
+    try {
+      await toggleArtPieceFeatured(id);
+    } catch (err) {
+      console.error(err);
+
+      setArtPieces((prev) => {
+        const reverted = prev.map((p) =>
+          p.id === id ? { ...p, isFeatured: !p.isFeatured } : p
+        );
+
+        return reverted.filter((p) => p.isFeatured);
+      });
+    }
+  };
 
   useEffect(() => {
     const getArtPiecesFromDb = async () => {
@@ -26,7 +58,7 @@ const FeaturedPieces: FC = () => {
 
       if (artPieces) {
         const featuredPieces = artPieces.filter(ap => ap.isFeatured === true);
-        
+
         setArtPieces(featuredPieces)
       }
     }
@@ -40,14 +72,13 @@ const FeaturedPieces: FC = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <p className="text-sm font-sans font-medium tracking-[0.3em] uppercase text-secondary mb-4">
-            Curated Selection
+            Zorgvuldig uitgekozen
           </p>
           <h2 className="text-oker text-4xl sm:text-5xl font-light tracking-tight text-foreground mb-4">
-            Featured <span className="italic font-medium">Pieces</span>
+            Stukjes om van te <span className="italic font-medium">Houden</span>
           </h2>
           <p className="max-w-2xl mx-auto text-muted-foreground text-lg">
-            Discover my most beloved works, each one a testament to the beauty
-            of handcrafted artistry. Make sure to check out the entire store on the `Shop` page.
+            Duik in mijn meest geliefde werkjes, stuk voor stuk met zorg en liefde gemaakt. Benieuwd naar meer? Verken gerust de hele winkel via de Shop.
           </p>
         </div>
 
@@ -79,8 +110,24 @@ const FeaturedPieces: FC = () => {
                       <Heart
                         className={`h-5 w-5`}
                       />
-                      <span className="sr-only">Add to favorites</span>
+                      <span className="sr-only">Toevoegen aan favorieten</span>
                     </Button>
+                    {
+                      isAdmin === true ?
+                      <Button
+                        size="icon"
+                        variant="secondary"
+                        className={`h-10 w-10 rounded-full backdrop-blur-sm ${piece.isFeatured
+                          ? "bg-yellow-500 hover:bg-yellow-600"
+                          : "bg-foreground/90 hover:bg-foreground"
+                          }`}
+                        onClick={() => handleToggleFeatured(piece.id)}
+                      >
+                        <FaStar />
+                        <span className="sr-only">Toggle featured</span>
+                      </Button>
+                      : null
+                    } 
                   </div>
                 </div>
 
@@ -100,7 +147,7 @@ const FeaturedPieces: FC = () => {
                       {piece.title}
                     </h3>
                     <p className="text-sm text-muted-foreground font-sans">
-                      by {piece.artist} · {piece.dimensions}
+                      door {piece.artist} · {piece.dimensions}
                     </p>
                   </div>
                 </div>
@@ -114,7 +161,7 @@ const FeaturedPieces: FC = () => {
                       size="sm"
                       className="font-sans text-sm tracking-wide"
                     >
-                      View Details
+                      Details
                     </Button>
                   </Link>
 
@@ -131,7 +178,7 @@ const FeaturedPieces: FC = () => {
             variant="outline"
             className="px-8 py-6 text-base font-sans font-medium tracking-wide"
           >
-            View All Pieces
+            Alle werken
           </Button>
         </div>
       </div>

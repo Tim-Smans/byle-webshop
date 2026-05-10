@@ -2,10 +2,11 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import { FC } from "react"
+import Link from "next/link"
 
 const Hero: FC = () => {
-    return (
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -23,30 +24,34 @@ const Hero: FC = () => {
         <p className="text-sm font-sans font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6">
           Handcrafted with passion
         </p>
-        
+
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-oker mb-6 text-balance">
           Art created from feeling <br />
           <span className="font-medium italic">to be felt in silence</span>
         </h1>
-        
+
         <p className="mx-auto max-w-2xl text-lg sm:text-xl text-muted-foreground leading-relaxed mb-10">
-          Here you’ll find handmade mixed media art, created using Powertex and intuitive acrylic painting techniques. Each piece is carefully built in layers, resulting in unique, textured artworks with a soft, natural feel.
+          In mijn shop vind je handgemaakte mixed media kunstwerken, gecreëerd met behulp van Powertex en intuïtieve acrylschildertechnieken. Elk stuk wordt zorgvuldig opgebouwd in lagen, wat resulteert in unieke, textuurrijke kunstwerken met een zachte, natuurlijke uitstraling.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-sans font-medium tracking-wide"
+            asChild
           >
-            Explore Collection
-            <ArrowRight className="ml-2 h-4 w-4" />
+            <Link href={'/shop'}>
+              Ontdek mijn collectie
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="lg"
             className="px-8 py-6 text-base font-sans font-medium tracking-wide border-foreground/20 hover:bg-foreground/5"
+            asChild
           >
-            Our Story
+            <a href="#collections">Mijn verhaal</a>
           </Button>
         </div>
       </div>
@@ -58,7 +63,7 @@ const Hero: FC = () => {
         </div>
       </div>
     </section>
-    )
+  )
 }
 
 export default Hero

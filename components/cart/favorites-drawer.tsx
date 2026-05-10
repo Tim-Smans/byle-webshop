@@ -8,7 +8,7 @@ import { FC } from "react"
 
 const FavoritesDrawer: FC = () => {
     const { favorites, isOpen, closeFavorites, removeItem, clearFavorites, isLoading } = useFavorites()
-
+    
     const etsyUrl = process.env.NEXT_PUBLIC_ETSY_STORE_URL;
 
     if (!etsyUrl) {
@@ -71,12 +71,12 @@ const FavoritesDrawer: FC = () => {
                                 >
                                     {/* Image */}
                                     <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-md">
-                                        <Image
-                                            src={item.product.images[0].url}
-                                            alt={item.product.title}
-                                            fill
-                                            className="object-cover"
-                                        />
+                                    <Image
+                                        src={item.product.images[0].url}
+                                        alt={item.product.title}
+                                        fill
+                                        className="object-cover"
+                                    />
                                     </div>
 
                                     {/* Details */}

@@ -6,10 +6,11 @@ import { FC, useEffect, useState } from "react"
 import { getStats, saveStatistics } from "@/lib/services/stats-service"
 import { useAdmin } from "@/lib/hooks/use-admin"
 import { EditStatisticsDialog, Statistic } from "../dialogs/edit-statistics"
+import ReferralDialog from "../dialogs/referral-dialog"
 
 const About: FC = () => {
   const [stats, setStats] = useState<Statistic[]>([])
-  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState<boolean>(false)
   const isAdmin = useAdmin();
 
   useEffect(() => {
@@ -54,7 +55,7 @@ const About: FC = () => {
           {/* Content Side */}
           <div>
             <p className="text-sm font-sans font-medium tracking-[0.3em] uppercase text-secondary mb-4">
-              My Story
+              Wie ben ik
             </p>
             <h2 className="text-4xl text-oker sm:text-5xl font-light tracking-tight text-foreground mb-6">
               Art Born From <br />
@@ -62,35 +63,37 @@ const About: FC = () => {
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed mb-8">
               <p>
-                Hi I’m Lé
-                The creator behind Art by Lé. I work intuitively, letting shapes, colors, and textures guide me.
-                My pieces often evolve slowly over several days, layer by layer, until they feel balanced and complete.
-                Creating is more than making art for me, it’s a moment of calm,
-                a way to gently disconnect from daily life. As a stay-at-home mom,
-                living with chronic pain, these creative moments are deeply meaningful and help me reconnect with both peace and inner strength.
+                <strong>Hallo, ik ben Lé, de maker achter Art by Lé.</strong>
+                <br />
+                Ik werk intuïtief en laat me leiden door vormen, kleuren en texturen. Mijn werken ontstaan vaak langzaam, verspreid over meerdere dagen, laag voor laag, totdat ze in balans voelen en volledig zijn. Voor mij is creëren meer dan kunst maken; het is een moment van rust, een manier om even zachtjes los te komen van het dagelijkse leven.
               </p>
               <p>
-                I’m naturally drawn to soft, earthy tones with subtle metallic accents. But sometimes,
-                I simply follow my feeling and allow something more expressive or unexpected to emerge, and that spontaneity is part of what makes each piece unique.
-                Every artwork is made with time, care, and attention. No two pieces are ever the same.
-                Thank you for visiting my small creative world
+                Als thuisblijfmama die leeft met chronische pijn, zijn deze creatieve momenten van grote betekenis. Ze helpen me om opnieuw verbinding te maken met zowel innerlijke rust als kracht.
+
+                Van nature voel ik me aangetrokken tot zachte, aardse tinten met subtiele metallic accenten. Maar soms volg ik gewoon mijn gevoel en laat ik iets expressievers of onverwachts ontstaan — en precies die spontaniteit maakt elk werk uniek. Elk kunstwerk wordt gemaakt met tijd, zorg en aandacht. Geen twee stukken zijn ooit hetzelfde.
+                <br />
+                <strong>Dank je wel voor het bezoeken van mijn kleine creatieve wereld.</strong>
               </p>
             </div>
 
-            <Button
-              size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-sans font-medium tracking-wide mb-12"
-            >
-              Learn More About Me
-            </Button>
-
+            <div>
+              <p className="text-sm font-sans font-medium tracking-[0.3em] uppercase text-secondary mb-4">
+                Wist je dat
+              </p>
+              <p>
+                Draag je mijn kunst een warm hart toe, en ken je iemand die een uniek werk zoekt?
+                Laat het me gerust weten. Ik denk graag mee over stijl, kleuren en wat mogelijk is.
+              </p>
+            </div>
+            
+            <ReferralDialog/>
             {
               isAdmin ?
                 <Button
                   size="lg"
                   className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-sans font-medium tracking-wide mb-12"
                   onClick={() => setIsEditOpen(true)}
-                > 
+                >
                   Admin: Edit Statistics
                 </Button>
                 : null
@@ -101,7 +104,7 @@ const About: FC = () => {
               onOpenChange={setIsEditOpen}
               statistics={stats}
               onSave={handleSaveStats}
-            />            
+            />
 
             {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">

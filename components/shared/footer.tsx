@@ -20,7 +20,7 @@ const footerLinks = {
     { name: "Our Story", href: "#" },
     { name: "Press", href: "#" },
     { name: "Commissions", href: "#" },
-    { name: "Contact", href: "#" },
+    { name: "Admin Login", href: "/admin/login" },
   ],
 }
 

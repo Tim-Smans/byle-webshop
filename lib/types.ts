@@ -15,7 +15,8 @@ export interface Product {
   edition: string,
   finish: string,
   isSold: boolean,
-  collection: string,
+  collectionId: string,
+  creationTime: string,
   images: Image[],
   labels: Label[]
 }
@@ -41,7 +42,7 @@ export interface IFavoritesService {
   removeItem(cartItemId: string): Promise<Favorites>
   updateQuantity(cartItemId: string, quantity: number): Promise<Favorites>
   clearFavorites(): Promise<Favorites>
-  includesFavorite(cartItemId: string) : Promise<boolean>
+  includesFavorite(cartItemId: string): Promise<boolean>
 }
 
 // User / Auth types
@@ -99,16 +100,24 @@ export interface ArtPiece {
   presentation: string,
   edition: string,
   finish: string,
-  isSold: boolean,  
-  collection: string,
+  isSold: boolean,
+  collectionId: string,
+  creationTime: string,
   images: Image[],
   labels: Label[]
-} 
+}
 
 export interface Image {
   id: string,
   pieceId: string,
   url: string
+}
+
+export interface Collection {
+  id: string,
+  title: string,
+  thumbnailUrl: string,
+  description: string
 }
 
 export interface Label {
