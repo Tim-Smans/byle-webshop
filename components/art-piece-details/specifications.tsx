@@ -7,18 +7,18 @@ interface Props {
 
 const Specifications: FC<Props> = ({ artPiece }) => {
     const specifications = [
-        { label: "Dimensions", value: artPiece.dimensions },
-        { label: "Frame", value: artPiece.frame },
-        { label: "Structure", value: artPiece.structure },
-        { label: "Presentation", value: artPiece.presentation },
-        { label: "Edition", value: artPiece.edition },
-        { label: "Finish", value: artPiece.finish },
+        { label: "Afmetingen", value: artPiece.dimensions },
+        { label: "Inlijsting", value: artPiece.frame },
+        { label: "Structuur", value: artPiece.structure },
+        { label: "Presentatie", value: artPiece.presentation },
+        { label: "Editie", value: artPiece.edition },
+        { label: "Afwerking", value: artPiece.finish },
     ]
 
     return (
         <div>
             <h3 className="text-sm font-sans font-medium tracking-wide uppercase text-muted-foreground mb-4">
-                Specifications
+                Specificaties
             </h3>
             <dl className="space-y-3">
                 {specifications.map((spec) => (

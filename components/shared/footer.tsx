@@ -1,25 +1,16 @@
 import Link from "next/link"
 import Image from "next/image"
-import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa"
+import { FaEtsy, FaFacebook, FaInstagram, FaTiktok, FaTwitter } from "react-icons/fa"
 import { FC } from "react"
 
 const footerLinks = {
   shop: [
-    { name: "All Pieces", href: "#" },
-    { name: "New Arrivals", href: "#" },
-    { name: "Best Sellers", href: "#" },
-    { name: "Collections", href: "#" },
-  ],
-  support: [
-    { name: "Shipping Info", href: "#" },
-    { name: "Returns", href: "#" },
-    { name: "FAQ", href: "#" },
-    { name: "Care Guide", href: "#" },
+    { name: "Alle stukken", href: "/shop" },
+    { name: "Collecties", href: "/#collections" },
   ],
   company: [
-    { name: "Our Story", href: "#" },
-    { name: "Press", href: "#" },
-    { name: "Commissions", href: "#" },
+    { name: "Wie ben ik?", href: "/#about" },
+    { name: "Doorverwijzen = 10%", href: "/#about" },
     { name: "Admin Login", href: "/admin/login" },
   ],
 }
@@ -50,32 +41,42 @@ const Footer: FC = () => {
               </div>
             </Link>
             <p className="text-muted-foreground max-w-sm mb-6">
-              Creating unique, handcrafted art pieces that bring beauty, 
-              warmth, and emotion into your living spaces.
+              Unieke handgemaakte creaties die warmte, sfeer en een vleugje magie brengen in jouw interieur.
             </p>
 
             {/* Social Links */}
             <div className="flex gap-4">
               <Link 
-                href="#" 
+                href="https://www.instagram.com/byle_art/"
+                target="_blank" 
                 className="h-10 w-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors"
               >
                 <FaInstagram className="h-5 w-5" />
                 <span className="sr-only">Instagram</span>
               </Link>
               <Link 
-                href="#" 
+                href="https://www.facebook.com/ByLe.Art"
+                target="_blank" 
                 className="h-10 w-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors"
               >
                 <FaFacebook className="h-5 w-5" />
                 <span className="sr-only">Facebook</span>
               </Link>
               <Link 
-                href="#" 
+                href="https://www.tiktok.com/@art.by.le"
+                target="_blank" 
                 className="h-10 w-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors"
               >
-                <FaTwitter className="h-5 w-5" />
-                <span className="sr-only">Twitter</span>
+                <FaTiktok className="h-5 w-5" />
+                <span className="sr-only">TikTok</span>
+              </Link>
+              <Link 
+                href="https://www.etsy.com/shop/ArtByLeBE"
+                target="_blank" 
+                className="h-10 w-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors"
+              >
+                <FaEtsy className="h-5 w-5" />
+                <span className="sr-only">Etsy</span>
               </Link>
             </div>
           </div>
@@ -99,24 +100,6 @@ const Footer: FC = () => {
             </ul>
           </div>
 
-          {/* Support Links */}
-          <div>
-            <h3 className="text-sm font-sans font-semibold tracking-wide uppercase text-foreground mb-4">
-              Support
-            </h3>
-            <ul className="space-y-3">
-              {footerLinks.support.map((link) => (
-                <li key={link.name}>
-                  <Link 
-                    href={link.href}
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
 
           {/* Company Links */}
           <div>

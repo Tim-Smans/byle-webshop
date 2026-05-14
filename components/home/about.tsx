@@ -41,7 +41,7 @@ const About: FC = () => {
           <div className="relative">
             <div className="relative aspect-4/5 rounded-lg overflow-hidden">
               <Image
-                src="/Images/about_me_image.jpg"
+                src="/images/about_me_image.jpg"
                 alt="Artist at work"
                 fill
                 className="object-cover"

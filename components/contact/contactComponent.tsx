@@ -79,10 +79,10 @@ const ContactComponent: FC = () => {
                 <aside className="space-y-10">
                     <div>
                         <h2 className="text-2xl mb-4">
-                            Got any questions?
+                            Heb je een vraag?
                         </h2>
                         <p className="leading-relaxed text-sm">
-                            Whether you'd like to commission a piece, learn more about a particular artwork, or simply have a chat about art — I'd love to hear from you.
+                            Heb je een vraag, spreekt een werk je aan of droom je van een creatie op maat? Neem gerust contact op, samen bekijken we de mogelijkheden.
                         </p>
                     </div>
 
@@ -210,7 +210,7 @@ const ContactComponent: FC = () => {
                             <div className="space-y-2">
 
                                 <Label htmlFor="subject">
-                                    Subject
+                                    Onderwerp
                                 </Label>
 
                                 <Select
@@ -218,24 +218,24 @@ const ContactComponent: FC = () => {
                                     onValueChange={setSubject}
                                 >
                                     <SelectTrigger id="subject">
-                                        <SelectValue placeholder="Choose a subject" />
+                                        <SelectValue placeholder="Kies een onderwerp" />
                                     </SelectTrigger>
 
                                     <SelectContent>
                                         <SelectItem value="order">
-                                            Question about an order
+                                            Vraag over een bestelling
                                         </SelectItem>
                                         <SelectItem value="artwork">
-                                            Question about an artwork
+                                            Vraag over een kunstwerk
                                         </SelectItem>
                                         <SelectItem value="commission">
-                                            Commission / custom work
+                                            Doorverwijzen / Origineel werk
                                         </SelectItem>
                                         <SelectItem value="collaboration">
-                                            Collaboration
+                                            Samenwerking
                                         </SelectItem>
                                         <SelectItem value="other">
-                                            Something else
+                                            Iets anders
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>

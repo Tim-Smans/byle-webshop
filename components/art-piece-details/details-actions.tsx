@@ -3,6 +3,7 @@ import { FC, useState } from "react"
 import { Button } from "../ui/button"
 import { useFavorites } from "@/lib/context/favorites-context"
 import { Check, Share2, Star } from "lucide-react"
+import { FaEtsy } from "react-icons/fa"
 
 interface Props {
     artPiece: ArtPiece
@@ -26,27 +27,38 @@ const DetailsActions: FC<Props> = ({ artPiece }) => {
                     className="flex-1 py-6 text-base font-sans tracking-wide"
                     disabled
                 >
-                    Sold Out
+                    Niet meer beschikbaar
                 </Button>
             ) : (
-                <Button
-                    size="lg"
-                    className="flex-1 py-6 text-base font-sans tracking-wide"
-                    onClick={handleAddToCart}
-                    disabled={isAdded}
-                >
-                    {isAdded ? (
+                <>
+                    <Button
+                        size="lg"
+                        className="flex-1 py-6 text-base font-sans tracking-wide"
+                        onClick={handleAddToCart}
+                        disabled={isAdded}
+                    >
+                        {isAdded ? (
+                            <>
+                                <Check className="h-5 w-5 mr-2" />
+                                Toegevoegd aan favorieten
+                            </>
+                        ) : (
+                            <>
+                                <Star className="h-5 w-5 mr-2" />
+                                Toevoegen aan favorieten
+                            </>
+                        )}
+                    </Button>
+                    <Button
+                        size="lg"
+                        className="flex-1 py-6 text-base font-sans tracking-wide"
+                    >
                         <>
-                            <Check className="h-5 w-5 mr-2" />
-                            Added to Favorites
+                            <FaEtsy className="h-5 w-5 mr-2" />
+                            Kopen op Etsy
                         </>
-                    ) : (
-                        <>
-                            <Star className="h-5 w-5 mr-2" />
-                            Add to Favorites
-                        </>
-                    )}
-                </Button>
+                    </Button>
+                </>
             )}
             <Button
                 size="lg"
@@ -54,7 +66,7 @@ const DetailsActions: FC<Props> = ({ artPiece }) => {
                 className="px-4"
             >
                 <Share2 className="h-5 w-5" />
-                <span className="sr-only">Share</span>
+                <span className="sr-only">Delen</span>
             </Button>
         </div>
     )

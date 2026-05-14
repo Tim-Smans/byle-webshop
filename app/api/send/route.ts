@@ -1,14 +1,15 @@
 import { EmailTemplate } from "@/components/shared/email-template";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
-    if(process.env.RESEND_API_KEY === undefined) {
-        throw new Error('Resend API key not set')
-    }
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
-    try {
+  if (process.env.RESEND_API_KEY === undefined) {
+    throw new Error('Resend API key not set')
+  }
+
+  try {
     const body = await req.json();
 
     const { name, email, subject, message } = body;
@@ -24,7 +25,7 @@ export async function POST(req: Request) {
       from: 'Els <contact@timsmans.be>',
       to: ['byle.art@outlook.com'],
       subject: 'New contact form message from ' + name,
-      react: EmailTemplate({ name: name, email: email, subject: subject, message: message}),
+      react: EmailTemplate({ name: name, email: email, subject: subject, message: message }),
     });
 
     return Response.json({

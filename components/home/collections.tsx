@@ -35,20 +35,19 @@ const Collections = () => {
                             Mijn <span className="italic font-medium">Collecties</span>
                         </h2>
                     </div>
-                    <p className="max-w-md text-muted-foreground text-lg lg:text-right">
-                        Collecties vol stijl, met liefde samengesteld elk met hun eigen verhaal.
+                    <p className="max-w-xl text-muted-foreground text-lg leading-8 lg:text-right">
+                        Ontdek mijn intuïtieve kunst, waar gevoel, kleur en vorm samenkomen in unieke creaties. Van abstracte schilderijen tot karaktervolle sculpturen: elk werk wordt zorgvuldig, geduldig met de hand gemaakt en draagt een eigen verhaal en uitstraling. Laat u inspireren door kunst die warmte, sfeer en persoonlijkheid toevoegt aan uw interieur.
                     </p>
                 </div>
 
                 {/* Collections Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {collections.map((collection, index) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {collections.map((collection) => (
                         <div
                             key={collection.id}
-                            className={`group relative overflow-hidden rounded-lg cursor-pointer ${index === 0 ? 'lg:col-span-2 lg:row-span-2' : ''
-                                }`}
+                            className="group relative overflow-hidden rounded-lg cursor-pointer"
                         >
-                            <div className={`relative ${index === 0 ? 'aspect-[4/3] lg:aspect-square' : 'aspect-[4/3]'}`}>
+                            <div className="relative min-h-[280px] md:aspect-[4/3]">
                                 <Image
                                     src={collection.thumbnailUrl}
                                     alt={collection.title}
@@ -56,20 +55,17 @@ const Collections = () => {
                                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                                 />
 
-                                {/* Gradient Overlay */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
 
-                                {/* Content */}
                                 <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end">
-                                    <p className="text-sm font-sans font-medium tracking-wide text-background/70 mb-2">
-                                        # pieces
-                                    </p>
                                     <h3 className="text-2xl sm:text-3xl font-medium text-background mb-2">
                                         {collection.title}
                                     </h3>
-                                    <p className="text-background/80 text-base mb-4">
+
+                                    <p className="text-background/80 text-base mb-4 line-clamp-3 md:line-clamp-none">
                                         {collection.description}
                                     </p>
+
                                     <Link href={`/shop?collectionId=${collection.id}`}>
                                         <div className="flex items-center gap-2 text-background font-sans text-sm font-medium tracking-wide group-hover:gap-3 transition-all">
                                             <span>Kijk eens rond in de collectie</span>

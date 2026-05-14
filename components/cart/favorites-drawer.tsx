@@ -5,15 +5,12 @@ import { X, ShoppingBag, Trash2, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useFavorites } from "@/lib/context/favorites-context"
 import { FC } from "react"
+import { getOptimizedImageUrl } from "@/lib/utils"
 
 const FavoritesDrawer: FC = () => {
     const { favorites, isOpen, closeFavorites, removeItem, clearFavorites, isLoading } = useFavorites()
     
-    const etsyUrl = process.env.NEXT_PUBLIC_ETSY_STORE_URL;
-
-    if (!etsyUrl) {
-    throw new Error("NEXT_PUBLIC_ETSY_STORE_URL is not defined");
-    }
+    const etsyUrl = process.env.NEXT_PUBLIC_ETSY_STORE_URL ?? "";
 
     if (!isOpen) return null
     return (
@@ -30,7 +27,7 @@ const FavoritesDrawer: FC = () => {
                 <div className="flex items-center justify-between px-6 py-4 border-b border-border">
                     <div className="flex items-center gap-3">
                         <Star className="h-5 w-5" />
-                        <h2 className="text-xl font-medium">Your Favorites</h2>
+                        <h2 className="text-xl font-medium">Jou Favorieten</h2>
                         {favorites.itemCount > 0 && (
                             <span className="px-2 py-0.5 text-xs font-sans font-medium bg-accent text-accent-foreground rounded-full">
                                 {favorites.itemCount}
@@ -39,7 +36,7 @@ const FavoritesDrawer: FC = () => {
                     </div>
                     <Button variant="ghost" size="icon" onClick={closeFavorites}>
                         <X className="h-5 w-5" />
-                        <span className="sr-only">Close favorites</span>
+                        <span className="sr-only">Sluit favorieten</span>
                     </Button>
                 </div>
 
@@ -53,13 +50,13 @@ const FavoritesDrawer: FC = () => {
                         <div className="flex flex-col items-center justify-center h-full text-center px-6">
                             <ShoppingBag className="h-16 w-16 text-muted-foreground/30 mb-4" />
                             <h3 className="text-xl font-medium text-foreground mb-2">
-                                Your favorites are empty
+                                Je hebt geen favorieten
                             </h3>
                             <p className="text-muted-foreground mb-6">
-                                Discover our collection and add some beautiful pieces to your favorites.
+                                Bekijk mijn collectie en voeg werken toe aan je favorieten.
                             </p>
                             <Button onClick={closeFavorites}>
-                                Continue Shopping
+                                Verder winkelen
                             </Button>
                         </div>
                     ) : (
@@ -72,7 +69,7 @@ const FavoritesDrawer: FC = () => {
                                     {/* Image */}
                                     <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-md">
                                     <Image
-                                        src={item.product.images[0].url}
+                                        src={getOptimizedImageUrl(item.product.images[0].url, {width: 300, quality: 50})}
                                         alt={item.product.title}
                                         fill
                                         className="object-cover"
@@ -119,21 +116,21 @@ const FavoritesDrawer: FC = () => {
                     <div className="border-t border-border px-6 py-4 space-y-4">
                         {/* Subtotal */}
                         <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground font-sans">Subtotal</span>
+                            <span className="text-muted-foreground font-sans">Subtotaal</span>
                             <span className="text-xl font-medium">
                                 ${favorites.total.toLocaleString()}
                             </span>
                         </div>
 
                         <p className="text-sm text-muted-foreground font-sans">
-                            Final prices and taxes will be calculated on Etsy
+                            Uiteindelijke prijzen worden berekend op Etsy
                         </p>
 
                         {/* Actions */}
                         <div className="space-y-2">
                             <Button asChild className="w-full py-6 text-base font-sans tracking-wide">
                                 <a target="blank" href={etsyUrl}>   
-                                    Go to Etsy store
+                                    Ga naar Etsy pagina
                                 </a>
                             </Button>
                             <Button
@@ -141,7 +138,7 @@ const FavoritesDrawer: FC = () => {
                                 className="w-full font-sans"
                                 onClick={closeFavorites}
                             >
-                                Continue Shopping
+                                Verder Winkelen
                             </Button>
                         </div>
 
@@ -150,7 +147,7 @@ const FavoritesDrawer: FC = () => {
                             className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors font-sans underline"
                             onClick={clearFavorites}
                         >
-                            Clear Favorites
+                            Maak Favorieten Leeg
                         </button>
                     </div>
                 )}

@@ -10,8 +10,8 @@ import AdminModeButton from "../admin/admin-mode-button"
 
 const navigation = [
   { name: "Shop", href: "/shop" },
-  { name: "Collections", href: "/#collections" },
-  { name: "About", href: "/#about" },
+  { name: "Collecties", href: "/#collections" },
+  { name: "Wie ben ik", href: "/#about" },
   { name: "Contact", href: "/contact" },
 ]
 

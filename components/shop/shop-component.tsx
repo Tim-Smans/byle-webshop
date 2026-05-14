@@ -22,6 +22,7 @@ import {
 import { useFeedback } from "@/lib/context/feedback-context";
 import { FaStar } from "react-icons/fa";
 import { useAdmin } from "@/lib/hooks/use-admin";
+import { getOptimizedImageUrl } from "@/lib/utils";
 
 const ShopComponent: FC = () => {
     const [artPieces, setArtPieces] = useState<ArtPiece[]>([])
@@ -268,13 +269,26 @@ const ShopComponent: FC = () => {
                             key={piece.id}
                             className="group bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
                         >
-                            {/* Image Container */}
-                            <div className="relative aspect-3/4 overflow-hidden">
+                            {/* Image Container — vaste hoogte, volledig kunstwerk zichtbaar */}
+                            <div className="relative h-[440px] overflow-hidden bg-black">
+
+                                {/* Geblurde achtergrond (museum-matte effect) */}
                                 <Image
-                                    src={piece.images[0]?.url}
+                                    src={getOptimizedImageUrl(piece.images[0]?.url, { width: 100, quality: 30 })}
+                                    alt=""
+                                    fill
+                                    aria-hidden
+                                    className="object-cover scale-110 blur-xl brightness-40 saturate-75"
+                                />
+
+                                {/* Hoofdafbeelding — object-contain zodat alles zichtbaar blijft */}
+                                <Image
+                                    src={getOptimizedImageUrl(piece.images[0]?.url, { width: 600, quality: 50 })}
                                     alt={piece.title}
                                     fill
-                                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                    className="object-contain p-3 group-hover:scale-105 transition-transform duration-500"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    priority={false}
                                 />
 
                                 {/* Overlay Actions */}
@@ -346,7 +360,6 @@ const ShopComponent: FC = () => {
                                     <span className="px-3 py-1 text-xs font-sans font-medium tracking-wide bg-background/90 backdrop-blur-sm rounded-full">
                                         {piece.labels[0].title}
                                     </span>
-
                                     {isNewArtPiece(piece.creationTime) && (
                                         <span className="px-3 py-1 text-xs font-bold tracking-wide bg-oker text-white rounded-full shadow">
                                             NEW
@@ -369,7 +382,7 @@ const ShopComponent: FC = () => {
                                 </div>
                                 <div className="flex items-center justify-between mt-4">
                                     <p className="text-2xl font-light text-foreground">
-                                        {piece.isSold ? <span className="text-red-700">VERKOCHT</span> : '€ ' + piece.price.toLocaleString("en-US")}
+                                        {piece.isSold ? <span className="text-red-700">NIET BESCHIKBAAR</span> : '€ ' + piece.price.toLocaleString("en-US")}
                                     </p>
                                     <Link href={`/art/${piece.id}`}>
                                         <Button

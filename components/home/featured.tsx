@@ -10,6 +10,7 @@ import { getArtPieces, toggleArtPieceFeatured } from "@/lib/services/art-piece-s
 import Link from "next/link"
 import { FaStar } from "react-icons/fa"
 import { useAdmin } from "@/lib/hooks/use-admin"
+import { getOptimizedImageUrl } from "@/lib/utils"
 
 
 const FeaturedPieces: FC = () => {
@@ -17,7 +18,7 @@ const FeaturedPieces: FC = () => {
   const [artPieces, setArtPieces] = useState<ArtPiece[]>([])
 
   const isAdmin = useAdmin();
-  
+
   const { addItem } = useFavorites();
 
   const handleAddItem = (product: Product) => {
@@ -75,7 +76,7 @@ const FeaturedPieces: FC = () => {
             Zorgvuldig uitgekozen
           </p>
           <h2 className="text-oker text-4xl sm:text-5xl font-light tracking-tight text-foreground mb-4">
-            Stukjes om van te <span className="italic font-medium">Houden</span>
+            <span className="italic font-medium">Uitgelicht</span>
           </h2>
           <p className="max-w-2xl mx-auto text-muted-foreground text-lg">
             Duik in mijn meest geliefde werkjes, stuk voor stuk met zorg en liefde gemaakt. Benieuwd naar meer? Verken gerust de hele winkel via de Shop.
@@ -91,11 +92,23 @@ const FeaturedPieces: FC = () => {
             >
               {/* Image Container */}
               <div className="relative aspect-3/4 overflow-hidden">
+                {/* Geblurde achtergrond (museum-matte effect) */}
                 <Image
-                  src={piece.images[0].url}
+                  src={getOptimizedImageUrl(piece.images[0]?.url, { width: 100, quality: 50 })}
+                  alt=""
+                  fill
+                  aria-hidden
+                  className="object-cover scale-110 blur-xl brightness-40 saturate-75"
+                />
+
+                {/* Hoofdafbeelding — object-contain zodat alles zichtbaar blijft */}
+                <Image
+                  src={getOptimizedImageUrl(piece.images[0]?.url, { width: 600, quality: 50 })}
                   alt={piece.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="object-contain p-3 group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  priority={false}
                 />
 
                 {/* Overlay Actions */}
@@ -114,20 +127,20 @@ const FeaturedPieces: FC = () => {
                     </Button>
                     {
                       isAdmin === true ?
-                      <Button
-                        size="icon"
-                        variant="secondary"
-                        className={`h-10 w-10 rounded-full backdrop-blur-sm ${piece.isFeatured
-                          ? "bg-yellow-500 hover:bg-yellow-600"
-                          : "bg-foreground/90 hover:bg-foreground"
-                          }`}
-                        onClick={() => handleToggleFeatured(piece.id)}
-                      >
-                        <FaStar />
-                        <span className="sr-only">Toggle featured</span>
-                      </Button>
-                      : null
-                    } 
+                        <Button
+                          size="icon"
+                          variant="secondary"
+                          className={`h-10 w-10 rounded-full backdrop-blur-sm ${piece.isFeatured
+                            ? "bg-yellow-500 hover:bg-yellow-600"
+                            : "bg-foreground/90 hover:bg-foreground"
+                            }`}
+                          onClick={() => handleToggleFeatured(piece.id)}
+                        >
+                          <FaStar />
+                          <span className="sr-only">Toggle featured</span>
+                        </Button>
+                        : null
+                    }
                   </div>
                 </div>
 

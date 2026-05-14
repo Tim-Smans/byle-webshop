@@ -2,6 +2,7 @@ import { FC } from "react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { ArtPiece } from "@/lib/types"
+import { getOptimizedImageUrl } from "@/lib/utils"
 
 type Props = {
     artPiece: ArtPiece
@@ -48,9 +49,9 @@ const ExpandedImageModal: FC<Props> = ({
                 </svg>
             </button>
 
-            <div className="relative w-full max-w-4xl aspect-[3/4]">
+            <div className="relative w-full max-w-4xl h-[85vh]">
                 <Image
-                    src={artPiece.images[selectedImageIndex]?.url || ""}
+                    src={getOptimizedImageUrl(artPiece.images[selectedImageIndex]?.url || "", { width: 800, quality: 75 })}                    
                     alt={artPiece.title}
                     fill
                     className="object-contain"

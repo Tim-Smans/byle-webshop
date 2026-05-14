@@ -43,7 +43,7 @@ const ArtDetailContent = ({ id }: { id: string }) => {
                         className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8 font-sans text-sm"
                     >
                         <ArrowLeft className="h-4 w-4" />
-                        Back to Shop
+                        Terug naar Shop
                     </Link>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">

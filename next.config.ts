@@ -10,7 +10,11 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "pxnluogtowkuizaejxsj.supabase.co"
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "i.imgur.com",
+      },
     ]
   }
 };
