@@ -39,7 +39,7 @@ const ArtDetailContent = ({ id }: { id: string }) => {
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     {/* Back Button */}
                     <Link
-                        href="/#shop"
+                        href="/shop"
                         className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8 font-sans text-sm"
                     >
                         <ArrowLeft className="h-4 w-4" />

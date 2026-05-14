@@ -26,7 +26,7 @@ const Hero: FC = () => {
         </p>
 
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-oker mb-6 text-balance">
-          Art created from feeling <br />
+          <span className="font-decorative">Art</span> created from feeling <br />
           <span className="font-medium italic">to be felt in silence</span>
         </h1>
 

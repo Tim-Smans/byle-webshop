@@ -186,11 +186,11 @@ const ShopComponent: FC = () => {
                         Kijk rond tussen mijn kunstwerken
                     </p>
                     <h2 className="text-oker text-4xl sm:text-5xl font-light tracking-tight text-foreground mb-4">
-                        Mijn <span className="italic font-medium">Winkel</span>
+                        Mijn <span className="italic font-medium">Shop</span>
                     </h2>
                     <p className="max-w-2xl mx-auto text-muted-foreground text-lg">
-                        Discover all of my works, each one a testament to the beauty
-                        of handcrafted artistry. You can use the filters to make your browsing experience more.
+                        Ontdek mijn unieke creaties, stuk voor stuk met liefde en zorg handgemaakt. Laat je inspireren door de warme details,
+                         zachte kleuren en creatieve afwerking. Gebruik de filters om rustig rond te kijken tussen al mijn werken.
                     </p>
                     {
                         isAdmin ?
@@ -206,7 +206,7 @@ const ShopComponent: FC = () => {
                 <div className="mb-10 w-full flex gap-4">
                     <input
                         type="text"
-                        placeholder="Search by title, artist or label..."
+                        placeholder="Zoek op titel, artiest of label..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="
@@ -248,7 +248,7 @@ const ShopComponent: FC = () => {
                         "
                     >
                         <option value="all">
-                            All collections
+                            Alle collecties
                         </option>
 
                         {collections.map((collection) => (
@@ -381,7 +381,7 @@ const ShopComponent: FC = () => {
                                     </div>
                                 </div>
                                 <div className="flex items-center justify-between mt-4">
-                                    <p className="text-2xl font-light text-foreground">
+                                    <p className="text-xl font-light text-foreground">
                                         {piece.isSold ? <span className="text-red-700">NIET BESCHIKBAAR</span> : '€ ' + piece.price.toLocaleString("en-US")}
                                     </p>
                                     <Link href={`/art/${piece.id}`}>
@@ -390,7 +390,7 @@ const ShopComponent: FC = () => {
                                             size="sm"
                                             className="font-sans text-sm tracking-wide"
                                         >
-                                            View Details
+                                            Bekijk Details
                                         </Button>
                                     </Link>
 
@@ -415,6 +415,7 @@ const ShopComponent: FC = () => {
                                                 ? "pointer-events-none opacity-50"
                                                 : "cursor-pointer"
                                         }
+                                        text="Vorige"
                                     />
                                 </PaginationItem>
 
@@ -446,6 +447,7 @@ const ShopComponent: FC = () => {
                                                 ? "pointer-events-none opacity-50"
                                                 : "cursor-pointer"
                                         }
+                                        text="Volgende"
                                     />
                                 </PaginationItem>
                             </PaginationContent>

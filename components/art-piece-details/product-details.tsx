@@ -36,7 +36,7 @@ const ProductDetails: FC<Props> = ({ artPiece }) => {
             {/* Price */}
             <div className="mb-8">
                 <p className="text-4xl font-light text-foreground">
-                    €{artPiece.price.toLocaleString()}
+                    € {artPiece.price.toLocaleString()}
                 </p>
                 {!artPiece.isSold && (
                     <>

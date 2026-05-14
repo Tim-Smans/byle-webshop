@@ -104,7 +104,7 @@ const Footer: FC = () => {
           {/* Company Links */}
           <div>
             <h3 className="text-sm font-sans font-semibold tracking-wide uppercase text-foreground mb-4">
-              Company
+              Over mij
             </h3>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
@@ -124,7 +124,7 @@ const Footer: FC = () => {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm font-sans text-muted-foreground">
-            © 2026 By Lé Handcrafted Art. All rights reserved.
+            © 2026 By Lé Handcrafted Art. All rights reserved. Website created by <a href="https://portfolio.timsmans.be" target="_blank">Tim Smans</a>
           </p>
           <div className="flex gap-6 text-sm font-sans text-muted-foreground">
             <Link href="#" className="hover:text-foreground transition-colors">
