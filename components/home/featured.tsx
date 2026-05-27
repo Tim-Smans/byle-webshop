@@ -165,8 +165,8 @@ const FeaturedPieces: FC = () => {
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-4">
-                  <p className="text-2xl font-light text-foreground">
-                    € {piece.price.toLocaleString("en-US")}
+                  <p className="text-xl font-light text-foreground">
+                    {piece.isSold ? <span className="text-red-700">NIET BESCHIKBAAR</span> : '€ ' + piece.price.toLocaleString("en-US")}
                   </p>
                   <Link href={`/art/${piece.id}`}>
                     <Button
@@ -192,8 +192,8 @@ const FeaturedPieces: FC = () => {
             className="px-8 py-6 text-base font-sans font-medium tracking-wide"
             asChild
           >
-            <Link href={'/shop'}>
-              Alle werken
+            <Link href={'/gallery'}>
+              Werken
             </Link>
           </Button>
         </div>

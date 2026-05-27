@@ -25,10 +25,10 @@ import { ArrowRight, Check } from "lucide-react"
           Nieuwsbrief
         </p>
         <h2 className="text-4xl sm:text-5xl font-light tracking-tight mb-6">
-          Een Beetje Creativiteit <span className="italic font-medium">In Je Mailbox</span>
+          Een beetje creativiteit <span className="italic font-medium">in je mailbox</span>
         </h2>
         <p className="text-lg text-primary-foreground/80 max-w-2xl mx-auto mb-10">
-          Ontvang als eerste informatie over nieuwe items, exclusieve collecties en speciale evenementen. Ik deel inzichten in mijn creatieve process en laten je een kijke achter de schermen nemen.
+          Ontvang als eerste nieuws over nieuwe items, exclusieve collecties en speciale evenementen. Ik deel ook een blik achter de schermen en neem je mee in mijn creatieve proces.
         </p>
 
         {isSubscribed ? (

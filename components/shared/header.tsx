@@ -3,20 +3,23 @@
 import Link from "next/link"
 import Image from "next/image"
 import { FC, useState } from "react"
-import { Menu, X, Search, User, Star } from "lucide-react"
+import { Menu, X, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useFavorites } from "@/lib/context/favorites-context"
 import AdminModeButton from "../admin/admin-mode-button"
 
 const navigation = [
-  { name: "Shop", href: "/shop" },
+  { name: "Home", href: "/"},
+  { name: "Gallery / Works", href: "/gallery" },
   { name: "Collecties", href: "/#collections" },
-  { name: "Wie ben ik", href: "/#about" },
+  { name: "About Lé", href: "/#about" },
+  { name: "Artist Statement", href: "/#statement" },
+  { name: "Artist CV", href: "/cv" },
   { name: "Contact", href: "/contact" },
 ]
 
 const Header: FC = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(true)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false)
   const { favorites, openFavorites } = useFavorites()
 
   return (
@@ -51,14 +54,6 @@ const Header: FC = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="hidden sm:flex">
-            <Search className="h-5 w-5" />
-            <span className="sr-only">Search</span>
-          </Button>
-          <Button variant="ghost" size="icon" className="hidden sm:flex">
-            <User className="h-5 w-5" />
-            <span className="sr-only">Account</span>
-          </Button>
           <Button
             variant="ghost"
             size="icon"

@@ -2,16 +2,17 @@ import Link from "next/link"
 import Image from "next/image"
 import { FaEtsy, FaFacebook, FaInstagram, FaTiktok, FaTwitter } from "react-icons/fa"
 import { FC } from "react"
+import { PrivacyPolicyDialog, TermsOfServiceDialog } from "../dialogs/service-dialogs"
 
 const footerLinks = {
   shop: [
-    { name: "Alle stukken", href: "/shop" },
+    { name: "Werken", href: "/gallery" },
     { name: "Collecties", href: "/#collections" },
   ],
   company: [
-    { name: "Wie ben ik?", href: "/#about" },
-    { name: "Doorverwijzen = 10%", href: "/#about" },
-    { name: "Admin Login", href: "/admin/login" },
+    { name: "About Lé?", href: "/#about" },
+    { name: "Artist CV", href: "/cv" },
+    { name: "Artist Statement", href: "/#statement" },
   ],
 }
 
@@ -84,7 +85,7 @@ const Footer: FC = () => {
           {/* Shop Links */}
           <div>
             <h3 className="text-sm font-sans font-semibold tracking-wide uppercase text-foreground mb-4">
-              Shop
+              Gallery / Works
             </h3>
             <ul className="space-y-3">
               {footerLinks.shop.map((link) => (
@@ -104,7 +105,7 @@ const Footer: FC = () => {
           {/* Company Links */}
           <div>
             <h3 className="text-sm font-sans font-semibold tracking-wide uppercase text-foreground mb-4">
-              Over mij
+              About
             </h3>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
@@ -124,14 +125,14 @@ const Footer: FC = () => {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm font-sans text-muted-foreground">
-            © 2026 By Lé Handcrafted Art. All rights reserved. Website created by <a href="https://portfolio.timsmans.be" target="_blank">Tim Smans</a>
+            © 2026 By Lé Handcrafted Art. Alle rechten voorbehouden. Website created/managed by <a className="underline" href="https://portfolio.timsmans.be" target="_blank">Tim Smans</a>
           </p>
           <div className="flex gap-6 text-sm font-sans text-muted-foreground">
             <Link href="#" className="hover:text-foreground transition-colors">
-              Privacy Policy
+              <PrivacyPolicyDialog triggerText="Privacy Policy"/>
             </Link>
             <Link href="#" className="hover:text-foreground transition-colors">
-              Terms of Service
+              <TermsOfServiceDialog triggerText="Terms of Service"/>
             </Link>
           </div>
         </div>

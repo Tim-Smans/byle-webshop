@@ -25,8 +25,11 @@ import { useAdmin } from "@/lib/hooks/use-admin";
 import { getOptimizedImageUrl } from "@/lib/utils";
 
 const ShopComponent: FC = () => {
+    const searchParams = useSearchParams();
+
     const [artPieces, setArtPieces] = useState<ArtPiece[]>([])
-    const [currentPage, setCurrentPage] = useState<number>(1)
+    const pageFromUrl = Number(searchParams.get("page")) || 1;
+    const [currentPage, setCurrentPage] = useState<number>(pageFromUrl)
     const [searchTerm, setSearchTerm] = useState<string>("")
     const [collections, setCollections] = useState<Collection[]>([])
     const [selectedCollectionId, setSelectedCollectionId] = useState<string>("all")
@@ -37,7 +40,6 @@ const ShopComponent: FC = () => {
     const ITEMS_PER_PAGE = 6
 
     const router = useRouter();
-    const searchParams = useSearchParams();
 
     useEffect(() => {
         const collectionIdFromUrl = searchParams.get("collectionId")
@@ -46,6 +48,22 @@ const ShopComponent: FC = () => {
             setSelectedCollectionId(collectionIdFromUrl)
         }
     }, [searchParams])
+
+    useEffect(() => {
+        const params = new URLSearchParams(searchParams.toString());
+
+        params.set("page", currentPage.toString());
+
+        if (selectedCollectionId !== "all") {
+            params.set("collectionId", selectedCollectionId);
+        } else {
+            params.delete("collectionId");
+        }
+
+        router.replace(`/gallery?${params.toString()}`, {
+            scroll: false,
+        });
+    }, [currentPage, selectedCollectionId]);
 
     const handleToggleFeatured = async (id: string) => {
         var artPieceFeatured = await isArtPieceFeatured(id)
@@ -140,18 +158,53 @@ const ShopComponent: FC = () => {
         addItem(product, 1)
     }
 
+    const handleNavigateToDetail = (url: string) => {
+        localStorage.setItem(
+            "shopScrollPosition",
+            window.scrollY.toString()
+        );
+
+        router.push(url);
+    };
+
+    useEffect(() => {
+        if (artPieces.length === 0) return;
+
+        const savedScrollPosition = localStorage.getItem("shopScrollPosition");
+
+        if (savedScrollPosition) {
+            window.scrollTo({
+                top: Number(savedScrollPosition),
+                behavior: "instant" as ScrollBehavior,
+            });
+
+            localStorage.removeItem("shopScrollPosition");
+        }
+    }, [artPieces]);
+
+    useEffect(() => {
+        const page = Number(searchParams.get("page")) || 1;
+        setCurrentPage(page);
+    }, [searchParams]);
+
     useEffect(() => {
         const loadData = async () => {
             const artPieces = await getArtPieces();
             const collections = await getCollections();
 
             if (artPieces) {
-                const sortedArtPieces = [...artPieces].sort(
-                    (a, b) =>
+                const sortedArtPieces = [...artPieces].sort((a, b) => {
+                    // First show the items that are still availble
+                    if (a.isSold !== b.isSold) {
+                        return Number(a.isSold) - Number(b.isSold);
+                    }
+
+                    // Then sort on creation time
+                    return (
                         new Date(b.creationTime).getTime() -
                         new Date(a.creationTime).getTime()
-                );
-
+                    );
+                });
                 setArtPieces(sortedArtPieces);
             }
 
@@ -173,9 +226,7 @@ const ShopComponent: FC = () => {
         return diffInDays <= 3;
     };
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchTerm, selectedCollectionId]);
+
 
     return (
         <section id="shop" className="py-24 bg-muted/30">
@@ -186,11 +237,11 @@ const ShopComponent: FC = () => {
                         Kijk rond tussen mijn kunstwerken
                     </p>
                     <h2 className="text-oker text-4xl sm:text-5xl font-light tracking-tight text-foreground mb-4">
-                        Mijn <span className="italic font-medium">Shop</span>
+                        Gallery / Works
                     </h2>
                     <p className="max-w-2xl mx-auto text-muted-foreground text-lg">
                         Ontdek mijn unieke creaties, stuk voor stuk met liefde en zorg handgemaakt. Laat je inspireren door de warme details,
-                         zachte kleuren en creatieve afwerking. Gebruik de filters om rustig rond te kijken tussen al mijn werken.
+                        zachte kleuren en creatieve afwerking. Gebruik de filters om rustig rond te kijken tussen al mijn werken.
                     </p>
                     {
                         isAdmin ?
@@ -203,12 +254,15 @@ const ShopComponent: FC = () => {
                     }
                 </div>
 
-                <div className="mb-10 w-full flex gap-4">
+                <div className="mb-10 w-full flex flex-col sm:flex-row gap-4">
                     <input
                         type="text"
                         placeholder="Zoek op titel, artiest of label..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value)
+                            setCurrentPage(1);
+                        }}
                         className="
                             w-full
                             px-4
@@ -230,13 +284,13 @@ const ShopComponent: FC = () => {
                             setCurrentPage(1);
 
                             if (value === "all") {
-                                router.push("/shop");
+                                router.push("/gallery");
                             } else {
-                                router.push(`/shop?collectionId=${value}`);
+                                router.push(`/gallery?collectionId=${value}`);
                             }
                         }}
                         className="
-                            min-w-[240px]
+                            w-full sm:w-auto sm:min-w-[240px]
                             px-4
                             py-3
                             border
@@ -384,15 +438,21 @@ const ShopComponent: FC = () => {
                                     <p className="text-xl font-light text-foreground">
                                         {piece.isSold ? <span className="text-red-700">NIET BESCHIKBAAR</span> : '€ ' + piece.price.toLocaleString("en-US")}
                                     </p>
-                                    <Link href={`/art/${piece.id}`}>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="font-sans text-sm tracking-wide"
-                                        >
-                                            Bekijk Details
-                                        </Button>
-                                    </Link>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="font-sans text-sm tracking-wide"
+                                        onClick={() =>
+                                            handleNavigateToDetail(
+                                                `/art/${piece.id}?page=${currentPage}${selectedCollectionId !== "all"
+                                                    ? `&collectionId=${selectedCollectionId}`
+                                                    : ""
+                                                }`
+                                            )
+                                        }
+                                    >
+                                        Bekijk Details
+                                    </Button>
 
                                 </div>
                             </div>

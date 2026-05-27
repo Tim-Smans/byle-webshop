@@ -17,6 +17,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { v4 as uuidv4 } from "uuid";
 import { useFeedback } from "@/lib/context/feedback-context";
 import { useRouter } from "next/navigation";
+import MDEditor from "@uiw/react-md-editor";
 
 interface LabelType {
     id: string;
@@ -274,208 +275,280 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
 
     return (
         <div className="w-full px-6 py-8 pt-30">
-            <Card>
-                <CardContent className="p-6 space-y-6">
-                    <h1 className="text-2xl font-semibold">Add ArtPiece</h1>
+            <Card className="overflow-hidden">
+                <CardContent className="p-8">
+                    <h1 className="text-3xl font-semibold mb-10">
+                        {isEditMode ? "Update ArtPiece" : "Add ArtPiece"}
+                    </h1>
 
-                    <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                            <div>
-                                <LabelComponent>Title</LabelComponent>
-                                <Input
-                                    value={form.title}
-                                    onChange={(e) =>
-                                        setForm({ ...form, title: e.target.value })
-                                    }
-                                />
+                    <form onSubmit={handleSubmit} className="space-y-10">
+
+                        {/* TOP SECTION */}
+                        <div className="grid grid-cols-1 xl:grid-cols-[1fr_1.4fr] gap-10 items-start">
+
+                            {/* LEFT SIDE */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                <div>
+                                    <LabelComponent>Title</LabelComponent>
+                                    <Input
+                                        value={form.title}
+                                        onChange={(e) =>
+                                            setForm({ ...form, title: e.target.value })
+                                        }
+                                    />
+                                </div>
+
+                                <div>
+                                    <LabelComponent>Artist</LabelComponent>
+                                    <Input
+                                        value={form.artist}
+                                        onChange={(e) =>
+                                            setForm({ ...form, artist: e.target.value })
+                                        }
+                                    />
+                                </div>
+
+                                <div>
+                                    <LabelComponent>Price</LabelComponent>
+                                    <Input
+                                        type="number"
+                                        value={form.price}
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                price: Number(e.target.value),
+                                            })
+                                        }
+                                    />
+                                </div>
+
+                                <div>
+                                    <LabelComponent>Dimensions</LabelComponent>
+                                    <Input
+                                        value={form.dimensions}
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                dimensions: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </div>
+
+                                <div>
+                                    <LabelComponent>Frame</LabelComponent>
+                                    <Input
+                                        value={form.frame}
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                frame: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </div>
+
+                                <div>
+                                    <LabelComponent>Structure</LabelComponent>
+                                    <Input
+                                        value={form.structure}
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                structure: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </div>
+
+                                <div>
+                                    <LabelComponent>Presentation</LabelComponent>
+                                    <Input
+                                        value={form.presentation}
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                presentation: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </div>
+
+                                <div>
+                                    <LabelComponent>Edition</LabelComponent>
+                                    <Input
+                                        value={form.edition}
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                edition: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </div>
+
+                                <div className="md:col-span-2">
+                                    <LabelComponent>Finish</LabelComponent>
+                                    <Input
+                                        value={form.finish}
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                finish: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </div>
                             </div>
 
-                            <div>
-                                <LabelComponent>Artist</LabelComponent>
-                                <Input
-                                    value={form.artist}
-                                    onChange={(e) =>
-                                        setForm({ ...form, artist: e.target.value })
-                                    }
-                                />
-                            </div>
+                            {/* RIGHT SIDE */}
+                            <div className="min-w-0">
+                                <LabelComponent>Description</LabelComponent>
 
-                            <div>
-                                <LabelComponent>Price</LabelComponent>
-                                <Input
-                                    type="number"
-                                    value={form.price}
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            price: Number(e.target.value),
-                                        })
-                                    }
-                                />
-                            </div>
-
-                            <div>
-                                <LabelComponent>Dimensions</LabelComponent>
-                                <Input
-                                    value={form.dimensions}
-                                    onChange={(e) =>
-                                        setForm({ ...form, dimensions: e.target.value })
-                                    }
-                                />
-                            </div>
-
-                            <div>
-                                <LabelComponent>Frame</LabelComponent>
-                                <Input
-                                    value={form.frame}
-                                    onChange={(e) =>
-                                        setForm({ ...form, frame: e.target.value })
-                                    }
-                                />
-                            </div>
-
-                            <div>
-                                <LabelComponent>Structure</LabelComponent>
-                                <Input
-                                    value={form.structure}
-                                    onChange={(e) =>
-                                        setForm({ ...form, structure: e.target.value })
-                                    }
-                                />
-                            </div>
-
-                            <div>
-                                <LabelComponent>Presentation</LabelComponent>
-                                <Input
-                                    value={form.presentation}
-                                    onChange={(e) =>
-                                        setForm({ ...form, presentation: e.target.value })
-                                    }
-                                />
-                            </div>
-
-                            <div>
-                                <LabelComponent>Edition</LabelComponent>
-                                <Input
-                                    value={form.edition}
-                                    onChange={(e) =>
-                                        setForm({ ...form, edition: e.target.value })
-                                    }
-                                />
-                            </div>
-
-                            <div>
-                                <LabelComponent>Finish</LabelComponent>
-                                <Input
-                                    value={form.finish}
-                                    onChange={(e) =>
-                                        setForm({ ...form, finish: e.target.value })
-                                    }
-
-                                />
+                                <div
+                                    data-color-mode="light"
+                                    className="mt-2 overflow-hidden rounded-md border"
+                                >
+                                    <MDEditor
+                                        value={form.description}
+                                        height={420}
+                                        onChange={(value) =>
+                                            setForm({
+                                                ...form,
+                                                description: value || "",
+                                            })
+                                        }
+                                    />
+                                </div>
                             </div>
                         </div>
 
-                        <div>
-                            <LabelComponent>Description</LabelComponent>
-                            <Textarea
-                                rows={4}
-                                value={form.description}
-                                onChange={(e) =>
-                                    setForm({ ...form, description: e.target.value })
-                                }
-                            />
-                        </div>
+                        {/* BOTTOM SECTION */}
+                        <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
 
-                        <div>
-                            <LabelComponent>Images</LabelComponent>
-                            <Input
-                                type="file"
-                                multiple
-                                accept="image/*"
-                                onChange={handleImageChange}
-                            />
+                            {/* IMAGES */}
+                            <div className="space-y-4">
+                                <div>
+                                    <LabelComponent>Images</LabelComponent>
 
-                            <p className="text-sm mt-2">
-                                {images.length} file(s) selected
-                            </p>
-                        </div>
+                                    <Input
+                                        type="file"
+                                        multiple
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                        className="mt-2"
+                                    />
 
-                        <div>
-                            <LabelComponent>Labels</LabelComponent>
+                                    <p className="text-sm text-muted-foreground mt-2">
+                                        {images.length} file(s) selected
+                                    </p>
+                                </div>
+                            </div>
 
-                            <div className="flex flex-wrap gap-2 mt-2">
-                                {labels.map((label) => (
-                                    <button
-                                        type="button"
-                                        key={label.id}
-                                        className={`px-3 py-1 border rounded ${selectedLabelIds.includes(label.id)
-                                            ? "font-bold"
-                                            : ""
-                                            }`}
-                                        onClick={() => {
-                                            setSelectedLabelIds((prev) =>
-                                                prev.includes(label.id)
-                                                    ? prev.filter((x) => x !== label.id)
-                                                    : [...prev, label.id]
-                                            );
-                                        }}
+                            {/* LABELS */}
+                            <div className="space-y-4 xl:col-span-1">
+                                <div>
+                                    <LabelComponent>Labels</LabelComponent>
+
+                                    <div className="flex flex-wrap gap-2 mt-3">
+                                        {labels.map((label) => (
+                                            <button
+                                                type="button"
+                                                key={label.id}
+                                                className={`
+                                                px-3 py-2 rounded-md border text-sm transition
+                                                ${selectedLabelIds.includes(label.id)
+                                                        ? "font-semibold border-primary"
+                                                        : "hover:bg-muted"
+                                                    }
+                                            `}
+                                                onClick={() => {
+                                                    setSelectedLabelIds((prev) =>
+                                                        prev.includes(label.id)
+                                                            ? prev.filter((x) => x !== label.id)
+                                                            : [...prev, label.id]
+                                                    );
+                                                }}
+                                            >
+                                                {label.title}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    <Input
+                                        placeholder="Create new label"
+                                        value={newLabel}
+                                        onChange={(e) =>
+                                            setNewLabel(e.target.value)
+                                        }
+                                        className="mt-4"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* COLLECTION */}
+                            <div className="space-y-4">
+                                <div>
+                                    <LabelComponent>Collection</LabelComponent>
+
+                                    <Select
+                                        key={collectionId}
+                                        value={collectionId ?? undefined}
+                                        onValueChange={(value) =>
+                                            setCollectionId(value)
+                                        }
                                     >
-                                        {label.title}
-                                    </button>
-                                ))}
+                                        <SelectTrigger className="mt-2">
+                                            <SelectValue placeholder="Select collection" />
+                                        </SelectTrigger>
+
+                                        <SelectContent>
+                                            {collections.map((c) => (
+                                                <SelectItem key={c.id} value={c.id}>
+                                                    {c.title}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+
+                                    <Input
+                                        placeholder="Or create new collection: Title"
+                                        value={newCollectionTitle}
+                                        onChange={(e) =>
+                                            setNewCollectionTitle(e.target.value)
+                                        }
+                                        className="mt-4"
+                                    />
+
+                                    <Input
+                                        placeholder="Or create new collection: Description"
+                                        value={newCollectionDescription}
+                                        onChange={(e) =>
+                                            setNewCollectionDescription(
+                                                e.target.value
+                                            )
+                                        }
+                                        className="mt-4"
+                                    />
+                                </div>
                             </div>
-
-                            <Input
-                                placeholder="Create new label"
-                                value={newLabel}
-                                onChange={(e) => setNewLabel(e.target.value)}
-                                className="mt-3"
-                            />
                         </div>
 
-                        <div>
-                            <LabelComponent>Collection</LabelComponent>
-
-                            <Select
-                                key={collectionId}
-                                value={collectionId ?? undefined}
-                                onValueChange={(value) => setCollectionId(value)}
+                        {/* SUBMIT */}
+                        <div className="flex justify-end pt-4">
+                            <Button
+                                type="submit"
+                                disabled={loading}
+                                className="min-w-[260px]"
                             >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select collection" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {collections.map((c) => (
-                                        <SelectItem key={c.id} value={c.id}>
-                                            {c.title}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-
-                            <Input
-                                placeholder="Or create new collection: Title"
-                                value={newCollectionTitle}
-                                onChange={(e) =>
-                                    setNewCollectionTitle(e.target.value)
-                                }
-                                className="mt-3"
-                            />
-                            <Input
-                                placeholder="Or create new collection: Description"
-                                value={newCollectionDescription}
-                                onChange={(e) =>
-                                    setNewCollectionDescription(e.target.value)
-                                }
-                                className="mt-3"
-                            />
+                                {loading
+                                    ? "Opslaan..."
+                                    : isEditMode
+                                        ? "Update kunstwerk"
+                                        : "Maak kunstwerk aan"}
+                            </Button>
                         </div>
-
-                        <Button type="submit" disabled={loading}>
-                            {loading ? "Opslaan..." :  
-                                isEditMode ?  "Update kunstwerk" : "Maak kunstwerk aan"}
-                        </Button>
                     </form>
                 </CardContent>
             </Card>

@@ -4,6 +4,8 @@ import { Badge } from "../ui/badge";
 import { RotateCcw, Shield, Truck } from "lucide-react";
 import Specifications from "./specifications";
 import DetailsActions from "./details-actions";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface Props {
     artPiece: ArtPiece
@@ -41,11 +43,11 @@ const ProductDetails: FC<Props> = ({ artPiece }) => {
                 {!artPiece.isSold && (
                     <>
                         <p className="text-sm text-muted-foreground font-sans mt-1">
-                            Gratis verzending binnen de EU, of anders veld op Etsy!
+                            Gratis verzending binnen de EU, of anders vermeld op Etsy!
                         </p>
                         <p className="text-sm text-muted-foreground font-sans mt-1">
                             Woon je buiten de EU? Wil je ophalen? Stuur gerust een email naar byle.art@outlook.com, of gebruik het contact formulier
-                            voor een persoonlijke berekening van de verzendkosten.<br/>
+                            voor een persoonlijke berekening van de verzendkosten.<br />
                             Verzending buiten de EU verloopt niet via Etsy.
                         </p>
                     </>
@@ -57,9 +59,11 @@ const ProductDetails: FC<Props> = ({ artPiece }) => {
                 <h3 className="text-sm font-sans font-medium tracking-wide uppercase text-muted-foreground mb-3">
                     Over dit kunstwerk
                 </h3>
-                <p className="text-foreground leading-relaxed">
-                    {artPiece.description}
-                </p>
+                <div className="text-foreground leading-relaxed">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {artPiece.description}
+                    </ReactMarkdown>
+                </div>
             </div>
 
             {/* Actions */}
