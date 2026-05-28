@@ -26,12 +26,16 @@ const Hero: FC = () => {
         </p>
 
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-oker mb-6 text-balance">
-          Art created from feeling <br />
+          <span className="font-decorative">Art</span> created from feeling <br />
           <span className="font-medium italic">to be felt in silence</span>
         </h1>
 
         <p className="mx-auto max-w-2xl text-lg sm:text-xl text-muted-foreground leading-relaxed mb-10">
-          In mijn shop vind je handgemaakte mixed media kunstwerken, gecreëerd met behulp van Powertex en intuïtieve acrylschildertechnieken. Elk stuk wordt zorgvuldig opgebouwd in lagen, wat resulteert in unieke, textuurrijke kunstwerken met een zachte, natuurlijke uitstraling.
+          Bij mijn werken vind je handgemaakte mixed media kunstwerken, 
+          opgebouwd met textielverharder en intuïtieve acrylschildertechnieken.
+          Je kan eenvoudig selecteren tussen de verschillende collecties, waaronder intuïtieve schilderijen en intuïtieve sculpturen.
+          Elk stuk ontstaat laag voor laag en ontwikkelt zich met tijd tot een uniek, 
+          textuurrijk werk met een zachte, natuurlijke uitstraling.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -40,7 +44,7 @@ const Hero: FC = () => {
             className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-sans font-medium tracking-wide"
             asChild
           >
-            <Link href={'/shop'}>
+            <Link href={'/gallery'}>
               Ontdek mijn collectie
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
@@ -51,7 +55,7 @@ const Hero: FC = () => {
             className="px-8 py-6 text-base font-sans font-medium tracking-wide border-foreground/20 hover:bg-foreground/5"
             asChild
           >
-            <a href="#collections">Mijn verhaal</a>
+            <a href="#about">Over Lé</a>
           </Button>
         </div>
       </div>

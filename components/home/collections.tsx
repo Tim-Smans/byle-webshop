@@ -32,7 +32,7 @@ const Collections = () => {
                             Kies uw stijl
                         </p>
                         <h2 className="text-4xl text-oker sm:text-5xl font-light tracking-tight text-foreground">
-                            Mijn <span className="italic font-medium">Collecties</span>
+                            Mijn <span className="italic font-medium">collecties</span>
                         </h2>
                     </div>
                     <p className="max-w-xl text-muted-foreground text-lg leading-8 lg:text-right">
@@ -66,7 +66,7 @@ const Collections = () => {
                                         {collection.description}
                                     </p>
 
-                                    <Link href={`/shop?collectionId=${collection.id}`}>
+                                    <Link href={`/gallery?collectionId=${collection.id}`}>
                                         <div className="flex items-center gap-2 text-background font-sans text-sm font-medium tracking-wide group-hover:gap-3 transition-all">
                                             <span>Kijk eens rond in de collectie</span>
                                             <ArrowRight className="h-4 w-4" />

@@ -55,7 +55,7 @@ const About: FC = () => {
           {/* Content Side */}
           <div>
             <p className="text-sm font-sans font-medium tracking-[0.3em] uppercase text-secondary mb-4">
-              Wie ben ik
+              About Lé
             </p>
             <h2 className="text-4xl text-oker sm:text-5xl font-light tracking-tight text-foreground mb-6">
               Art Born From <br />
@@ -63,16 +63,19 @@ const About: FC = () => {
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed mb-8">
               <p>
-                <strong>Hallo, ik ben Lé, de maker achter Art by Lé.</strong>
-                <br />
-                Ik werk intuïtief en laat me leiden door vormen, kleuren en texturen. Mijn werken ontstaan vaak langzaam, verspreid over meerdere dagen, laag voor laag, totdat ze in balans voelen en volledig zijn. Voor mij is creëren meer dan kunst maken; het is een moment van rust, een manier om even zachtjes los te komen van het dagelijkse leven.
+                Lé is de maker achter Art by Lé, een intuïtieve mixed media praktijk waarin rust, textuur en gelaagdheid centraal staan.
               </p>
               <p>
-                Als thuisblijfmama die leeft met chronische pijn, zijn deze creatieve momenten van grote betekenis. Ze helpen me om opnieuw verbinding te maken met zowel innerlijke rust als kracht.
-
-                Van nature voel ik me aangetrokken tot zachte, aardse tinten met subtiele metallic accenten. Maar soms volg ik gewoon mijn gevoel en laat ik iets expressievers of onverwachts ontstaan — en precies die spontaniteit maakt elk werk uniek. Elk kunstwerk wordt gemaakt met tijd, zorg en aandacht. Geen twee stukken zijn ooit hetzelfde.
-                <br />
-                <strong>Dank je wel voor het bezoeken van mijn kleine creatieve wereld.</strong>
+                Haar werken ontstaan langzaam en organisch, vaak verspreid over meerdere dagen, waarbij vormen, kleuren en materialen zich laag voor laag ontwikkelen tot een evenwichtig geheel.
+              </p>
+              <p>
+                Van nature voelt ze zich aangetrokken tot zachte aardetinten, subtiele metallic accenten en tactiele oppervlakken die een gevoel van verstilling oproepen. Tegelijk laat ze ruimte voor spontaniteit en intuïtie, waardoor soms onverwachte contrasten of expressieve details ontstaan.
+              </p>
+              <p>
+                Voor Lé is creëren meer dan esthetiek alleen; het is een trage en aandachtige manier van werken die ruimte maakt voor rust, zachtheid en verbinding.
+              </p>
+              <p className="font-bold">
+                Elk kunstwerk wordt met tijd, zorg en aandacht opgebouwd. Geen enkel stuk is hetzelfde.
               </p>
             </div>
 
@@ -85,8 +88,8 @@ const About: FC = () => {
                 Laat het me gerust weten. Ik denk graag mee over stijl, kleuren en wat mogelijk is.
               </p>
             </div>
-            
-            <ReferralDialog/>
+
+            <ReferralDialog />
             {
               isAdmin ?
                 <Button

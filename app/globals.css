@@ -1,10 +1,11 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.95 0.015 75);
+  --background: #fceed1;
   --foreground: #6b4426;
   --card: oklch(0.98 0.01 75);
   --card-foreground: oklch(0.15 0.02 75);
@@ -39,9 +40,9 @@
 }
 
 @theme inline {
-  --font-sans: 'Cormorant Garamond', 'Georgia', serif;
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
-  --font-serif: 'Cormorant Garamond', 'Georgia', serif;
+  --font-body: var(--font-body);
+  --font-heading: var(--font-heading);
+  --font-decorative: var(--font-decorative);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -111,4 +112,29 @@
 
 .bg-oker{
   background-color: #cc4b1b;
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-decorative {
+  font-family: var(--font-decorative);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
 }
