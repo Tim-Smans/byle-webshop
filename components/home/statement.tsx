@@ -33,25 +33,19 @@ const Statement: FC = () => {
 
                             <div className="space-y-8 text-lg leading-relaxed text-muted-foreground">
                                 <p>
-                                    Het werk van Lé vertrekt vanuit intuïtie, vertraging en gelaagdheid.
-                                    Door materialen laag per laag op te bouwen, ontstaan sculpturale en
-                                    mixed media werken waarin textuur, licht en vorm voortdurend met
-                                    elkaar in dialoog staan.
+                                    Mijn werk vertrekt vanuit intuïtie, vertraging en gelaagdheid. Door materialen laag per laag op te bouwen, ontstaan sculpturale en mixed media werken waarin textuur, licht en vorm voortdurend met elkaar in dialoog staan.
                                 </p>
 
                                 <p>
-                                    Zachte aardse kleuren worden gecombineerd met subtiele metallic
-                                    nuances, waardoor een spanningsveld ontstaat tussen kwetsbaarheid en
-                                    kracht, soberheid en verfijning. Het maakproces speelt hierin een
-                                    centrale rol: elk werk groeit langzaam en organisch, zonder volledig
-                                    vooraf bepaald eindbeeld.
+                                    Naast mijn werk met textielverharder creëer ik ook schilderijen die variëren van rijke structuren tot pouring-technieken, en soms spontaan verder groeien naar mixed media werken. Ik voel me zowel aangetrokken tot het sculpturale als tot het schilderende proces, waardoor beide werelden elkaar blijven aanvullen binnen mijn praktijk.
                                 </p>
 
                                 <p>
-                                    Haar praktijk onderzoekt hoe kunst een moment van rust en verstilling
-                                    kan creëren binnen de drukte van het dagelijkse leven. De werken
-                                    nodigen uit tot vertragen, kijken en voelen, eerder dan onmiddellijk
-                                    begrijpen.
+                                    Ik combineer zachte aardse kleuren met subtiele metallic nuances, waardoor een spanningsveld ontstaat tussen kwetsbaarheid en kracht, soberheid en verfijning. Het maakproces speelt hierin een centrale rol: elk werk groeit langzaam en organisch, zonder volledig vooraf bepaald eindbeeld.
+
+                                </p>
+                                <p>
+                                    Met mijn werk wil ik een gevoel van rust en verstilling oproepen in de drukte van het dagelijkse leven. Mijn werken nodigen uit tot vertragen, kijken en voelen, eerder dan onmiddellijk begrijpen.
                                 </p>
                             </div>
 
