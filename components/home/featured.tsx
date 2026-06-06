@@ -145,11 +145,15 @@ const FeaturedPieces: FC = () => {
                 </div>
 
                 {/* Category Badge */}
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 text-xs font-sans font-medium tracking-wide bg-background/90 backdrop-blur-sm rounded-full">
-                    {piece.labels[0].title}
-                  </span>
-                </div>
+                {
+                  piece.labels?.length > 0 && (
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 text-xs font-sans font-medium tracking-wide bg-background/90 backdrop-blur-sm rounded-full">
+                        {piece.labels[0].title}
+                      </span>
+                    </div>
+                  )
+                }
               </div>
 
               {/* Details */}

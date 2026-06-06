@@ -411,9 +411,11 @@ const ShopComponent: FC = () => {
 
                                 {/* Badges */}
                                 <div className="absolute top-4 left-4 flex flex-col gap-2">
-                                    <span className="px-3 py-1 text-xs font-sans font-medium tracking-wide bg-background/90 backdrop-blur-sm rounded-full">
-                                        {piece.labels[0].title}
-                                    </span>
+                                    {piece.labels?.length > 0 && (
+                                        <span className="px-3 py-1 text-xs font-sans font-medium tracking-wide bg-background/90 backdrop-blur-sm rounded-full">
+                                            {piece.labels[0].title}
+                                        </span>
+                                    )}
                                     {isNewArtPiece(piece.creationTime) && (
                                         <span className="px-3 py-1 text-xs font-bold tracking-wide bg-oker text-white rounded-full shadow">
                                             NEW
