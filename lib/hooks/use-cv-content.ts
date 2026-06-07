@@ -18,11 +18,12 @@ export const useCvContent = () => {
     setData(newData)
     setSaving(true)
     try {
-      await fetch('/api/cv', {
+      const resp = await fetch('/api/cv', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newData),
       })
+      console.log('resp', resp)
     } finally {
       setSaving(false)
     }
