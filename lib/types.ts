@@ -110,7 +110,8 @@ export interface ArtPiece {
 export interface Image {
   id: string,
   pieceId: string,
-  url: string
+  url: string,
+  index: number
 }
 
 export interface Collection {

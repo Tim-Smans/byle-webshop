@@ -18,6 +18,20 @@ import { v4 as uuidv4 } from "uuid";
 import { useFeedback } from "@/lib/context/feedback-context";
 import { useRouter } from "next/navigation";
 import MDEditor from "@uiw/react-md-editor";
+import {
+    DndContext,
+    closestCenter,
+    PointerSensor,
+    useSensor,
+    useSensors,
+} from "@dnd-kit/core";
+import {
+    SortableContext,
+    arrayMove,
+    rectSortingStrategy,
+    useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface LabelType {
     id: string;
@@ -35,6 +49,13 @@ interface Props {
     id: string
 }
 
+interface ImageItem {
+    id: string;
+    type: "existing" | "new";
+    url?: string;    // voor bestaande
+    file?: File;     // voor nieuwe
+}
+
 const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
     const [loading, setLoading] = useState(false);
 
@@ -48,7 +69,7 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
     const [newCollectionTitle, setNewCollectionTitle] = useState("");
     const [newCollectionDescription, setNewCollectionDescription] = useState("");
 
-    const [images, setImages] = useState<File[]>([]);
+    const [images, setImages] = useState<ImageItem[]>([]);
 
     const [form, setForm] = useState({
         title: "",
@@ -65,6 +86,10 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
 
     const { showSuccess, showError } = useFeedback();
     const router = useRouter();
+
+    const sensors = useSensors(
+        useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+    );
 
     useEffect(() => {
         fetchLabels();
@@ -83,28 +108,27 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
 
     function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
         if (!e.target.files) return;
-        setImages(Array.from(e.target.files));
+        const newItems: ImageItem[] = Array.from(e.target.files).map((file) => ({
+            id: uuidv4(),
+            type: "new" as const,
+            file,
+        }));
+        setImages((prev) => [...prev, ...newItems]);
     }
 
     async function uploadImages(): Promise<string[]> {
         const urls: string[] = [];
-
-        for (const file of images) {
-            const fileName = `${uuidv4()}-${file.name}`;
-
-            const { error } = await supabase.storage
-                .from("images")
-                .upload(fileName, file);
-
-            if (error) throw error;
-
-            const { data } = supabase.storage
-                .from("images")
-                .getPublicUrl(fileName);
-
-            urls.push(data.publicUrl);
+        for (const item of images) {
+            if (item.type === "existing" && item.url) {
+                urls.push(item.url);
+            } else if (item.type === "new" && item.file) {
+                const fileName = `${uuidv4()}-${item.file.name}`;
+                const { error } = await supabase.storage.from("images").upload(fileName, item.file);
+                if (error) throw error;
+                const { data } = supabase.storage.from("images").getPublicUrl(fileName);
+                urls.push(data.publicUrl);
+            }
         }
-
         return urls;
     }
 
@@ -160,10 +184,6 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
 
 
             if (isEditMode) {
-                if (imageUrls.length == 0) {
-                    imageUrls = null;
-                }
-
                 const { error } = await supabase.rpc("update_art_piece", {
                     p_id: id,
                     p_title: form.title,
@@ -270,7 +290,13 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
             data.PieceLabel.map((l: any) => l.labelId)
         );
 
-        // images (optioneel: URLs opslaan)
+        setImages(
+            (data.Image || []).map((img: { url: string }) => ({
+                id: uuidv4(),
+                type: "existing" as const,
+                url: img.url,
+            }))
+        );
     }
 
     return (
@@ -431,7 +457,6 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                             <div className="space-y-4">
                                 <div>
                                     <LabelComponent>Images</LabelComponent>
-
                                     <Input
                                         type="file"
                                         multiple
@@ -439,10 +464,33 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                                         onChange={handleImageChange}
                                         className="mt-2"
                                     />
-
                                     <p className="text-sm text-muted-foreground mt-2">
                                         {images.length} file(s) selected
                                     </p>
+
+                                    <DndContext
+                                        sensors={useSensors(
+                                            useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+                                        )}
+                                        collisionDetection={closestCenter}
+                                        onDragEnd={({ active, over }) => {
+                                            if (over && active.id !== over.id) {
+                                                setImages((prev) => {
+                                                    const oldIndex = prev.findIndex((i) => i.id === active.id);
+                                                    const newIndex = prev.findIndex((i) => i.id === over.id);
+                                                    return arrayMove(prev, oldIndex, newIndex);
+                                                });
+                                            }
+                                        }}
+                                    >
+                                        <SortableContext items={images.map((i) => i.id)} strategy={rectSortingStrategy}>
+                                            <div className="grid grid-cols-5 gap-2 mt-3">
+                                                {images.map((item, index) => (
+                                                    <SortableThumbnail key={item.id} item={item} index={index} />
+                                                ))}
+                                            </div>
+                                        </SortableContext>
+                                    </DndContext>
                                 </div>
                             </div>
 
@@ -556,4 +604,39 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
     );
 }
 
+function SortableThumbnail({ item, index }: { item: ImageItem; index: number }) {
+    const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+        useSortable({ id: item.id });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.4 : 1,
+    };
+
+    const previewUrl =
+        item.type === "existing"
+            ? item.url!
+            : URL.createObjectURL(item.file!);
+
+    return (
+        <div
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            {...listeners}
+            className="relative cursor-grab active:cursor-grabbing rounded overflow-hidden border border-border aspect-square w-full"
+        >
+            <img
+                src={previewUrl}
+                alt=""
+                className="w-full h-full object-cover"
+                draggable={false}
+            />
+            <span className="absolute bottom-0 right-0 bg-black/60 text-white text-[10px] px-1 py-0.5 leading-none rounded-tl">
+                {index}
+            </span>
+        </div>
+    );
+}
 export default AdminCreateArtPiecePage

@@ -14,20 +14,23 @@ const ImageGalery: FC<Props> = ({ artPiece }) => {
     const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0)
     const [isImageExpanded, setIsImageExpanded] = useState<boolean>(false)
 
+    const sortedImages = [...artPiece.images].sort(
+        (a, b) => a.index - b.index
+    )
+
     const nextImage = () => {
         setSelectedImageIndex((prev) =>
-            prev === artPiece.images.length - 1 ? 0 : prev + 1
+            prev === sortedImages.length - 1 ? 0 : prev + 1
         )
     }
 
     const prevImage = () => {
         setSelectedImageIndex((prev) =>
-            prev === 0 ? artPiece.images.length - 1 : prev - 1
+            prev === 0 ? sortedImages.length - 1 : prev - 1
         )
     }
 
-    const currentImage = artPiece.images[selectedImageIndex]?.url || ""
-
+    const currentImage = sortedImages[selectedImageIndex]?.url || ""
     return (
         <>
             <div className="space-y-4">
@@ -47,7 +50,7 @@ const ImageGalery: FC<Props> = ({ artPiece }) => {
                     {/* Hoofdafbeelding — volledig zichtbaar */}
                     {/* Subtiele blur alleen als decoratieve rand — schaal groter zodat geen zwarte hoeken */}
                     <Image
-                        src={getOptimizedImageUrl(currentImage, { width: 200, quality: 50})}
+                        src={getOptimizedImageUrl(currentImage, { width: 200, quality: 50 })}
                         alt=""
                         fill
                         aria-hidden
@@ -60,7 +63,7 @@ const ImageGalery: FC<Props> = ({ artPiece }) => {
 
                     {/* Hoofdafbeelding */}
                     <Image
-                        src={getOptimizedImageUrl(currentImage, { width: 800, quality: 70})}
+                        src={getOptimizedImageUrl(currentImage, { width: 800, quality: 70 })}
                         alt={artPiece.title}
                         fill
                         className="object-contain p-6 transition-all duration-500"
@@ -69,7 +72,7 @@ const ImageGalery: FC<Props> = ({ artPiece }) => {
                     />
 
                     {/* Image Navigation */}
-                    {artPiece.images.length > 1 && (
+                    {sortedImages.length > 1 && (
                         <>
                             <button
                                 onClick={prevImage}
@@ -104,15 +107,15 @@ const ImageGalery: FC<Props> = ({ artPiece }) => {
                     )}
 
                     {/* Image counter */}
-                    {artPiece.images.length > 1 && (
+                    {sortedImages.length > 1 && (
                         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
                             {artPiece.images.map((_, i) => (
                                 <button
                                     key={i}
                                     onClick={() => setSelectedImageIndex(i)}
                                     className={`h-1.5 rounded-full transition-all duration-300 ${i === selectedImageIndex
-                                            ? "w-6 bg-white"
-                                            : "w-1.5 bg-white/50"
+                                        ? "w-6 bg-white"
+                                        : "w-1.5 bg-white/50"
                                         }`}
                                 />
                             ))}
@@ -128,8 +131,8 @@ const ImageGalery: FC<Props> = ({ artPiece }) => {
                                 key={image.id}
                                 onClick={() => setSelectedImageIndex(index)}
                                 className={`relative h-20 w-20 flex-shrink-0 rounded-lg overflow-hidden transition-all bg-black ${selectedImageIndex === index
-                                        ? "ring-2 ring-primary ring-offset-2"
-                                        : "opacity-60 hover:opacity-100"
+                                    ? "ring-2 ring-primary ring-offset-2"
+                                    : "opacity-60 hover:opacity-100"
                                     }`}
                             >
                                 {/* Blurred bg voor thumbnails ook */}
