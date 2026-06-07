@@ -193,6 +193,7 @@ const ShopComponent: FC = () => {
             const collections = await getCollections();
 
             if (artPieces) {
+                console.log(artPieces)
                 const sortedArtPieces = [...artPieces].sort((a, b) => {
                     // First show the items that are still availble
                     if (a.isSold !== b.isSold) {
@@ -225,8 +226,6 @@ const ShopComponent: FC = () => {
 
         return diffInDays <= 3;
     };
-
-
 
     return (
         <section id="shop" className="py-24 bg-muted/30">
@@ -318,148 +317,154 @@ const ShopComponent: FC = () => {
 
                 {/* Art Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {paginatedArtPieces.map((piece) => (
-                        <div
-                            key={piece.id}
-                            className="group bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
-                        >
-                            {/* Image Container — vaste hoogte, volledig kunstwerk zichtbaar */}
-                            <div className="relative h-[440px] overflow-hidden bg-black">
+                    {paginatedArtPieces.map((piece) => {
+                        const thumbnailImage = [...piece.images].sort(
+                            (a, b) => a.index - b.index
+                        )[0];
 
-                                {/* Geblurde achtergrond (museum-matte effect) */}
-                                <Image
-                                    src={getOptimizedImageUrl(piece.images[0]?.url, { width: 100, quality: 30 })}
-                                    alt=""
-                                    fill
-                                    aria-hidden
-                                    className="object-cover scale-110 blur-xl brightness-40 saturate-75"
-                                />
+                        return (
+                            <div
+                                key={piece.id}
+                                className="group bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+                            >
+                                {/* Image Container — vaste hoogte, volledig kunstwerk zichtbaar */}
+                                <div className="relative h-[440px] overflow-hidden bg-black">
 
-                                {/* Hoofdafbeelding — object-contain zodat alles zichtbaar blijft */}
-                                <Image
-                                    src={getOptimizedImageUrl(piece.images[0]?.url, { width: 600, quality: 50 })}
-                                    alt={piece.title}
-                                    fill
-                                    className="object-contain p-3 group-hover:scale-105 transition-transform duration-500"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                    priority={false}
-                                />
+                                    {/* Geblurde achtergrond (museum-matte effect) */}
+                                    <Image
+                                        src={getOptimizedImageUrl(thumbnailImage?.url, { width: 100, quality: 30 })}
+                                        alt=""
+                                        fill
+                                        aria-hidden
+                                        className="object-cover scale-110 blur-xl brightness-40 saturate-75"
+                                    />
 
-                                {/* Overlay Actions */}
-                                <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/10 transition-colors duration-300">
-                                    <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <Button
-                                            size="icon"
-                                            variant="secondary"
-                                            className="h-10 w-10 rounded-full bg-foreground/90 backdrop-blur-sm hover:bg-foreground"
-                                            onClick={() => handleAddItem({ ...piece })}
-                                        >
-                                            <Heart
-                                                className={`h-5 w-5`}
-                                            />
-                                            <span className="sr-only">Add to favorites</span>
-                                        </Button>
-                                        {
-                                            isAdmin ?
-                                                <>
-                                                    <Button
-                                                        size="icon"
-                                                        variant="secondary"
-                                                        className={`h-10 w-10 rounded-full backdrop-blur-sm ${piece.isFeatured
-                                                            ? "bg-yellow-500 hover:bg-yellow-600"
-                                                            : "bg-foreground/90 hover:bg-foreground"
-                                                            }`}
-                                                        onClick={() => handleToggleFeatured(piece.id)}
-                                                    >
-                                                        {piece.isFeatured ? <FaStar /> : <Star />}
-                                                        <span className="sr-only">Toggle featured</span>
-                                                    </Button>
-                                                    <Button
-                                                        size="icon"
-                                                        variant="secondary"
-                                                        className={`h-10 w-10 rounded-full backdrop-blur-sm bg-red-500 hover:bg-red-600`}
-                                                        onClick={() => handleDeleteArtPiece(piece.id)}
-                                                    >
-                                                        <TrashIcon />
-                                                        <span className="sr-only">Verwijder kunstwerk</span>
-                                                    </Button>
-                                                    <Button
-                                                        size="icon"
-                                                        variant="secondary"
-                                                        className={`h-10 w-10 rounded-full backdrop-blur-sm bg-green-500 hover:bg-green-600`}
-                                                        asChild
-                                                    >
-                                                        <Link href={'admin/artpiece/' + piece.id}>
-                                                            <Pencil />
-                                                            <span className="sr-only">Update kunstwerk</span>
-                                                        </Link>
-                                                    </Button>
-                                                    <Button
-                                                        size="icon"
-                                                        variant="secondary"
-                                                        className={`h-10 w-10 rounded-full backdrop-blur-sm bg-blue-500 hover:bg-blue-600`}
-                                                        onClick={() => handleSold(piece.id)}
-                                                    >
-                                                        <ShoppingBasket />
-                                                        <span className="sr-only">Stuk verkocht</span>
-                                                    </Button>
-                                                </>
-                                                : null
-                                        }
+                                    {/* Hoofdafbeelding — object-contain zodat alles zichtbaar blijft */}
+                                    <Image
+                                        src={getOptimizedImageUrl(thumbnailImage?.url, { width: 600, quality: 50 })}
+                                        alt={piece.title}
+                                        fill
+                                        className="object-contain p-3 group-hover:scale-105 transition-transform duration-500"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        priority={false}
+                                    />
+
+                                    {/* Overlay Actions */}
+                                    <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/10 transition-colors duration-300">
+                                        <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <Button
+                                                size="icon"
+                                                variant="secondary"
+                                                className="h-10 w-10 rounded-full bg-foreground/90 backdrop-blur-sm hover:bg-foreground"
+                                                onClick={() => handleAddItem({ ...piece })}
+                                            >
+                                                <Heart
+                                                    className={`h-5 w-5`}
+                                                />
+                                                <span className="sr-only">Add to favorites</span>
+                                            </Button>
+                                            {
+                                                isAdmin ?
+                                                    <>
+                                                        <Button
+                                                            size="icon"
+                                                            variant="secondary"
+                                                            className={`h-10 w-10 rounded-full backdrop-blur-sm ${piece.isFeatured
+                                                                ? "bg-yellow-500 hover:bg-yellow-600"
+                                                                : "bg-foreground/90 hover:bg-foreground"
+                                                                }`}
+                                                            onClick={() => handleToggleFeatured(piece.id)}
+                                                        >
+                                                            {piece.isFeatured ? <FaStar /> : <Star />}
+                                                            <span className="sr-only">Toggle featured</span>
+                                                        </Button>
+                                                        <Button
+                                                            size="icon"
+                                                            variant="secondary"
+                                                            className={`h-10 w-10 rounded-full backdrop-blur-sm bg-red-500 hover:bg-red-600`}
+                                                            onClick={() => handleDeleteArtPiece(piece.id)}
+                                                        >
+                                                            <TrashIcon />
+                                                            <span className="sr-only">Verwijder kunstwerk</span>
+                                                        </Button>
+                                                        <Button
+                                                            size="icon"
+                                                            variant="secondary"
+                                                            className={`h-10 w-10 rounded-full backdrop-blur-sm bg-green-500 hover:bg-green-600`}
+                                                            asChild
+                                                        >
+                                                            <Link href={'admin/artpiece/' + piece.id}>
+                                                                <Pencil />
+                                                                <span className="sr-only">Update kunstwerk</span>
+                                                            </Link>
+                                                        </Button>
+                                                        <Button
+                                                            size="icon"
+                                                            variant="secondary"
+                                                            className={`h-10 w-10 rounded-full backdrop-blur-sm bg-blue-500 hover:bg-blue-600`}
+                                                            onClick={() => handleSold(piece.id)}
+                                                        >
+                                                            <ShoppingBasket />
+                                                            <span className="sr-only">Stuk verkocht</span>
+                                                        </Button>
+                                                    </>
+                                                    : null
+                                            }
+                                        </div>
+                                    </div>
+
+                                    {/* Badges */}
+                                    <div className="absolute top-4 left-4 flex flex-col gap-2">
+                                        {piece.labels?.length > 0 && (
+                                            <span className="px-3 py-1 text-xs font-sans font-medium tracking-wide bg-background/90 backdrop-blur-sm rounded-full">
+                                                {piece.labels[0].title}
+                                            </span>
+                                        )}
+                                        {isNewArtPiece(piece.creationTime) && (
+                                            <span className="px-3 py-1 text-xs font-bold tracking-wide bg-oker text-white rounded-full shadow">
+                                                NEW
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
 
-                                {/* Badges */}
-                                <div className="absolute top-4 left-4 flex flex-col gap-2">
-                                    {piece.labels?.length > 0 && (
-                                        <span className="px-3 py-1 text-xs font-sans font-medium tracking-wide bg-background/90 backdrop-blur-sm rounded-full">
-                                            {piece.labels[0].title}
-                                        </span>
-                                    )}
-                                    {isNewArtPiece(piece.creationTime) && (
-                                        <span className="px-3 py-1 text-xs font-bold tracking-wide bg-oker text-white rounded-full shadow">
-                                            NEW
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Details */}
-                            <div className="p-6">
-                                <div className="flex items-start justify-between mb-2">
-                                    <div>
-                                        <h3 className="text-xl font-medium text-foreground">
-                                            {piece.title}
-                                        </h3>
-                                        <p className="text-sm text-muted-foreground font-sans">
-                                            by {piece.artist} · {piece.dimensions}
+                                {/* Details */}
+                                <div className="p-6">
+                                    <div className="flex items-start justify-between mb-2">
+                                        <div>
+                                            <h3 className="text-xl font-medium text-foreground">
+                                                {piece.title}
+                                            </h3>
+                                            <p className="text-sm text-muted-foreground font-sans">
+                                                by {piece.artist} · {piece.dimensions}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between mt-4">
+                                        <p className="text-xl font-light text-foreground">
+                                            {piece.isSold ? <span className="text-red-700">NIET BESCHIKBAAR</span> : '€ ' + piece.price.toLocaleString("en-US")}
                                         </p>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="font-sans text-sm tracking-wide"
+                                            onClick={() =>
+                                                handleNavigateToDetail(
+                                                    `/art/${piece.id}?page=${currentPage}${selectedCollectionId !== "all"
+                                                        ? `&collectionId=${selectedCollectionId}`
+                                                        : ""
+                                                    }`
+                                                )
+                                            }
+                                        >
+                                            Bekijk Details
+                                        </Button>
+
                                     </div>
                                 </div>
-                                <div className="flex items-center justify-between mt-4">
-                                    <p className="text-xl font-light text-foreground">
-                                        {piece.isSold ? <span className="text-red-700">NIET BESCHIKBAAR</span> : '€ ' + piece.price.toLocaleString("en-US")}
-                                    </p>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="font-sans text-sm tracking-wide"
-                                        onClick={() =>
-                                            handleNavigateToDetail(
-                                                `/art/${piece.id}?page=${currentPage}${selectedCollectionId !== "all"
-                                                    ? `&collectionId=${selectedCollectionId}`
-                                                    : ""
-                                                }`
-                                            )
-                                        }
-                                    >
-                                        Bekijk Details
-                                    </Button>
-
-                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
                 {/* Pagination */}
                 {totalPages > 1 && (

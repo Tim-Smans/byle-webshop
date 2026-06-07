@@ -20,6 +20,7 @@ export const getArtPieces = async (): Promise<ArtPiece[] | undefined> => {
             `
     );
 
+    console.log('dit zijn pieces: ', pieces)
   if (!pieces) {
     return undefined
   }
@@ -231,7 +232,8 @@ const mapArtPiece = (
       (img: any) => ({
         id: img.id,
         pieceId: dbPiece.id,
-        url: img.url
+        url: img.url,
+        index: img.index
       })
     ),
 
