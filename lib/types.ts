@@ -131,3 +131,10 @@ export interface PieceLabel {
   pieceId: string,
   labelId: string
 }
+
+export type CvData = {
+  events: { date: string; name: string }[]
+  themes: string[]
+  mediums: string[]
+  commissions: number
+}

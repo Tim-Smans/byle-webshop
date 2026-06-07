@@ -11,6 +11,7 @@ import { Heart, Pencil, ShoppingBasket, Star, TrashIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getCollections } from "@/lib/services/collection-service";
 import { toggleArtPieceFeatured } from "@/lib/services/art-piece-service";
+import WarningDialog from "@/components/dialogs/warning-dialog";
 import {
     Pagination,
     PaginationContent,
@@ -32,6 +33,8 @@ const ShopComponent: FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(pageFromUrl)
     const [searchTerm, setSearchTerm] = useState<string>("")
     const [collections, setCollections] = useState<Collection[]>([])
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [artPieceToDelete, setArtPieceToDelete] = useState<string | null>(null);
     const [selectedCollectionId, setSelectedCollectionId] = useState<string>("all")
 
     const { showError } = useFeedback();
@@ -381,8 +384,11 @@ const ShopComponent: FC = () => {
                                                         <Button
                                                             size="icon"
                                                             variant="secondary"
-                                                            className={`h-10 w-10 rounded-full backdrop-blur-sm bg-red-500 hover:bg-red-600`}
-                                                            onClick={() => handleDeleteArtPiece(piece.id)}
+                                                            className="h-10 w-10 rounded-full backdrop-blur-sm bg-red-500 hover:bg-red-600"
+                                                            onClick={() => {
+                                                                setArtPieceToDelete(piece.id);
+                                                                setDeleteDialogOpen(true);
+                                                            }}
                                                         >
                                                             <TrashIcon />
                                                             <span className="sr-only">Verwijder kunstwerk</span>
@@ -522,6 +528,17 @@ const ShopComponent: FC = () => {
                     </div>
                 )}
             </div>
+
+            <WarningDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+                message="Ben je zeker dat je dit kunstwerk wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden."
+                onConfirm={() => {
+                    if (artPieceToDelete) {
+                        handleDeleteArtPiece(artPieceToDelete);
+                    }
+                }}
+            />
         </section>
     )
 }
