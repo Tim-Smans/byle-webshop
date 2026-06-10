@@ -22,9 +22,9 @@ const Specifications: FC<Props> = ({ artPiece }) => {
             </h3>
             <dl className="space-y-3">
                 {specifications.map((spec) => (
-                    <div key={spec.label} className="flex justify-between py-2 border-b border-border/50">
-                        <dt className="text-muted-foreground font-sans text-sm">{spec.label}</dt>
-                        <dd className="text-foreground font-sans text-sm">{spec.value}</dd>
+                    <div key={spec.label} className="flex flex-col sm:flex-row sm:justify-between py-2 border-b border-border/50 gap-0.5 sm:gap-0">
+                        <dt className="text-muted-foreground font-bold font-sans text-sm">{spec.label}</dt>
+                        <dd className="text-foreground font-sans text-sm sm:text-right">{spec.value}</dd>
                     </div>
                 ))}
             </dl>

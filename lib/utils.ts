@@ -5,10 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// utils/image.js
-
-// utils/image.ts
-
 interface ImageTransformOptions {
   width?: number;
   quality?: number;

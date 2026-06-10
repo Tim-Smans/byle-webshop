@@ -1,5 +1,3 @@
-import { StripeIssuingCardNumberDisplayElement } from "@stripe/stripe-js"
-
 // Product types
 export interface Product {
   id: string,
