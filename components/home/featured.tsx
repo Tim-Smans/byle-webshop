@@ -79,7 +79,7 @@ const FeaturedPieces: FC = () => {
             <span className="italic font-medium">Uitgelicht</span>
           </h2>
           <p className="max-w-2xl mx-auto text-muted-foreground text-lg">
-            Duik in mijn meest geliefde werkjes, stuk voor stuk met zorg en liefde gemaakt. Benieuwd naar meer? Verken gerust de hele winkel via de Shop.
+            Duik in mijn meest geliefde werkjes, stuk voor stuk met zorg en liefde gemaakt. Benieuwd naar meer? Verken gerust de volledige gallerij via de Gallery.
           </p>
         </div>
 
