@@ -11,6 +11,7 @@ import Link from "next/link"
 import { FaStar } from "react-icons/fa"
 import { useAdmin } from "@/lib/hooks/use-admin"
 import { getOptimizedImageUrl } from "@/lib/utils"
+import { primeCache } from "@/lib/client/image-cache"
 
 
 const FeaturedPieces: FC = () => {
@@ -59,8 +60,15 @@ const FeaturedPieces: FC = () => {
 
       if (artPieces) {
         const featuredPieces = artPieces.filter(ap => ap.isFeatured === true);
-
         setArtPieces(featuredPieces)
+
+        // Background-prime HQ cache so detail page loads instantly on click
+        featuredPieces.forEach((piece) => {
+          const thumbnail = [...piece.images].sort((a, b) => a.index - b.index)[0];
+          if (thumbnail?.url) {
+            primeCache(getOptimizedImageUrl(thumbnail.url, { width: 1400, quality: 90, format: "webp" }));
+          }
+        });
       }
     }
 

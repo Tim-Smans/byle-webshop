@@ -24,6 +24,7 @@ import { useFeedback } from "@/lib/context/feedback-context";
 import { FaStar } from "react-icons/fa";
 import { useAdmin } from "@/lib/hooks/use-admin";
 import { getOptimizedImageUrl } from "@/lib/utils";
+import { primeCache } from "@/lib/client/image-cache";
 
 const ShopComponent: FC = () => {
     const searchParams = useSearchParams();
@@ -154,6 +155,16 @@ const ShopComponent: FC = () => {
         (currentPage - 1) * ITEMS_PER_PAGE,
         currentPage * ITEMS_PER_PAGE
     );
+
+    // Background-prime HQ cache for visible artworks so detail page loads instantly
+    useEffect(() => {
+        paginatedArtPieces.forEach((piece) => {
+            const thumbnail = [...piece.images].sort((a, b) => a.index - b.index)[0];
+            if (thumbnail?.url) {
+                primeCache(getOptimizedImageUrl(thumbnail.url, { width: 1400, quality: 90, format: "webp" }));
+            }
+        });
+    }, [paginatedArtPieces]);
 
     const { addItem } = useFavorites();
 

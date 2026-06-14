@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, Expand } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import ExpandedImageModal from "./expanded-image-modal";
 import { getOptimizedImageUrl } from "@/lib/utils";
+import { ProgressiveImage } from "@/components/shared/progressive-image";
 
 interface Props {
     artPiece: ArtPiece
@@ -61,14 +62,15 @@ const ImageGalery: FC<Props> = ({ artPiece }) => {
                     {/* Witte/muted overlay zodat het nooit te donker wordt */}
                     <div className="absolute inset-0 bg-muted/60" />
 
-                    {/* Hoofdafbeelding */}
-                    <Image
-                        src={getOptimizedImageUrl(currentImage, { width: 800, quality: 70 })}
+                    {/* Hoofdafbeelding — progressief: medium snel, HQ fadet in en wordt gecached.
+                        key=currentImage zorgt dat de component herstart bij navigatie (fresh state). */}
+                    <ProgressiveImage
+                        key={currentImage}
+                        src={currentImage}
                         alt={artPiece.title}
-                        fill
-                        className="object-contain p-6 transition-all duration-500"
                         priority
                         sizes="(max-width: 768px) 100vw, 60vw"
+                        className="object-contain p-6 transition-all duration-500"
                     />
 
                     {/* Image Navigation */}

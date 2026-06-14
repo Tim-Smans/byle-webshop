@@ -109,7 +109,8 @@ export interface Image {
   id: string,
   pieceId: string,
   url: string,
-  index: number
+  index: number,
+  blurDataUrl?: string
 }
 
 export interface Collection {

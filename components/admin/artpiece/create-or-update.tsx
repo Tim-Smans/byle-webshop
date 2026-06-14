@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { v4 as uuidv4 } from "uuid";
+import { Trash2 } from "lucide-react";
 import { useFeedback } from "@/lib/context/feedback-context";
 import { useRouter } from "next/navigation";
 import MDEditor from "@uiw/react-md-editor";
@@ -486,7 +487,14 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                                         <SortableContext items={images.map((i) => i.id)} strategy={rectSortingStrategy}>
                                             <div className="grid grid-cols-5 gap-2 mt-3">
                                                 {images.map((item, index) => (
-                                                    <SortableThumbnail key={item.id} item={item} index={index} />
+                                                    <SortableThumbnail
+                                                        key={item.id}
+                                                        item={item}
+                                                        index={index}
+                                                        onRemove={() =>
+                                                            setImages((prev) => prev.filter((i) => i.id !== item.id))
+                                                        }
+                                                    />
                                                 ))}
                                             </div>
                                         </SortableContext>
@@ -604,7 +612,7 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
     );
 }
 
-function SortableThumbnail({ item, index }: { item: ImageItem; index: number }) {
+function SortableThumbnail({ item, index, onRemove }: { item: ImageItem; index: number; onRemove: () => void }) {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
         useSortable({ id: item.id });
 
@@ -633,6 +641,17 @@ function SortableThumbnail({ item, index }: { item: ImageItem; index: number }) 
                 className="w-full h-full object-cover"
                 draggable={false}
             />
+            <button
+                type="button"
+                onPointerDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onRemove();
+                }}
+                className="absolute top-0.5 right-0.5 bg-black/60 hover:bg-red-600 text-white rounded p-0.5 transition-colors"
+            >
+                <Trash2 size={10} />
+            </button>
             <span className="absolute bottom-0 right-0 bg-black/60 text-white text-[10px] px-1 py-0.5 leading-none rounded-tl">
                 {index}
             </span>
