@@ -10,7 +10,7 @@ const footerLinks = {
     { name: "Collecties", href: "/#collections" },
   ],
   company: [
-    { name: "About Lé?", href: "/#about" },
+    { name: "About Lé", href: "/#about" },
     { name: "Artist CV", href: "/cv" },
     { name: "Artist Statement", href: "/#statement" },
   ],

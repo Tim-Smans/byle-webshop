@@ -338,7 +338,8 @@ const ShopComponent: FC = () => {
                         return (
                             <div
                                 key={piece.id}
-                                className="group bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+                                className="group bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
+                                onClick={() => handleNavigateToDetail(`/art/${piece.id}?page=${currentPage}${selectedCollectionId !== "all" ? `&collectionId=${selectedCollectionId}` : ""}`)}
                             >
                                 {/* Image Container — vaste hoogte, volledig kunstwerk zichtbaar */}
                                 <div className="relative h-[440px] overflow-hidden bg-black">
@@ -370,7 +371,7 @@ const ShopComponent: FC = () => {
                                                 size="icon"
                                                 variant="secondary"
                                                 className="h-10 w-10 rounded-full bg-foreground/90 backdrop-blur-sm hover:bg-foreground"
-                                                onClick={() => handleAddItem({ ...piece })}
+                                                onClick={(e) => { e.stopPropagation(); handleAddItem({ ...piece }); }}
                                             >
                                                 <Heart
                                                     className={`h-5 w-5`}
@@ -387,7 +388,7 @@ const ShopComponent: FC = () => {
                                                                 ? "bg-yellow-500 hover:bg-yellow-600"
                                                                 : "bg-foreground/90 hover:bg-foreground"
                                                                 }`}
-                                                            onClick={() => handleToggleFeatured(piece.id)}
+                                                            onClick={(e) => { e.stopPropagation(); handleToggleFeatured(piece.id); }}
                                                         >
                                                             {piece.isFeatured ? <FaStar /> : <Star />}
                                                             <span className="sr-only">Toggle featured</span>
@@ -396,10 +397,7 @@ const ShopComponent: FC = () => {
                                                             size="icon"
                                                             variant="secondary"
                                                             className="h-10 w-10 rounded-full backdrop-blur-sm bg-red-500 hover:bg-red-600"
-                                                            onClick={() => {
-                                                                setArtPieceToDelete(piece.id);
-                                                                setDeleteDialogOpen(true);
-                                                            }}
+                                                            onClick={(e) => { e.stopPropagation(); setArtPieceToDelete(piece.id); setDeleteDialogOpen(true); }}
                                                         >
                                                             <TrashIcon />
                                                             <span className="sr-only">Verwijder kunstwerk</span>
@@ -410,7 +408,7 @@ const ShopComponent: FC = () => {
                                                             className={`h-10 w-10 rounded-full backdrop-blur-sm bg-green-500 hover:bg-green-600`}
                                                             asChild
                                                         >
-                                                            <Link href={'admin/artpiece/' + piece.id}>
+                                                            <Link href={'admin/artpiece/' + piece.id} onClick={(e) => e.stopPropagation()}>
                                                                 <Pencil />
                                                                 <span className="sr-only">Update kunstwerk</span>
                                                             </Link>
@@ -419,7 +417,7 @@ const ShopComponent: FC = () => {
                                                             size="icon"
                                                             variant="secondary"
                                                             className={`h-10 w-10 rounded-full backdrop-blur-sm bg-blue-500 hover:bg-blue-600`}
-                                                            onClick={() => handleSold(piece.id)}
+                                                            onClick={(e) => { e.stopPropagation(); handleSold(piece.id); }}
                                                         >
                                                             <ShoppingBasket />
                                                             <span className="sr-only">Stuk verkocht</span>
@@ -446,37 +444,29 @@ const ShopComponent: FC = () => {
                                 </div>
 
                                 {/* Details */}
-                                <div className="p-6">
-                                    <div className="flex items-start justify-between mb-2">
-                                        <div>
-                                            <h3 className="text-xl font-medium text-foreground">
-                                                {piece.title}
-                                            </h3>
-                                            <p className="text-sm text-muted-foreground font-sans">
-                                                by {piece.artist} · {piece.dimensions}
-                                            </p>
-                                        </div>
-                                    </div>
+                                <div className="p-5">
+                                    <h3 className="text-lg font-medium text-foreground leading-snug">
+                                        {piece.title}
+                                    </h3>
+                                    <p className="text-xs text-muted-foreground font-sans mt-0.5">
+                                        {piece.artist} · {piece.dimensions}
+                                    </p>
                                     <div className="flex items-center justify-between mt-4">
-                                        <p className="text-xl font-light text-foreground">
-                                            {piece.isSold ? <span className="text-red-700">NIET BESCHIKBAAR</span> : '€ ' + piece.price.toLocaleString("en-US")}
-                                        </p>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="font-sans text-sm tracking-wide"
-                                            onClick={() =>
-                                                handleNavigateToDetail(
-                                                    `/art/${piece.id}?page=${currentPage}${selectedCollectionId !== "all"
-                                                        ? `&collectionId=${selectedCollectionId}`
-                                                        : ""
-                                                    }`
-                                                )
-                                            }
+                                        {piece.isSold ? (
+                                            <span className="text-xs font-sans tracking-widest uppercase text-muted-foreground/60">
+                                                niet beschikbaar
+                                            </span>
+                                        ) : (
+                                            <span className="text-lg font-light text-foreground">
+                                                € {piece.price.toLocaleString("en-US")}
+                                            </span>
+                                        )}
+                                        <button
+                                            className="text-xs font-sans tracking-wide text-muted-foreground hover:text-foreground underline underline-offset-4 transition-colors"
+                                            onClick={(e) => { e.stopPropagation(); handleNavigateToDetail(`/art/${piece.id}?page=${currentPage}${selectedCollectionId !== "all" ? `&collectionId=${selectedCollectionId}` : ""}`); }}
                                         >
-                                            Bekijk Details
-                                        </Button>
-
+                                            Bekijk details →
+                                        </button>
                                     </div>
                                 </div>
                             </div>

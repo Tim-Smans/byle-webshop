@@ -3,7 +3,7 @@
 import { FC, useEffect, useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Heart, Star } from "lucide-react"
+import { Heart } from "lucide-react"
 import { useFavorites } from "@/lib/context/favorites-context"
 import { ArtPiece, Product } from "@/lib/types"
 import { getArtPieces, toggleArtPieceFeatured } from "@/lib/services/art-piece-service"
@@ -11,15 +11,15 @@ import Link from "next/link"
 import { FaStar } from "react-icons/fa"
 import { useAdmin } from "@/lib/hooks/use-admin"
 import { primeCache } from "@/lib/client/image-cache"
-
+import { useRouter } from "next/navigation";
 
 const FeaturedPieces: FC = () => {
   const [favorites, setFavorites] = useState<number[]>([])
   const [artPieces, setArtPieces] = useState<ArtPiece[]>([])
 
-  const isAdmin = useAdmin();
-
-  const { addItem } = useFavorites();
+  const isAdmin = useAdmin()
+  const router = useRouter()
+  const { addItem } = useFavorites()
 
   const handleAddItem = (product: Product) => {
     addItem(product, 1)
@@ -52,6 +52,10 @@ const FeaturedPieces: FC = () => {
       });
     }
   };
+
+  const handleImageClick = (id: string) => {
+    router.push(`/art/${id}`)
+  }
 
   useEffect(() => {
     const getArtPiecesFromDb = async () => {
@@ -100,7 +104,8 @@ const FeaturedPieces: FC = () => {
             return (
               <div
                 key={piece.id}
-                className="group bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+                className="group bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
+                onClick={() => handleImageClick(piece.id)}
               >
                 {/* Image Container */}
                 <div className="relative aspect-3/4 overflow-hidden">
@@ -131,7 +136,7 @@ const FeaturedPieces: FC = () => {
                         size="icon"
                         variant="secondary"
                         className="h-10 w-10 rounded-full bg-foreground/90 backdrop-blur-sm hover:bg-foreground"
-                        onClick={() => handleAddItem({ ...piece })}
+                        onClick={(e) => { e.stopPropagation(); handleAddItem({ ...piece }); }}
                       >
                         <Heart
                           className={`h-5 w-5`}
@@ -147,7 +152,7 @@ const FeaturedPieces: FC = () => {
                               ? "bg-yellow-500 hover:bg-yellow-600"
                               : "bg-foreground/90 hover:bg-foreground"
                               }`}
-                            onClick={() => handleToggleFeatured(piece.id)}
+                            onClick={(e) => { e.stopPropagation(); handleToggleFeatured(piece.id); }}
                           >
                             <FaStar />
                             <span className="sr-only">Toggle featured</span>
@@ -170,31 +175,29 @@ const FeaturedPieces: FC = () => {
                 </div>
 
                 {/* Details */}
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <h3 className="text-xl font-medium text-foreground">
-                        {piece.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground font-sans">
-                        door {piece.artist} · {piece.dimensions}
-                      </p>
-                    </div>
-                  </div>
+                <div className="p-5">
+                  <h3 className="text-lg font-medium text-foreground leading-snug">
+                    {piece.title}
+                  </h3>
+                  <p className="text-xs text-muted-foreground font-sans mt-0.5">
+                    {piece.artist} · {piece.dimensions}
+                  </p>
                   <div className="flex items-center justify-between mt-4">
-                    <p className="text-xl font-light text-foreground">
-                      {piece.isSold ? <span className="text-red-700">NIET BESCHIKBAAR</span> : '€ ' + piece.price.toLocaleString("en-US")}
-                    </p>
-                    <Link href={`/art/${piece.id}`}>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="font-sans text-sm tracking-wide"
-                      >
-                        Bekijk details
-                      </Button>
-                    </Link>
-
+                    {piece.isSold ? (
+                      <span className="text-xs font-sans tracking-widest uppercase text-muted-foreground/60">
+                        niet beschikbaar
+                      </span>
+                    ) : (
+                      <span className="text-lg font-light text-foreground">
+                        € {piece.price.toLocaleString("en-US")}
+                      </span>
+                    )}
+                    <button
+                      className="text-xs font-sans tracking-wide text-muted-foreground hover:text-foreground underline underline-offset-4 transition-colors"
+                      onClick={(e) => { e.stopPropagation(); handleImageClick(piece.id); }}
+                    >
+                      Bekijk details →
+                    </button>
                   </div>
                 </div>
               </div>

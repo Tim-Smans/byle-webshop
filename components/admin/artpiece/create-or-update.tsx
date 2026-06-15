@@ -84,6 +84,7 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
         presentation: "",
         edition: "",
         finish: "",
+        etsyUrl: ""
     });
 
     const { showSuccess, showError } = useFeedback();
@@ -143,7 +144,7 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                 await supabase.storage
                     .from("images")
                     .upload(`${uuid}-t.webp`, thumbBlob, { contentType: "image/webp" })
-                    .catch(() => {});
+                    .catch(() => { });
 
                 const { data } = supabase.storage.from("images").getPublicUrl(displayName);
                 urls.push(data.publicUrl);
@@ -216,6 +217,8 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                     p_presentation: form.presentation,
                     p_edition: form.edition,
                     p_finish: form.finish,
+                    p_etsy_url: form.etsyUrl,
+
 
                     p_images: imageUrls,
                     p_label_ids: labelIds,
@@ -225,7 +228,6 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                     p_collection_title: null,
                     p_collection_description: null,
                     p_collection_thumbnail_url: null,
-                    p_etsy_url: null,
                     p_is_featured: false
                 });
                 if (error) throw error;
@@ -241,6 +243,7 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                     p_presentation: form.presentation,
                     p_edition: form.edition,
                     p_finish: form.finish,
+                    p_etsy_url: form.etsyUrl,
 
                     p_images: imageUrls,
                     p_label_ids: labelIds,
@@ -250,7 +253,6 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                     p_collection_title: null,
                     p_collection_description: null,
                     p_collection_thumbnail_url: null,
-                    p_etsy_url: null,
                     p_is_featured: false
                 });
                 if (error) throw error;
@@ -300,6 +302,7 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
             presentation: data.presentation,
             edition: data.edition,
             finish: data.finish,
+            etsyUrl: data.etsyUrl ?? ""
         });
 
         setCollectionId(data.collectionId);
@@ -446,6 +449,17 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                                         }
                                     />
                                 </div>
+
+                                <div className="md:col-span-2">
+                                    <LabelComponent>Etsy Url</LabelComponent>
+                                    <Input
+                                        value={form.etsyUrl}
+                                        onChange={(e) =>
+                                            setForm({ ...form, etsyUrl: e.target.value })
+                                        }
+                                    />
+                                </div>
+
                             </div>
 
                             {/* RIGHT SIDE */}

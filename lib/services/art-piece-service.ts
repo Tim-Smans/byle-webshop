@@ -224,6 +224,7 @@ const mapArtPiece = (
     presentation: dbPiece.presentation,
     edition: dbPiece.edition,
     finish: dbPiece.finish,
+    etsyUrl: dbPiece.etsyUrl ?? null,
     isSold: dbPiece.isSold,
     creationTime: dbPiece.creationTime,
     collectionId: dbPiece.collectionId,

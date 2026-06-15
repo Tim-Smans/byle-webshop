@@ -43,12 +43,9 @@ const ProductDetails: FC<Props> = ({ artPiece }) => {
                 {!artPiece.isSold && (
                     <>
                         <p className="text-sm text-muted-foreground font-sans mt-1">
-                            Gratis verzending binnen de EU, of anders vermeld op Etsy!
-                        </p>
+                            Verzendinformatie verschilt per kunstwerk en wordt vermeld bij het artikel.                        </p>
                         <p className="text-sm text-muted-foreground font-sans mt-1">
-                            Woon je buiten de EU? Wil je ophalen? Stuur gerust een email naar byle.art@outlook.com, of gebruik het contact formulier
-                            voor een persoonlijke berekening van de verzendkosten.<br />
-                            Verzending buiten de EU verloopt niet via Etsy.
+                            Woon je buiten de EU, wil je een werk ophalen, of staat het gewenste kunstwerk niet op Etsy? Neem gerust contact op via byle.art@outlook.com of het contactformulier voor meer informatie en een persoonlijke berekening van de verzendkosten.
                         </p>
                     </>
                 )}
