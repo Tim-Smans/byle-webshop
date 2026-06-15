@@ -4,7 +4,6 @@ import Image from "next/image"
 import { ChevronLeft, ChevronRight, Expand } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import ExpandedImageModal from "./expanded-image-modal";
-import { getOptimizedImageUrl } from "@/lib/utils";
 import { ProgressiveImage } from "@/components/shared/progressive-image";
 
 interface Props {
@@ -38,23 +37,25 @@ const ImageGalery: FC<Props> = ({ artPiece }) => {
                 {/* Main Image */}
                 <div className="relative h-[600px] bg-black rounded-xl overflow-hidden group">
 
-                    {/* Geblurde achtergrond — museum-matte effect */}
+                    {/* Geblurde achtergrond — museum-matte effect
+                        sizes="200px" → Vercel serveert een klein formaat voor dit decoratieve laagje */}
                     <Image
                         src={currentImage}
                         alt=""
                         fill
                         aria-hidden
+                        sizes="200px"
                         className="object-cover scale-110 blur-2xl brightness-[0.35] saturate-75 transition-all duration-500"
                         priority
                     />
 
-                    {/* Hoofdafbeelding — volledig zichtbaar */}
-                    {/* Subtiele blur alleen als decoratieve rand — schaal groter zodat geen zwarte hoeken */}
+                    {/* Subtiele blur decoratieve rand */}
                     <Image
-                        src={getOptimizedImageUrl(currentImage, { width: 200, quality: 50 })}
+                        src={currentImage}
                         alt=""
                         fill
                         aria-hidden
+                        sizes="200px"
                         className="object-cover scale-150 blur brightness-75 saturate-50 opacity-40 transition-all duration-500"
                         priority
                     />
@@ -62,7 +63,7 @@ const ImageGalery: FC<Props> = ({ artPiece }) => {
                     {/* Witte/muted overlay zodat het nooit te donker wordt */}
                     <div className="absolute inset-0 bg-muted/60" />
 
-                    {/* Hoofdafbeelding — progressief: medium snel, HQ fadet in en wordt gecached.
+                    {/* Hoofdafbeelding — progressief: shimmer → Vercel CDN → lokale cache.
                         key=currentImage zorgt dat de component herstart bij navigatie (fresh state). */}
                     <ProgressiveImage
                         key={currentImage}
@@ -137,18 +138,20 @@ const ImageGalery: FC<Props> = ({ artPiece }) => {
                                     : "opacity-60 hover:opacity-100"
                                     }`}
                             >
-                                {/* Blurred bg voor thumbnails ook */}
+                                {/* Blurred bg voor thumbnails */}
                                 <Image
-                                    src={getOptimizedImageUrl(image.url, { width: 200, quality: 50 })}
+                                    src={image.url}
                                     alt=""
                                     fill
                                     aria-hidden
+                                    sizes="80px"
                                     className="object-cover blur-md brightness-50 scale-110"
                                 />
                                 <Image
-                                    src={getOptimizedImageUrl(image.url, { width: 600, quality: 50 })}
+                                    src={image.url}
                                     alt={`${artPiece.title} - View ${index + 1}`}
                                     fill
+                                    sizes="80px"
                                     className="object-contain p-1"
                                 />
                             </button>

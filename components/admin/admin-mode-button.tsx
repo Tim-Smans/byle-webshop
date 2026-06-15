@@ -14,20 +14,7 @@ const AdminModeButton: FC = () => {
     ) {
         e.preventDefault();
 
-        const res = await fetch(
-            "/api/admin/logout",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                }
-            }
-        );
-
-        if(res.status == 200){
-            window.location.href = "/";
-        }
+        window.location.href = "/admin";
     }
 
     if (!isAdmin) {
