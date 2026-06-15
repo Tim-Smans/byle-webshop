@@ -10,7 +10,6 @@ import { getArtPieces, toggleArtPieceFeatured } from "@/lib/services/art-piece-s
 import Link from "next/link"
 import { FaStar } from "react-icons/fa"
 import { useAdmin } from "@/lib/hooks/use-admin"
-import { getOptimizedImageUrl } from "@/lib/utils"
 import { primeCache } from "@/lib/client/image-cache"
 
 
@@ -66,7 +65,7 @@ const FeaturedPieces: FC = () => {
         featuredPieces.forEach((piece) => {
           const thumbnail = [...piece.images].sort((a, b) => a.index - b.index)[0];
           if (thumbnail?.url) {
-            primeCache(getOptimizedImageUrl(thumbnail.url, { width: 1400, quality: 90, format: "webp" }));
+            primeCache(thumbnail.url);
           }
         });
       }
@@ -107,16 +106,17 @@ const FeaturedPieces: FC = () => {
                 <div className="relative aspect-3/4 overflow-hidden">
                   {/* Geblurde achtergrond (museum-matte effect) */}
                   <Image
-                    src={getOptimizedImageUrl(thumbnailImage?.url, { width: 100, quality: 50 })}
+                    src={thumbnailImage?.url ?? ""}
                     alt=""
                     fill
                     aria-hidden
+                    sizes="100px"
                     className="object-cover scale-110 blur-xl brightness-40 saturate-75"
                   />
 
                   {/* Hoofdafbeelding — object-contain zodat alles zichtbaar blijft */}
                   <Image
-                    src={getOptimizedImageUrl(thumbnailImage?.url, { width: 600, quality: 50 })}
+                    src={thumbnailImage?.url ?? ""}
                     alt={piece.title}
                     fill
                     className="object-contain p-3 group-hover:scale-105 transition-transform duration-500"

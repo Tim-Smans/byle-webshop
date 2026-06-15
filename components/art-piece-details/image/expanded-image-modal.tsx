@@ -3,7 +3,6 @@
 import { FC, useEffect, useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { ArtPiece } from "@/lib/types"
-import { getOptimizedImageUrl } from "@/lib/utils"
 import { getFromCache, primeCache } from "@/lib/client/image-cache"
 
 type Props = {
@@ -23,57 +22,39 @@ const ExpandedImageModal: FC<Props> = ({
     onNext,
     onPrev
 }) => {
-    // placeholderSrc: tiny blurry version shown instantly while HQ loads
-    const [placeholderSrc, setPlaceholderSrc] = useState<string | null>(null)
-    // mainSrc: HQ image (blob URL from cache or direct Supabase URL)
-    const [mainSrc, setMainSrc] = useState<string | null>(null)
-    const [mainReady, setMainReady] = useState(false)
+    const [imgSrc, setImgSrc] = useState<string | null>(null)
+    const [imgReady, setImgReady] = useState(false)
 
     const rawUrl = artPiece.images[selectedImageIndex]?.url || ""
-    const tinySrc = getOptimizedImageUrl(rawUrl, { width: 20, quality: 10, format: "webp" })
-    const hqSrc = getOptimizedImageUrl(rawUrl, { width: 1800, quality: 92, format: "webp" })
 
     useEffect(() => {
         if (!isOpen || !rawUrl) return
 
         let cancelled = false
-
-        // Reset: show tiny blurry placeholder immediately so there's never a blank screen
-        setPlaceholderSrc(tinySrc)
-        setMainSrc(null)
-        setMainReady(false)
+        setImgSrc(null)
+        setImgReady(false)
 
         async function load() {
-            // Check cache first — instant on repeat opens or if gallery pre-cached it
-            const cached = await getFromCache(hqSrc)
+            // Try Cache API first — instant on repeat opens or if gallery already primed it
+            const cached = await getFromCache(rawUrl)
             if (cancelled) return
 
             if (cached) {
-                setMainSrc(cached)
-                setMainReady(true)
+                setImgSrc(cached)
+                setImgReady(true)
                 return
             }
 
-            // Fetch and cache HQ, placeholder stays visible during this time
-            await primeCache(hqSrc)
-            if (cancelled) return
-
-            const fromCache = await getFromCache(hqSrc)
-            if (cancelled) return
-
-            if (fromCache) {
-                setMainSrc(fromCache)
-                setMainReady(true)
-            } else {
-                // Fallback: show direct URL if cache failed
-                setMainSrc(hqSrc)
-                setMainReady(true)
-            }
+            // Not cached: show original URL directly (Vercel CDN may already have it cached)
+            // and prime Cache API in the background for future opens
+            setImgSrc(rawUrl)
+            setImgReady(true)
+            primeCache(rawUrl)
         }
 
         load()
         return () => { cancelled = true }
-    }, [isOpen, hqSrc, rawUrl, tinySrc])
+    }, [isOpen, rawUrl])
 
     if (!isOpen) return null
 
@@ -95,34 +76,22 @@ const ExpandedImageModal: FC<Props> = ({
 
             <div className="relative w-full max-w-5xl h-[90vh] flex items-center justify-center overflow-hidden">
 
-                {/* Tiny blurry placeholder — shows immediately, hides when HQ is ready */}
-                {placeholderSrc && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                        src={placeholderSrc}
-                        alt=""
-                        aria-hidden
-                        className={`absolute inset-0 w-full h-full object-contain scale-110 blur-2xl transition-opacity duration-300 ${
-                            mainReady ? "opacity-0" : "opacity-100"
-                        }`}
-                    />
-                )}
-
-                {/* Loading spinner — visible while HQ loads */}
-                {!mainReady && (
-                    <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                {/* CSS shimmer + spinner while image loads */}
+                {!imgReady && (
+                    <>
+                        <div className="absolute inset-0 bg-muted/20 animate-pulse rounded-lg" />
                         <div className="h-10 w-10 rounded-full border-2 border-foreground/20 border-t-foreground/70 animate-spin" />
-                    </div>
+                    </>
                 )}
 
-                {/* HQ image — fades in when ready */}
-                {mainSrc && (
+                {/* Main image — from Cache API (instant) or Vercel CDN */}
+                {imgSrc && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                        src={mainSrc}
+                        src={imgSrc}
                         alt={artPiece.title}
                         className={`max-w-full max-h-full object-contain transition-opacity duration-500 ${
-                            mainReady ? "opacity-100" : "opacity-0"
+                            imgReady ? "opacity-100" : "opacity-0"
                         }`}
                         onClick={(e) => e.stopPropagation()}
                     />

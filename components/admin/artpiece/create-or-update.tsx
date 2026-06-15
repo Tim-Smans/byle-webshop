@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { v4 as uuidv4 } from "uuid";
+import { resizeToWebP } from "@/lib/client/resize-image";
 import { Trash2 } from "lucide-react";
 import { useFeedback } from "@/lib/context/feedback-context";
 import { useRouter } from "next/navigation";
@@ -123,10 +124,28 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
             if (item.type === "existing" && item.url) {
                 urls.push(item.url);
             } else if (item.type === "new" && item.file) {
-                const fileName = `${uuidv4()}-${item.file.name}`;
-                const { error } = await supabase.storage.from("images").upload(fileName, item.file);
+                const uuid = uuidv4();
+
+                // Generate display (1600px) and thumb (200px) variants client-side via Canvas API
+                const [displayBlob, thumbBlob] = await Promise.all([
+                    resizeToWebP(item.file, 1600, 0.85),
+                    resizeToWebP(item.file, 200, 0.75),
+                ]);
+
+                // Upload display version — this URL becomes image.url in the database
+                const displayName = `${uuid}.webp`;
+                const { error } = await supabase.storage
+                    .from("images")
+                    .upload(displayName, displayBlob, { contentType: "image/webp" });
                 if (error) throw error;
-                const { data } = supabase.storage.from("images").getPublicUrl(fileName);
+
+                // Upload thumb — non-critical, ignore failures
+                await supabase.storage
+                    .from("images")
+                    .upload(`${uuid}-t.webp`, thumbBlob, { contentType: "image/webp" })
+                    .catch(() => {});
+
+                const { data } = supabase.storage.from("images").getPublicUrl(displayName);
                 urls.push(data.publicUrl);
             }
         }

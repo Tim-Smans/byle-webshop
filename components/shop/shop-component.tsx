@@ -23,7 +23,6 @@ import {
 import { useFeedback } from "@/lib/context/feedback-context";
 import { FaStar } from "react-icons/fa";
 import { useAdmin } from "@/lib/hooks/use-admin";
-import { getOptimizedImageUrl } from "@/lib/utils";
 import { primeCache } from "@/lib/client/image-cache";
 
 const ShopComponent: FC = () => {
@@ -161,7 +160,7 @@ const ShopComponent: FC = () => {
         paginatedArtPieces.forEach((piece) => {
             const thumbnail = [...piece.images].sort((a, b) => a.index - b.index)[0];
             if (thumbnail?.url) {
-                primeCache(getOptimizedImageUrl(thumbnail.url, { width: 1400, quality: 90, format: "webp" }));
+                primeCache(thumbnail.url);
             }
         });
     }, [paginatedArtPieces]);
@@ -346,16 +345,17 @@ const ShopComponent: FC = () => {
 
                                     {/* Geblurde achtergrond (museum-matte effect) */}
                                     <Image
-                                        src={getOptimizedImageUrl(thumbnailImage?.url, { width: 100, quality: 30 })}
+                                        src={thumbnailImage?.url ?? ""}
                                         alt=""
                                         fill
                                         aria-hidden
+                                        sizes="100px"
                                         className="object-cover scale-110 blur-xl brightness-40 saturate-75"
                                     />
 
                                     {/* Hoofdafbeelding — object-contain zodat alles zichtbaar blijft */}
                                     <Image
-                                        src={getOptimizedImageUrl(thumbnailImage?.url, { width: 600, quality: 50 })}
+                                        src={thumbnailImage?.url ?? ""}
                                         alt={piece.title}
                                         fill
                                         className="object-contain p-3 group-hover:scale-105 transition-transform duration-500"

@@ -5,7 +5,6 @@ import { X, ShoppingBag, Trash2, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useFavorites } from "@/lib/context/favorites-context"
 import { FC } from "react"
-import { getOptimizedImageUrl } from "@/lib/utils"
 
 const FavoritesDrawer: FC = () => {
     const { favorites, isOpen, closeFavorites, removeItem, clearFavorites, isLoading } = useFavorites()
@@ -69,9 +68,10 @@ const FavoritesDrawer: FC = () => {
                                     {/* Image */}
                                     <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-md">
                                     <Image
-                                        src={getOptimizedImageUrl(item.product.images[0].url, {width: 300, quality: 50})}
+                                        src={item.product.images[0].url}
                                         alt={item.product.title}
                                         fill
+                                        sizes="80px"
                                         className="object-cover"
                                     />
                                     </div>
