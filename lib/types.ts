@@ -17,7 +17,8 @@ export interface Product {
   collectionId: string,
   creationTime: string,
   images: Image[],
-  labels: Label[]
+  labels: Label[],
+  shippingInfo: string
 }
 
 // Cart types
@@ -104,7 +105,8 @@ export interface ArtPiece {
   collectionId: string,
   creationTime: string,
   images: Image[],
-  labels: Label[]
+  labels: Label[],
+  shippingInfo: string
 }
 
 export interface Image {
