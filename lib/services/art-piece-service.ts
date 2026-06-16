@@ -228,6 +228,7 @@ const mapArtPiece = (
     isSold: dbPiece.isSold,
     creationTime: dbPiece.creationTime,
     collectionId: dbPiece.collectionId,
+    shippingInfo: dbPiece.shippingInfo ?? "",
 
     images: dbPiece.Image.map(
       (img: any) => ({
