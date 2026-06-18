@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { ArtPiece } from "@/lib/types"
 import { getFromCache, primeCache } from "@/lib/client/image-cache"
+import { useSwipe } from "@/hooks/use-swipe"
 
 type Props = {
     artPiece: ArtPiece
@@ -56,12 +57,15 @@ const ExpandedImageModal: FC<Props> = ({
         return () => { cancelled = true }
     }, [isOpen, rawUrl])
 
+    const swipeHandlers = useSwipe(onNext, onPrev)
+
     if (!isOpen) return null
 
     return (
         <div
-            className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-4 select-none"
             onClick={onClose}
+            {...(artPiece.images.length > 1 ? swipeHandlers : {})}
         >
             {/* Close button */}
             <button

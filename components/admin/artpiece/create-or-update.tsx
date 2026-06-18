@@ -76,7 +76,7 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
 
     const [form, setForm] = useState({
         title: "",
-        artist: "",
+        artist: "Lé",
         dimensions: "",
         price: 0,
         description: "",
@@ -85,7 +85,8 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
         presentation: "",
         edition: "",
         finish: "",
-        etsyUrl: ""
+        etsyUrl: "",
+        shippingInfo: ""
     });
 
     const { showSuccess, showError } = useFeedback();
@@ -219,6 +220,7 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                     p_edition: form.edition,
                     p_finish: form.finish,
                     p_etsy_url: form.etsyUrl,
+                    p_shipping_info: form.shippingInfo,
 
 
                     p_images: imageUrls,
@@ -245,6 +247,7 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                     p_edition: form.edition,
                     p_finish: form.finish,
                     p_etsy_url: form.etsyUrl,
+                    p_shipping_info: form.shippingInfo,
 
                     p_images: imageUrls,
                     p_label_ids: labelIds,
@@ -303,7 +306,8 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
             presentation: data.presentation,
             edition: data.edition,
             finish: data.finish,
-            etsyUrl: data.etsyUrl ?? ""
+            etsyUrl: data.etsyUrl ?? "",
+            shippingInfo: data.shippingInfo ?? ""
         });
 
         setCollectionId(data.collectionId);
@@ -458,6 +462,18 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                                         onChange={(e) =>
                                             setForm({ ...form, etsyUrl: e.target.value })
                                         }
+                                    />
+                                </div>
+
+                                <div className="md:col-span-2">
+                                    <LabelComponent>Verzendinformatie</LabelComponent>
+                                    <Textarea
+                                        value={form.shippingInfo}
+                                        onChange={(e) =>
+                                            setForm({ ...form, shippingInfo: e.target.value })
+                                        }
+                                        rows={3}
+                                        placeholder="bv. Gratis verzending binnen België · €15 naar Nederland"
                                     />
                                 </div>
 

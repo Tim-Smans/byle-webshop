@@ -1,3 +1,5 @@
+"use client"
+
 import { ArtPiece } from "@/lib/types";
 import { FC, useState } from "react";
 import Image from "next/image"
@@ -5,6 +7,7 @@ import { ChevronLeft, ChevronRight, Expand } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import ExpandedImageModal from "./expanded-image-modal";
 import { ProgressiveImage } from "@/components/shared/progressive-image";
+import { useSwipe } from "@/hooks/use-swipe";
 
 interface Props {
     artPiece: ArtPiece
@@ -31,11 +34,17 @@ const ImageGalery: FC<Props> = ({ artPiece }) => {
     }
 
     const currentImage = sortedImages[selectedImageIndex]?.url || ""
+
+    const swipeHandlers = useSwipe(nextImage, prevImage)
+
     return (
         <>
             <div className="space-y-4">
                 {/* Main Image */}
-                <div className="relative h-[600px] bg-black rounded-xl overflow-hidden group">
+                <div
+                    className="relative h-[600px] bg-black rounded-xl overflow-hidden group select-none"
+                    {...(sortedImages.length > 1 ? swipeHandlers : {})}
+                >
 
                     {/* Geblurde achtergrond — museum-matte effect
                         sizes="200px" → Vercel serveert een klein formaat voor dit decoratieve laagje */}
@@ -95,7 +104,7 @@ const ImageGalery: FC<Props> = ({ artPiece }) => {
                     {/* Expand Button */}
                     <button
                         onClick={() => setIsImageExpanded(true)}
-                        className="absolute top-4 right-4 h-10 w-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80 text-white z-10"
+                        className="absolute top-4 right-4 h-10 w-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center transition-opacity hover:bg-black/80 text-white z-10 md:opacity-0 md:group-hover:opacity-100"
                     >
                         <Expand className="h-5 w-5" />
                     </button>
