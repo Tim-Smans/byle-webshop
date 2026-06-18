@@ -1,6 +1,7 @@
 import { ArtPiece } from "../types";
 import { supabase } from "../supabase/client"
 import { PostgrestError } from "@supabase/supabase-js";
+import { normalizeLabel } from "../utils";
 
 const ARTPIECE_TABLE = 'ArtPiece'
 const IMAGE_TABLE = 'Image'
@@ -241,7 +242,7 @@ const mapArtPiece = (
     labels: dbPiece.PieceLabel.map(
       (pl: any) => ({
         id: pl.Label.id,
-        title: pl.Label.title
+        title: normalizeLabel(pl.Label.title)
       })
     )
   };

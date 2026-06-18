@@ -18,6 +18,7 @@ import { v4 as uuidv4 } from "uuid";
 import { resizeToWebP } from "@/lib/client/resize-image";
 import { Trash2 } from "lucide-react";
 import { useFeedback } from "@/lib/context/feedback-context";
+import { normalizeLabel } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import MDEditor from "@uiw/react-md-editor";
 import {
@@ -560,7 +561,7 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                                                     );
                                                 }}
                                             >
-                                                {label.title}
+                                                {normalizeLabel(label.title)}
                                             </button>
                                         ))}
                                     </div>

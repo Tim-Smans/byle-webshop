@@ -15,3 +15,8 @@ export function getThumbUrl(url: string): string {
   if (!url) return '';
   return isNewStyleImage(url) ? url.replace(/\.webp$/, '-t.webp') : url;
 }
+
+export function normalizeLabel(title: string): string {
+  const words = title.toLowerCase().replace(/[-_]+/g, ' ').trim().split(/\s+/);
+  return words.map((word, i) => (i === 0 ? word.charAt(0).toUpperCase() + word.slice(1) : word)).join(' ');
+}
