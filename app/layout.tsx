@@ -13,8 +13,8 @@ import { cn } from "@/lib/utils";
 
 import Header from "@/components/shared/header";
 import Footer from "@/components/shared/footer";
-import { UnderConstructionPopup } from "@/components/temp/underConstruction";
 import { FavoritesProvider } from "@/lib/context/favorites-context";
+import { Analytics } from "@vercel/analytics/next"
 import CartDrawer from "@/components/cart/favorites-drawer";
 import { FeedbackProvider } from "@/lib/context/feedback-context";
 
@@ -77,6 +77,7 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col">
+        <Analytics/>
         <FavoritesProvider>
           <FeedbackProvider>
             <Header />
