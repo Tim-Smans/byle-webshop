@@ -26,7 +26,7 @@ const Footer: FC = () => {
             <Link href="/" className="flex items-center gap-3 mb-6">
               <div className="relative h-12 w-12 rounded overflow-hidden">
                 <Image
-                  src="/images/logo.jpg"
+                  src="/images/icon.png"
                   alt="By Lé Handcrafted Art"
                   fill
                   className="object-cover"

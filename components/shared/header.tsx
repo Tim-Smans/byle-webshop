@@ -30,7 +30,7 @@ const Header: FC = () => {
         <Link href="/" className="flex items-center gap-3 shrink-0">
           <div className="relative h-12 w-12">
             <Image
-              src="/images/logo.jpg"
+              src="/images/icon.png"
               alt="Art by Lé"
               fill
               className="object-cover rounded"
