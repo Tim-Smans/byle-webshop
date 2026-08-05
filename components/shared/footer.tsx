@@ -24,9 +24,9 @@ const Footer: FC = () => {
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-6">
-              <div className="relative h-12 w-12 rounded overflow-hidden">
+              <div className="relative h-16 w-16 rounded overflow-hidden">
                 <Image
-                  src="/images/icon.png"
+                  src="/images/test.png"
                   alt="By Lé Handcrafted Art"
                   fill
                   className="object-cover"

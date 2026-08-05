@@ -28,9 +28,9 @@ const Header: FC = () => {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 shrink-0">
-          <div className="relative h-12 w-12">
+          <div className="relative h-15 w-15">
             <Image
-              src="/images/icon.png"
+              src="/images/icontwo.png"
               alt="Art by Lé"
               fill
               className="object-cover rounded"
