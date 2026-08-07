@@ -63,10 +63,16 @@ const FeaturedPieces: FC = () => {
 
       if (artPieces) {
         const featuredPieces = artPieces.filter(ap => ap.isFeatured === true);
-        setArtPieces(featuredPieces)
+
+        // Van de (max 9) uitgelichte stukken tonen we op de homepage steeds maar 6, willekeurig gekozen
+        const shownPieces = [...featuredPieces]
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 6);
+
+        setArtPieces(shownPieces)
 
         // Background-prime HQ cache so detail page loads instantly on click
-        featuredPieces.forEach((piece) => {
+        shownPieces.forEach((piece) => {
           const thumbnail = [...piece.images].sort((a, b) => a.index - b.index)[0];
           if (thumbnail?.url) {
             primeCache(thumbnail.url);

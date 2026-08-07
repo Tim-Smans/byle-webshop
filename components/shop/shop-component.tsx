@@ -71,8 +71,8 @@ const ShopComponent: FC = () => {
     const handleToggleFeatured = async (id: string) => {
         var artPieceFeatured = await isArtPieceFeatured(id)
 
-        if (artPieces.filter(x => x.isFeatured).length >= 6 && !artPieceFeatured) {
-            showError('Je mag maar maximaal 6 uitgelichte stukken selecteren, haal wat oude stukken weg voor je er nieuwe selecteerd.');
+        if (artPieces.filter(x => x.isFeatured).length >= 9 && !artPieceFeatured) {
+            showError('Je mag maar maximaal 9 uitgelichte stukken selecteren, haal wat oude stukken weg voor je er nieuwe selecteerd.');
             return
         }
 
