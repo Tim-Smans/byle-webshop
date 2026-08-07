@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import LogoutButton from "@/components/admin/logout-button"
+import MoveSoldButton from "@/components/admin/move-sold-button"
 import {
     ImageIcon,
     Layers,
@@ -15,6 +16,9 @@ import {
     Plus,
     ArrowRight,
     MoveRight,
+    TrendingUp,
+    Users,
+    Eye,
 } from "lucide-react"
 
 async function getDashboardStats() {
@@ -54,6 +58,63 @@ async function getDashboardStats() {
     }
 }
 
+type AnalyticsStats = {
+    pageviews: number
+    visitors: number
+    topRoutes: { route: string; pageviews: number; visitors: number }[]
+} | null
+
+async function getAnalyticsStats(): Promise<AnalyticsStats> {
+    const apiKey = process.env.VERCEL_API_KEY
+    const projectId = process.env.VERCEL_PROJECT_ID
+    if (!apiKey || !projectId) return null
+
+    const headers = { Authorization: `Bearer ${apiKey}` }
+    const teamId = process.env.VERCEL_TEAM_ID
+
+    const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
+    const until = new Date().toISOString().split("T")[0]
+
+    const base = new URLSearchParams({ projectId, since, until })
+    if (teamId) base.set("teamId", teamId)
+
+    const dailyParams = new URLSearchParams(base)
+    dailyParams.set("by", "day")
+
+    const routeParams = new URLSearchParams(base)
+    routeParams.set("by", "route")
+    routeParams.set("limit", "5")
+
+    const baseUrl = "https://api.vercel.com/v1/query/web-analytics"
+
+    console.log("[analytics] full daily URL:", `${baseUrl}/visits/aggregate?${dailyParams}`)
+    console.log("[analytics] teamId in request:", teamId ?? "(not set — may be required)")
+
+    const [dailyResult, routeResult] = await Promise.allSettled([
+        fetch(`${baseUrl}/visits/aggregate?${dailyParams}`, { headers }).then(async (r) => {
+            const body = await r.json()
+            console.log("[analytics] daily:", r.status, JSON.stringify(body).slice(0, 400))
+            if (!r.ok) throw new Error(body?.error?.message ?? r.statusText)
+            return body
+        }),
+        fetch(`${baseUrl}/visits/aggregate?${routeParams}`, { headers }).then(async (r) => {
+            const body = await r.json()
+            if (!r.ok) throw new Error(body?.error?.message ?? r.statusText)
+            return body
+        }),
+    ])
+
+    if (dailyResult.status === "rejected" || routeResult.status === "rejected") return null
+
+    const dailyData: { pageviews: number; visitors: number }[] = dailyResult.value?.data ?? []
+    const routeData: { route: string; pageviews: number; visitors: number }[] = routeResult.value?.data ?? []
+
+    const pageviews = dailyData.reduce((sum, d) => sum + (d.pageviews ?? 0), 0)
+    const visitors = dailyData.reduce((sum, d) => sum + (d.visitors ?? 0), 0)
+
+    return { pageviews, visitors, topRoutes: routeData }
+}
+
 function formatBytes(bytes: number): string {
     if (bytes === 0) return "0 B"
     const k = 1024
@@ -68,7 +129,7 @@ export default async function AdminDashboard() {
         redirect("/admin/login")
     }
 
-    const stats = await getDashboardStats()
+    const [stats, analytics] = await Promise.all([getDashboardStats(), getAnalyticsStats()])
 
     return (
         <div className="min-h-screen px-6 py-10 max-w-5xl mx-auto">
@@ -135,6 +196,51 @@ export default async function AdminDashboard() {
                 </div>
             </section>
 
+            {/* Analytics */}
+            {analytics && (
+                <section className="mb-10">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
+                        Analytics (laatste 30 dagen)
+                    </h2>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+                        <StatCard label="Paginaweergaven" value={analytics.pageviews} icon={<Eye size={18} />} />
+                        <StatCard label="Unieke bezoekers" value={analytics.visitors} icon={<Users size={18} />} />
+                    </div>
+                    {analytics.topRoutes.length > 0 && (
+                        <div className="bg-card border border-border rounded-lg p-4">
+                            <div className="flex items-center gap-2 mb-4">
+                                <TrendingUp size={16} className="text-muted-foreground" />
+                                <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                                    Top pagina&apos;s
+                                </span>
+                            </div>
+                            <div className="space-y-3">
+                                {analytics.topRoutes.map((row) => {
+                                    const max = analytics.topRoutes[0].pageviews
+                                    const pct = max > 0 ? Math.round((row.pageviews / max) * 100) : 0
+                                    return (
+                                        <div key={row.route}>
+                                            <div className="flex items-center justify-between mb-1 gap-2">
+                                                <span className="text-sm text-foreground font-mono truncate">{row.route}</span>
+                                                <span className="text-xs text-muted-foreground shrink-0">
+                                                    {row.pageviews} views · {row.visitors} bezoekers
+                                                </span>
+                                            </div>
+                                            <div className="h-1.5 rounded-full bg-border overflow-hidden">
+                                                <div
+                                                    className="h-full rounded-full bg-primary/60"
+                                                    style={{ width: `${pct}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    )}
+                </section>
+            )}
+
             {/* Quick actions */}
             <section>
                 <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">Beheer</h2>
@@ -158,6 +264,7 @@ export default async function AdminDashboard() {
                         description="Zet bestaande afbeeldingen om naar geoptimaliseerd formaat"
                         icon={<MoveRight size={20} />}
                     />
+                    <MoveSoldButton />
                     <LogoutButton />
                 </div>
             </section>

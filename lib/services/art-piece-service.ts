@@ -8,7 +8,7 @@ const IMAGE_TABLE = 'Image'
 const LABEL_TABLE = 'Label'
 const PIECELABEL_TABLE = 'PieceLabel'
 
-const SOLD_COLLECTION_ID = 'a413fc29-b2d2-464c-8c37-31f109ec047d'
+export const SOLD_COLLECTION_ID = 'a413fc29-b2d2-464c-8c37-31f109ec047d'
 
 export const getArtPieces = async (): Promise<ArtPiece[] | undefined> => {
   const { data: pieces } = await supabase
