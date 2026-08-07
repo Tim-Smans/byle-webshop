@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image"
 import { ArtPiece, Collection, Product } from "@/lib/types";
 import { useFavorites } from "@/lib/context/favorites-context";
-import { deleteArtPiece, getArtPieces, isArtPieceFeatured, toggleArtPieceSold } from "@/lib/services/art-piece-service";
+import { deleteArtPiece, getArtPieces, isArtPieceFeatured, SOLD_COLLECTION_ID, toggleArtPieceSold } from "@/lib/services/art-piece-service";
 import { Heart, Pencil, ShoppingBasket, Star, TrashIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getCollections } from "@/lib/services/collection-service";
@@ -145,7 +145,11 @@ const ShopComponent: FC = () => {
             selectedCollectionId === "all" ||
             piece.collectionId === selectedCollectionId;
 
-        return matchesSearch && matchesCollection;
+        const isHiddenSoldPiece =
+            selectedCollectionId !== SOLD_COLLECTION_ID &&
+            piece.collectionId === SOLD_COLLECTION_ID;
+
+        return matchesSearch && matchesCollection && !isHiddenSoldPiece;
     });
 
     const totalPages = Math.ceil(filteredArtPieces.length / ITEMS_PER_PAGE);
