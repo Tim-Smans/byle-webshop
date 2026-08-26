@@ -31,11 +31,12 @@ const Hero: FC = () => {
         </h1>
 
         <p className="mx-auto max-w-2xl text-lg sm:text-xl text-muted-foreground leading-relaxed mb-10">
-          Bij mijn werken vind je handgemaakte mixed media kunstwerken, 
-          opgebouwd met textielverharder en intuïtieve acrylschildertechnieken.
-          Je kan eenvoudig selecteren tussen de verschillende collecties, waaronder intuïtieve schilderijen en intuïtieve sculpturen.
-          Elk stuk ontstaat laag voor laag en ontwikkelt zich met tijd tot een uniek, 
-          textuurrijk werk met een zachte, natuurlijke uitstraling.
+          Bij Art by Lé vind je unieke, handgemaakte mixed media kunst, ontstaan vanuit gevoel en zonder vast plan.
+
+          Schilderijen en beelden groeien intuïtief, laag voor laag, met een samenspel van kleur, vorm, textuur en verschillende materialen. Elk werk krijgt de tijd om te worden wat het wil worden.
+
+          Geen mal, geen vaste formule en geen twee dezelfde werken.
+          Elk stuk is één uniek origineel, gemaakt met tijd, zorg en aandacht.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -46,6 +47,16 @@ const Hero: FC = () => {
           >
             <Link href={'/gallery'}>
               Ontdek mijn collectie
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+          <Button
+            size="lg"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-sans font-medium tracking-wide"
+            asChild
+          >
+            <Link href={'/maatwerk'}>
+              Kunstwerk op maat
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

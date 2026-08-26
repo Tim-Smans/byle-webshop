@@ -13,6 +13,7 @@ const navigation = [
   { name: "Gallery / Works", href: "/gallery" },
   { name: "Collecties", href: "/#collections" },
   { name: "About Lé", href: "/#about" },
+  { name: "Kunstwerk op maat", href: "/maatwerk" },
   { name: "Artist Statement", href: "/#statement" },
   { name: "Artist CV", href: "/cv" },
   { name: "Contact", href: "/contact" },
