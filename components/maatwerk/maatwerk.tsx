@@ -35,13 +35,13 @@ const Maatwerk: FC = () => {
             {/* Jouw idee, intuïtief tot leven gebracht */}
             <section className="mx-auto max-w-6xl px-6 lg:px-8 py-12">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                    <div className="relative order-1">
+                    <div className="relative order-1 hidden lg:block">
                         <div className="relative aspect-4/5 rounded-lg overflow-hidden">
                             <Image
                                 src="/images/step1.jpg"
                                 alt="Jouw idee, intuïtief tot leven gebracht"
                                 fill
-                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                sizes="50vw"
                                 className="object-cover"
                             />
                         </div>
@@ -102,13 +102,13 @@ const Maatwerk: FC = () => {
                             </div>
                         </div>
 
-                        <div className="relative order-1 lg:order-2">
+                        <div className="relative order-1 lg:order-2 hidden lg:block">
                             <div className="relative aspect-4/5 rounded-lg overflow-hidden">
                                 <Image
                                     src="/images/step3.jpg"
                                     alt="Schilderij op maat"
                                     fill
-                                    sizes="(max-width: 1024px) 100vw, 50vw"
+                                    sizes="50vw"
                                     className="object-cover"
                                 />
                             </div>
@@ -122,13 +122,13 @@ const Maatwerk: FC = () => {
             {/* Beeld op maat */}
             <section className="mx-auto max-w-6xl px-6 lg:px-8 py-16">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                    <div className="relative order-1">
+                    <div className="relative order-1 hidden lg:block">
                         <div className="relative aspect-4/5 rounded-lg overflow-hidden">
                             <Image
                                 src="/images/step2.jpg"
                                 alt="Beeld op maat"
                                 fill
-                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                sizes="50vw"
                                 className="object-cover"
                             />
                         </div>

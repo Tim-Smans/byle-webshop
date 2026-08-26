@@ -48,7 +48,7 @@ const Header: FC = () => {
             <Link
               key={item.name}
               href={item.href}
-              className="whitespace-nowrap font-heading text-xs tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors duration-200"
+              className="whitespace-nowrap font-heading text-sm tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors duration-200"
             >
               {item.name}
             </Link>

@@ -34,9 +34,9 @@ const StepsCarousel: FC = () => {
     const current = slides[index]
 
     return (
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-5xl mx-auto">
             <div
-                className="relative h-[420px] sm:h-[520px] rounded-2xl overflow-hidden bg-black select-none group"
+                className="relative h-[320px] sm:h-[520px] lg:h-[640px] rounded-2xl overflow-hidden bg-black select-none group"
                 {...swipeHandlers}
             >
                 {/* Blurred backdrop so the full photo can be shown without cropping */}
@@ -60,15 +60,6 @@ const StepsCarousel: FC = () => {
                     priority={index === 0}
                 />
 
-                {/* Gradient overlay for caption legibility */}
-                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
-
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <p className="text-white text-lg sm:text-xl font-light tracking-wide text-center">
-                        {current.caption}
-                    </p>
-                </div>
-
                 {/* Navigation Arrows */}
                 <button
                     onClick={prev}
@@ -84,6 +75,13 @@ const StepsCarousel: FC = () => {
                 >
                     <ChevronRight className="h-5 w-5" />
                 </button>
+            </div>
+
+            {/* Caption, next to the photo instead of on top of it */}
+            <div className="mt-5 flex items-center justify-between gap-4">
+                <p className="flex-1 text-center text-lg sm:text-xl font-light tracking-wide text-foreground">
+                    {current.caption}
+                </p>
             </div>
 
             {/* Dots */}
