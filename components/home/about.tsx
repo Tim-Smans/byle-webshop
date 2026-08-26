@@ -58,24 +58,23 @@ const About: FC = () => {
               About Lé
             </p>
             <h2 className="text-4xl text-oker sm:text-5xl font-light tracking-tight text-foreground mb-6">
-              Art Born From <br />
-              <span className="italic font-medium">Passion & Heart</span>
+              Kunst ontstaan vanuit <br />
+              <span className="italic font-medium">gevoel</span>
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed mb-8">
               <p>
-                Lé is de maker achter Art by Lé, een intuïtieve mixed media praktijk waarin rust, textuur en gelaagdheid centraal staan.
-              </p>
+                Lé is de maker achter Art by Lé. Ze werkt intuïtief en bouwt haar schilderijen en beelden langzaam en organisch op, laag voor laag, tot kleur, textuur en gevoel samenkomen in een evenwichtig geheel.              </p>
               <p>
-                Haar werken ontstaan langzaam en organisch, vaak verspreid over meerdere dagen, waarbij vormen, kleuren en materialen zich laag voor laag ontwikkelen tot een evenwichtig geheel.
-              </p>
+                Van nature voelt ze zich aangetrokken tot zachte aardetinten, subtiele metallic accenten en tactiele oppervlakken die rust en verstilling oproepen. Tegelijk laat ze ruimte voor spontaniteit en intuïtie, waardoor elk werk een eigen, uniek karakter krijgt.              </p>
               <p>
-                Van nature voelt ze zich aangetrokken tot zachte aardetinten, subtiele metallic accenten en tactiele oppervlakken die een gevoel van verstilling oproepen. Tegelijk laat ze ruimte voor spontaniteit en intuïtie, waardoor soms onverwachte contrasten of expressieve details ontstaan.
-              </p>
-              <p>
-                Voor Lé is creëren meer dan esthetiek alleen; het is een trage en aandachtige manier van werken die ruimte maakt voor rust, zachtheid en verbinding.
-              </p>
+                Creëren is voor Lé veel meer dan esthetiek alleen. Als mama die om medische redenen thuis is, is kunst voor haar een manier om rust, zachtheid en mentale ademruimte te vinden.              </p>
               <p className="font-bold">
-                Elk kunstwerk wordt met tijd, zorg en aandacht opgebouwd. Geen enkel stuk is hetzelfde.
+                De werken worden niet aangeboden vanuit grote commerciële ambities of om winst te maken, maar vooral om een deel van de materiaalkosten te helpen dragen,              </p>
+              <p>
+                zodat ze kan blijven creëren met tijd, zorg en aandacht. 
+                <br/><br/>
+                *Elk kunstwerk wordt met tijd, zorg en aandacht opgebouwd.
+                Geen enkel stuk is hetzelfde.*
               </p>
             </div>
 

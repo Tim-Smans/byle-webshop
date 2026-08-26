@@ -1,0 +1,93 @@
+"use client"
+
+import Image from "next/image"
+import { FC, useState } from "react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useSwipe } from "@/hooks/use-swipe"
+
+interface Slide {
+    src: string
+    caption: string
+}
+
+const slides: Slide[] = [
+    { src: "/images/step1.jpg", caption: "Jouw idee, intuïtief tot leven gebracht" },
+    { src: "/images/step2.jpg", caption: "Beeld op maat" },
+    { src: "/images/step3.jpg", caption: "Schilderij op maat" },
+    { src: "/images/step4.jpg", caption: "Stap 1 – Jouw idee" },
+    { src: "/images/step5.jpg", caption: "Stap 2 – Samen afstemmen" },
+    { src: "/images/step6.jpg", caption: "Stap 3 – Bevestiging" },
+    { src: "/images/step7.jpg", caption: "Stap 4 – Het creatieve proces" },
+    { src: "/images/step8.jpg", caption: "Stap 5 – Vertrouwen in het proces" },
+    { src: "/images/step9.jpg", caption: "Stap 6 – De laatste afwerking" },
+    { src: "/images/step10.jpg", caption: "Stap 7 – Klaar voor zijn nieuwe thuis" },
+]
+
+const StepsCarousel: FC = () => {
+    const [index, setIndex] = useState<number>(0)
+
+    const next = () => setIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1))
+    const prev = () => setIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1))
+
+    const swipeHandlers = useSwipe(next, prev)
+
+    const current = slides[index]
+
+    return (
+        <div className="max-w-5xl mx-auto">
+            <div
+                className="relative h-[480px] sm:h-[560px] lg:h-[640px] rounded-2xl overflow-hidden bg-background border border-border/50 select-none group"
+                {...swipeHandlers}
+            >
+                {/* Full, uncropped photo on a soft cream background */}
+                <Image
+                    key={current.src}
+                    src={current.src}
+                    alt={current.caption}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 60vw"
+                    className="object-contain transition-opacity duration-500"
+                    priority={index === 0}
+                />
+
+                {/* Navigation Arrows */}
+                <button
+                    onClick={prev}
+                    aria-label="Vorige foto"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70 text-white z-10"
+                >
+                    <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                    onClick={next}
+                    aria-label="Volgende foto"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70 text-white z-10"
+                >
+                    <ChevronRight className="h-5 w-5" />
+                </button>
+            </div>
+
+            {/* Caption, next to the photo instead of on top of it */}
+            <div className="mt-5 flex items-center justify-between gap-4">
+                <p className="flex-1 text-center text-lg sm:text-xl font-light tracking-wide text-foreground">
+                    {current.caption}
+                </p>
+            </div>
+
+            {/* Dots */}
+            <div className="flex justify-center flex-wrap gap-1.5 mt-4">
+                {slides.map((_, i) => (
+                    <button
+                        key={i}
+                        onClick={() => setIndex(i)}
+                        aria-label={`Ga naar foto ${i + 1}`}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${i === index ? "w-6 bg-primary" : "w-1.5 bg-muted-foreground/40"
+                            }`}
+                    />
+                ))}
+            </div>
+        </div>
+    )
+}
+
+export default StepsCarousel
