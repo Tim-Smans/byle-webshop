@@ -43,12 +43,12 @@ const Header: FC = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex lg:gap-x-8">
+        <div className="hidden xl:flex xl:items-center xl:gap-x-6">
           {navigation.map((item) => (
             <Link
               key={item.name}
               href={item.href}
-              className="font-heading text-sm tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors duration-200"
+              className="whitespace-nowrap font-heading text-xs tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors duration-200"
             >
               {item.name}
             </Link>
@@ -78,7 +78,7 @@ const Header: FC = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="xl:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -89,13 +89,13 @@ const Header: FC = () => {
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-border bg-background">
+        <div className="xl:hidden border-t border-border bg-background">
           <div className="flex flex-col px-6 py-4">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="py-3 font-heading text-sm tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors duration-200 border-b border-border/50 last:border-0"
+                className="py-3 font-heading text-sm tracking-wide uppercase text-muted-foreground hover:text-foreground transition-colors duration-200 border-b border-border/50 last:border-0"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.name}

@@ -36,21 +36,32 @@ const StepsCarousel: FC = () => {
     return (
         <div className="max-w-3xl mx-auto">
             <div
-                className="relative h-[420px] sm:h-[520px] rounded-2xl overflow-hidden bg-muted select-none group"
+                className="relative h-[420px] sm:h-[520px] rounded-2xl overflow-hidden bg-black select-none group"
                 {...swipeHandlers}
             >
+                {/* Blurred backdrop so the full photo can be shown without cropping */}
+                <Image
+                    src={current.src}
+                    alt=""
+                    fill
+                    aria-hidden
+                    sizes="200px"
+                    className="object-cover scale-110 blur-2xl brightness-[0.45] saturate-75"
+                />
+
+                {/* Full, uncropped photo */}
                 <Image
                     key={current.src}
                     src={current.src}
                     alt={current.caption}
                     fill
                     sizes="(max-width: 768px) 100vw, 60vw"
-                    className="object-cover transition-opacity duration-500"
+                    className="object-contain transition-opacity duration-500"
                     priority={index === 0}
                 />
 
                 {/* Gradient overlay for caption legibility */}
-                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
 
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                     <p className="text-white text-lg sm:text-xl font-light tracking-wide text-center">
