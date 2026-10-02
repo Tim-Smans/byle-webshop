@@ -82,7 +82,7 @@ const ContactComponent: FC = () => {
                             Heb je een vraag?
                         </h2>
                         <p className="leading-relaxed text-sm">
-                            Heb je een vraag, spreekt een werk je aan of droom je van een creatie op maat? Neem gerust contact op, samen bekijken we de mogelijkheden.
+                            Sprak een werk je aan of droom je van een creatie op maat? Neem gerust contact op. Samen bekijken we de mogelijkheden.
                         </p>
                     </div>
 

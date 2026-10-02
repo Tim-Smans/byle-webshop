@@ -26,13 +26,12 @@ const Hero: FC = () => {
         </p>
 
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-oker mb-6 text-balance">
-          <span className="font-decorative">Art</span> created from feeling <br />
-          <span className="font-medium italic">to be felt in silence</span>
+          <span className="font-decorative">Art By Lé</span><br />
         </h1>
 
         <p className="mx-auto max-w-2xl text-lg sm:text-xl text-muted-foreground leading-relaxed mb-10">
-          Bij Art by Lé vind je unieke, handgemaakte mixed media kunst, ontstaan vanuit gevoel en zonder vast plan.
-
+          Bij Art by Lé vind je unieke, intuïtieve semi-abstracte mixed-media kunst waarin textuur, kleur en gevoel centraal staan
+          <br/>
           Schilderijen en beelden groeien intuïtief, laag voor laag, met een samenspel van kleur, vorm, textuur en verschillende materialen. Elk werk krijgt de tijd om te worden wat het wil worden.
 
           Geen mal, geen vaste formule en geen twee dezelfde werken.
@@ -42,17 +41,17 @@ const Hero: FC = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button
             size="lg"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-sans font-medium tracking-wide"
+            className="btn-green text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-sans font-medium tracking-wide"
             asChild
           >
             <Link href={'/gallery'}>
-              Ontdek mijn collectie
+              Kies uw stijl
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button
             size="lg"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-sans font-medium tracking-wide"
+            className="btn-green text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-sans font-medium tracking-wide"
             asChild
           >
             <Link href={'/maatwerk'}>
@@ -63,10 +62,10 @@ const Hero: FC = () => {
           <Button
             variant="outline"
             size="lg"
-            className="px-8 py-6 text-base font-sans font-medium tracking-wide border-foreground/20 hover:bg-foreground/5"
+            className="px-8 py-6 text-base font-sans font-medium tracking-wide border-foreground/20 hover:bg-foreground/5 btn-green"
             asChild
           >
-            <a href="#about">Over Lé</a>
+            <a href="#about">Achter Art by Lé</a>
           </Button>
         </div>
       </div>

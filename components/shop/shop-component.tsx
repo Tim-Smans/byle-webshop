@@ -253,11 +253,11 @@ const ShopComponent: FC = () => {
                         Kijk rond tussen mijn kunstwerken
                     </p>
                     <h2 className="text-oker text-4xl sm:text-5xl font-light tracking-tight text-foreground mb-4">
-                        Gallery / Works
+                        Gallery
                     </h2>
                     <p className="max-w-2xl mx-auto text-muted-foreground text-lg">
-                        Ontdek mijn unieke creaties, stuk voor stuk met liefde en zorg handgemaakt. Laat je inspireren door de warme details,
-                        zachte kleuren en creatieve afwerking. Gebruik de filters om rustig rond te kijken tussen al mijn werken.
+                        Ontdek mijn unieke creaties, stuk voor stuk met liefde en zorg handgemaakt. Laat u inspireren door warme details,
+                        zachte kleuren en creatieve afwerkingen. Gebruik de filters om rustig tussen mijn werken rond te kijken.
                     </p>
                     {
                         isAdmin ?
@@ -273,7 +273,7 @@ const ShopComponent: FC = () => {
                 <div className="mb-10 w-full flex flex-col sm:flex-row gap-4">
                     <input
                         type="text"
-                        placeholder="Zoek op titel, artiest of label..."
+                        placeholder="Zoek op titel, collectie of label..."
                         value={searchTerm}
                         onChange={(e) => {
                             setSearchTerm(e.target.value)
