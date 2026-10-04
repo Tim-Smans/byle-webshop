@@ -19,6 +19,7 @@ import {
     TrendingUp,
     Users,
     Eye,
+    Mail,
 } from "lucide-react"
 
 async function getDashboardStats() {
@@ -132,7 +133,7 @@ export default async function AdminDashboard() {
     const [stats, analytics] = await Promise.all([getDashboardStats(), getAnalyticsStats()])
 
     return (
-        <div className="min-h-screen px-6 py-10 max-w-5xl mx-auto">
+        <div className="min-h-screen px-6 pt-28 pb-10 max-w-5xl mx-auto">
             <div className="mb-10">
                 <h1 className="text-3xl font-light tracking-tight text-primary mb-1">Admin Dashboard</h1>
                 <p className="text-muted-foreground text-sm">Overzicht van de galerij en beheeropties</p>
@@ -257,6 +258,12 @@ export default async function AdminDashboard() {
                         title="Galerij bekijken"
                         description="Beheer bestaande werken: bewerk, verkoop of verwijder"
                         icon={<PaintbrushIcon size={20} />}
+                    />
+                    <AdminLink
+                        href="/admin/newsletter"
+                        title="Nieuwsbrief"
+                        description="Bekijk inschrijvingen en exporteer ze naar Excel"
+                        icon={<Mail size={20} />}
                     />
                     <AdminLink
                         href="/admin/migrate-images"

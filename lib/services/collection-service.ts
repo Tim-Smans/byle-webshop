@@ -6,7 +6,8 @@ const COLLECTIONS_TABLE = 'Collection'
 export const getCollections = async (): Promise<Collection[] | undefined> => {
     const { data: collections } = await supabase
         .from(COLLECTIONS_TABLE)
-        .select();
+        .select()
+        .order('index', { ascending: true, nullsFirst: false });
 
     if (!collections) {
         return undefined

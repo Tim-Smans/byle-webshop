@@ -6,7 +6,6 @@ import { FC, useEffect, useState } from "react"
 import { getStats, saveStatistics } from "@/lib/services/stats-service"
 import { useAdmin } from "@/lib/hooks/use-admin"
 import { EditStatisticsDialog, Statistic } from "../dialogs/edit-statistics"
-import ReferralDialog from "../dialogs/referral-dialog"
 
 const About: FC = () => {
   const [stats, setStats] = useState<Statistic[]>([])
@@ -39,9 +38,9 @@ const About: FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Image Side */}
           <div className="relative">
-            <div className="relative aspect-4/5 rounded-lg overflow-hidden">
+            <div className="relative aspect-3/4 rounded-lg overflow-hidden">
               <Image
-                src="/images/about_me_image.jpg"
+                src="/images/about_me_image_newer.jpg"
                 alt="Artist at work"
                 fill
                 className="object-cover"
@@ -55,7 +54,7 @@ const About: FC = () => {
           {/* Content Side */}
           <div>
             <p className="text-sm font-sans font-medium tracking-[0.3em] uppercase text-secondary mb-4">
-              About Lé
+              Achter Art by Lé
             </p>
             <h2 className="text-4xl text-oker sm:text-5xl font-light tracking-tight text-foreground mb-6">
               Kunst ontstaan vanuit <br />
@@ -63,22 +62,20 @@ const About: FC = () => {
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed mb-8">
               <p>
-                Lé is de maker achter Art by Lé. Ze werkt intuïtief en bouwt haar schilderijen en beelden langzaam en organisch op, laag voor laag, tot kleur, textuur en gevoel samenkomen in een evenwichtig geheel.              </p>
+                Els is de maker achter Art by Lé. Ze werkt intuïtief en bouwt haar schilderijen en sculpturen langzaam en organisch op, laag voor laag, tot kleur, textuur en gevoel samenkomen in een evenwichtig geheel.
+              </p>
               <p>
-                Van nature voelt ze zich aangetrokken tot zachte aardetinten, subtiele metallic accenten en tactiele oppervlakken die rust en verstilling oproepen. Tegelijk laat ze ruimte voor spontaniteit en intuïtie, waardoor elk werk een eigen, uniek karakter krijgt.              </p>
+                Van nature voelt ze zich aangetrokken tot zachte aardetinten, subtiele metallic accenten en tactiele oppervlakken die rust en verstilling oproepen. Tegelijk laat ze tijdens het creëren ruimte voor spontaniteit en intuïtie, waardoor elk werk op zijn eigen manier groeit en een uniek karakter krijgt.
+              </p>
               <p>
-                Creëren is voor Lé veel meer dan esthetiek alleen. Als mama die om medische redenen thuis is, is kunst voor haar een manier om rust, zachtheid en mentale ademruimte te vinden.              </p>
-              <p className="font-bold">
-                De werken worden niet aangeboden vanuit grote commerciële ambities of om winst te maken, maar vooral om een deel van de materiaalkosten te helpen dragen,              </p>
-              <p>
-                zodat ze kan blijven creëren met tijd, zorg en aandacht. 
-                <br/><br/>
-                *Elk kunstwerk wordt met tijd, zorg en aandacht opgebouwd.
-                Geen enkel stuk is hetzelfde.*
+                Voor Els is creëren veel meer dan esthetiek alleen. Als mama die om medische redenen thuis is, vormt kunst een waardevolle manier om rust, zachtheid en mentale ademruimte te vinden. Het creatieve proces geeft haar de ruimte om te vertragen, los te laten en volledig op te gaan in het maken.
+              </p>
+              <p className="italic">
+                Elk kunstwerk ontstaat met tijd, zorg en aandacht. Geen enkel stuk is hetzelfde.
               </p>
             </div>
 
-            <div>
+            <div className="mb-12">
               <p className="text-sm font-sans font-medium tracking-[0.3em] uppercase text-secondary mb-4">
                 Wist je dat
               </p>
@@ -88,7 +85,6 @@ const About: FC = () => {
               </p>
             </div>
 
-            <ReferralDialog />
             {
               isAdmin ?
                 <Button

@@ -33,26 +33,26 @@ const Statement: FC = () => {
 
                             <div className="space-y-8 text-lg leading-relaxed text-muted-foreground">
                                 <p>
-                                    Mijn werk vertrekt vanuit intuïtie, vertraging en gelaagdheid. Door materialen laag per laag op te bouwen, ontstaan sculpturale en mixed media werken waarin textuur, licht en vorm voortdurend met elkaar in dialoog staan.
+                                    My work begins with intuition, a sense of stillness, and the gradual building of layers. By allowing materials to evolve layer by layer, I create sculptural and mixed media works in which texture, light, and form are constantly in dialogue.
                                 </p>
 
                                 <p>
-                                    Naast mijn werk met textielverharder creëer ik ook schilderijen die variëren van rijke structuren tot pouring-technieken, en soms spontaan verder groeien naar mixed media werken. Ik voel me zowel aangetrokken tot het sculpturale als tot het schilderende proces, waardoor beide werelden elkaar blijven aanvullen binnen mijn praktijk.
+                                    Alongside my sculptural work with textile hardener, I create paintings that range from richly textured surfaces to fluid pouring techniques. Some pieces remain purely painterly, while others evolve spontaneously into mixed media works. I feel equally drawn to the sculptural and painterly process, allowing both worlds to naturally complement and influence one another within my practice.
                                 </p>
 
                                 <p>
-                                    Ik combineer zachte aardse kleuren met subtiele metallic nuances, waardoor een spanningsveld ontstaat tussen kwetsbaarheid en kracht, soberheid en verfijning. Het maakproces speelt hierin een centrale rol: elk werk groeit langzaam en organisch, zonder volledig vooraf bepaald eindbeeld.
-
+                                    My palette often combines soft, earthy tones with subtle metallic accents, creating a balance between vulnerability and strength, simplicity and refinement. The creative process itself is an essential part of my work: each piece develops slowly and organically, without a fully predetermined outcome.
                                 </p>
+
                                 <p>
-                                    Met mijn werk wil ik een gevoel van rust en verstilling oproepen in de drukte van het dagelijkse leven. Mijn werken nodigen uit tot vertragen, kijken en voelen, eerder dan onmiddellijk begrijpen.
+                                    Through my art, I hope to create a sense of calm and stillness within the rhythm of everyday life. My work invites the viewer to slow down, look closer, and feel, rather than immediately understand.
                                 </p>
                             </div>
 
                             {/* Quote Accent */}
                             <div className="mt-12 pt-8 border-t border-border/40">
                                 <p className="text-xl sm:text-2xl italic text-foreground font-light leading-relaxed max-w-3xl">
-                                    “Kunst hoeft niet luid te zijn om aanwezig te voelen.”
+                                    “Art can speak softly and still be deeply felt.”
                                 </p>
                             </div>
                         </div>

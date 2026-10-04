@@ -76,7 +76,7 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
 
     const [form, setForm] = useState({
         title: "",
-        artist: "Lé",
+        artist: "2026",
         dimensions: "",
         price: 0,
         description: "",
@@ -354,7 +354,7 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                                 </div>
 
                                 <div>
-                                    <LabelComponent>Artist</LabelComponent>
+                                    <LabelComponent>Jaartal</LabelComponent>
                                     <Input
                                         value={form.artist}
                                         onChange={(e) =>

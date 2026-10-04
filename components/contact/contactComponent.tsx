@@ -2,7 +2,7 @@
 
 import { ArrowRight, Check, Mail, MapPin } from "lucide-react";
 import { FC, useState } from "react";
-import { FaInstagram } from "react-icons/fa"
+import { FaInstagram, FaMobile } from "react-icons/fa"
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import {
@@ -82,7 +82,7 @@ const ContactComponent: FC = () => {
                             Heb je een vraag?
                         </h2>
                         <p className="leading-relaxed text-sm">
-                            Heb je een vraag, spreekt een werk je aan of droom je van een creatie op maat? Neem gerust contact op, samen bekijken we de mogelijkheden.
+                            Sprak een werk je aan of droom je van een creatie op maat? Neem gerust contact op. Samen bekijken we de mogelijkheden.
                         </p>
                     </div>
 
@@ -111,6 +111,18 @@ const ContactComponent: FC = () => {
                                     Studio
                                 </p>
                                 <span>Belgium</span>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start gap-4">
+                            <div className="w-8 h-8 flex items-center justify-center">
+                                <FaMobile size={14} />
+                            </div>
+                            <div>
+                                <p className="font-medium">
+                                    Telephone
+                                </p>
+                                <span>+32 491 364 332</span>
                             </div>
                         </div>
 
@@ -229,7 +241,7 @@ const ContactComponent: FC = () => {
                                             Vraag over een kunstwerk
                                         </SelectItem>
                                         <SelectItem value="commission">
-                                            Doorverwijzen / Origineel werk
+                                            Origineel werk
                                         </SelectItem>
                                         <SelectItem value="collaboration">
                                             Samenwerking
@@ -273,7 +285,7 @@ const ContactComponent: FC = () => {
                             </Button>
 
                             <p className="text-center text-xs">
-                                Je gegevens worden nooit gedeeld met derden.
+                                Je gegevens worden zorgvuldig verwerkt volgens het privacybeleid.
                             </p>
 
                         </form>

@@ -32,7 +32,7 @@ const ProductDetails: FC<Props> = ({ artPiece }) => {
                 {artPiece.title}
             </h1>
             <p className="text-lg text-muted-foreground font-sans mb-6">
-                door <span className="text-foreground">{artPiece.artist}</span> · {artPiece.dimensions}
+                <span className="text-foreground">{artPiece.artist}</span> · {artPiece.dimensions}
             </p>
 
             {/* Price */}
@@ -48,7 +48,10 @@ const ProductDetails: FC<Props> = ({ artPiece }) => {
                             </p>
                         )}
                         <p className="text-sm text-muted-foreground font-sans mt-1">
-                            Woon je buiten de EU, wil je een werk ophalen, of staat het gewenste kunstwerk niet op Etsy? Neem gerust contact op via byle.art@outlook.com of het contactformulier voor meer informatie en een persoonlijke berekening van de verzendkosten.
+                            Woont u buiten de EU, wilt u een werk ophalen of heeft u een vraag
+                            over een kunstwerk? Neem gerust contact op via byle.art@outlook.com 
+                            of via het contactformulier. Ik help u graag verder met meer informatie 
+                            en een persoonlijke berekening van de verzendkosten 
                         </p>
                     </>
                 )}

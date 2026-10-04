@@ -90,13 +90,14 @@ const FeaturedPieces: FC = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <p className="text-sm font-sans font-medium tracking-[0.3em] uppercase text-secondary mb-4">
-            Zorgvuldig uitgekozen
+            In de kijker
           </p>
           <h2 className="text-oker text-4xl sm:text-5xl font-light tracking-tight text-foreground mb-4">
-            <span className="italic font-medium">Uitgelicht</span>
+            <span className="italic font-medium">Een wisselende selectie</span>
           </h2>
           <p className="max-w-2xl mx-auto text-muted-foreground text-lg">
-            Duik in mijn meest geliefde werkjes, stuk voor stuk met zorg en liefde gemaakt. Benieuwd naar meer? Verken gerust de volledige gallerij via de Gallery.
+            Duik in een wisselende selectie van mijn werk, stuk voor stuk met zorg en gevoel
+            gemaakt. Benieuwd naar meer? Ontdek de volledige collectie in de Gallery.
           </p>
         </div>
 

@@ -1,8 +1,9 @@
 import Link from "next/link"
 import Image from "next/image"
-import { FaEtsy, FaFacebook, FaInstagram, FaTiktok, FaTwitter } from "react-icons/fa"
+import { FaEtsy, FaFacebook, FaInstagram } from "react-icons/fa"
+import { Mail, MapPin, Phone } from "lucide-react"
 import { FC } from "react"
-import { PrivacyPolicyDialog, TermsOfServiceDialog } from "../dialogs/service-dialogs"
+import { OrderAndDeliveryDialog, PrivacyPolicyDialog, TermsOfServiceDialog } from "../dialogs/service-dialogs"
 
 const footerLinks = {
   shop: [
@@ -10,7 +11,7 @@ const footerLinks = {
     { name: "Collecties", href: "/#collections" },
   ],
   company: [
-    { name: "About Lé", href: "/#about" },
+    { name: "Achter Art by Lé", href: "/#about" },
     { name: "Artist CV", href: "/cv" },
     { name: "Artist Statement", href: "/#statement" },
   ],
@@ -26,7 +27,7 @@ const Footer: FC = () => {
             <Link href="/" className="flex items-center gap-3 mb-6">
               <div className="relative h-16 w-16 rounded overflow-hidden">
                 <Image
-                  src="/images/test.png"
+                  src="/images/iconthree.png"
                   alt="By Lé Handcrafted Art"
                   fill
                   className="object-cover"
@@ -64,14 +65,6 @@ const Footer: FC = () => {
                 <span className="sr-only">Facebook</span>
               </Link>
               <Link 
-                href="https://www.tiktok.com/@art.by.le"
-                target="_blank" 
-                className="h-10 w-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors"
-              >
-                <FaTiktok className="h-5 w-5" />
-                <span className="sr-only">TikTok</span>
-              </Link>
-              <Link 
                 href="https://www.etsy.com/shop/ArtByLeBE"
                 target="_blank" 
                 className="h-10 w-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors"
@@ -85,7 +78,7 @@ const Footer: FC = () => {
           {/* Shop Links */}
           <div>
             <h3 className="text-sm font-sans font-semibold tracking-wide uppercase text-foreground mb-4">
-              Gallery / Works
+              Mijn werk
             </h3>
             <ul className="space-y-3">
               {footerLinks.shop.map((link) => (
@@ -120,6 +113,38 @@ const Footer: FC = () => {
               ))}
             </ul>
           </div>
+
+          {/* Contact */}
+          <div>
+            <h3 className="text-sm font-sans font-semibold tracking-wide uppercase text-foreground mb-4">
+              Contact
+            </h3>
+            <ul className="space-y-3 text-muted-foreground">
+              <li className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 mt-1 shrink-0" />
+                <ul>
+                  <li>2340 Vlimmeren</li>
+                  <li>België</li>
+                </ul>
+              </li>
+              <li className="flex items-start gap-2">
+                <Mail className="h-4 w-4 mt-1 shrink-0" />
+                <a href="mailto:byle.art@outlook.com" className="hover:text-foreground transition-colors break-all">
+                  byle.art@outlook.com
+                </a>
+              </li>
+              <li className="flex items-start gap-2">
+                <Phone className="h-4 w-4 mt-1 shrink-0" />
+                <a href="tel:+32491364332" className="hover:text-foreground transition-colors">
+                  +32 491 364 332
+                </a>
+              </li>
+            </ul>
+            <div className="mt-6 space-y-1 text-sm font-sans text-muted-foreground">
+              <p>BTW BE1043462454</p>
+              <p>Ondernemingsnummer: 1043.462.454</p>
+            </div>
+          </div>
         </div>
 
         {/* Bottom Bar */}
@@ -127,12 +152,15 @@ const Footer: FC = () => {
           <p className="text-sm font-sans text-muted-foreground">
             © 2026 By Lé Handcrafted Art. Alle rechten voorbehouden. Website created/managed by <a className="underline" href="https://portfolio.timsmans.be" target="_blank">Tim Smans</a>
           </p>
-          <div className="flex gap-6 text-sm font-sans text-muted-foreground">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-sans text-muted-foreground">
             <Link href="#" className="hover:text-foreground transition-colors">
               <PrivacyPolicyDialog triggerText="Privacy Policy"/>
             </Link>
             <Link href="#" className="hover:text-foreground transition-colors">
               <TermsOfServiceDialog triggerText="Terms of Service"/>
+            </Link>
+            <Link href="#" className="hover:text-foreground transition-colors">
+              <OrderAndDeliveryDialog triggerText="Bestellen & levering"/>
             </Link>
           </div>
         </div>
