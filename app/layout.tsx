@@ -53,8 +53,8 @@ const amoresa = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Art By Lé",
-  description: "Art By Lé galery app"
+  title: "Art by Lé",
+  description: "Art by Lé galery app"
 };
 
 export default function RootLayout({

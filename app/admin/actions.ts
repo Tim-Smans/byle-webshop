@@ -20,3 +20,17 @@ export async function moveSoldArtPiecesToSoldCollection(): Promise<{ movedCount:
 
   return { movedCount: data?.length ?? 0 };
 }
+
+export async function deleteNewsletterSubscriber(id: string): Promise<void> {
+  const authorized = await isAdmin();
+  if (!authorized) throw new Error("Unauthorized");
+
+  const supabase = createAdminClient();
+
+  const { error } = await supabase
+    .from("NewsletterSubscriber")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw new Error(error.message);
+}

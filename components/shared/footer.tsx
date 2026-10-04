@@ -27,7 +27,7 @@ const Footer: FC = () => {
             <Link href="/" className="flex items-center gap-3 mb-6">
               <div className="relative h-16 w-16 rounded overflow-hidden">
                 <Image
-                  src="/images/test.png"
+                  src="/images/iconthree.png"
                   alt="By Lé Handcrafted Art"
                   fill
                   className="object-cover"
@@ -78,7 +78,7 @@ const Footer: FC = () => {
           {/* Shop Links */}
           <div>
             <h3 className="text-sm font-sans font-semibold tracking-wide uppercase text-foreground mb-4">
-              Gallery / Works
+              Mijn werk
             </h3>
             <ul className="space-y-3">
               {footerLinks.shop.map((link) => (
@@ -122,7 +122,10 @@ const Footer: FC = () => {
             <ul className="space-y-3 text-muted-foreground">
               <li className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 mt-1 shrink-0" />
-                <span>Vlimmeren, Beerse</span>
+                <ul>
+                  <li>2340 Vlimmeren</li>
+                  <li>België</li>
+                </ul>
               </li>
               <li className="flex items-start gap-2">
                 <Mail className="h-4 w-4 mt-1 shrink-0" />
@@ -138,8 +141,8 @@ const Footer: FC = () => {
               </li>
             </ul>
             <div className="mt-6 space-y-1 text-sm font-sans text-muted-foreground">
-              <p>KBO BE1043462454</p>
-              <p>IBAN BE87 9733 8835 5294</p>
+              <p>BTW BE1043462454</p>
+              <p>Ondernemingsnummer: 1043.462.454</p>
             </div>
           </div>
         </div>

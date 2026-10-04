@@ -10,7 +10,7 @@ const Hero: FC = () => {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/banner_new.jpg"
+          src="/images/banner_newly.jpg"
           alt="Textured art background"
           fill
           className="object-cover"
@@ -26,7 +26,7 @@ const Hero: FC = () => {
         </p>
 
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-oker mb-6 text-balance">
-          <span className="font-decorative">Art By Lé</span><br />
+          <span className="font-decorative">Art byLé</span><br />
         </h1>
 
         <p className="mx-auto max-w-2xl text-lg sm:text-xl text-muted-foreground leading-relaxed mb-10">

@@ -41,7 +41,7 @@ const conditions = [
     {
         title: "Maatwerk en annuleren",
         paragraphs: [
-            "Een kunstwerk op maat wordt speciaal volgens jouw wensen gemaakt. Daarom geldt voor maatwerk niet de gebruikelijke bedenktijd voor online aankopen.",
+            "Voor kunstwerken die volgens jouw persoonlijke specificaties worden gemaakt of duidelijk gepersonaliseerd zijn, geldt het wettelijke herroepingsrecht niet.",
             "Na de start van de opdracht kan deze dus niet zomaar worden geannuleerd.",
         ],
     },

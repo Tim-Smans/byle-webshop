@@ -6,7 +6,6 @@ import { FC, useEffect, useState } from "react"
 import { getStats, saveStatistics } from "@/lib/services/stats-service"
 import { useAdmin } from "@/lib/hooks/use-admin"
 import { EditStatisticsDialog, Statistic } from "../dialogs/edit-statistics"
-import ReferralDialog from "../dialogs/referral-dialog"
 
 const About: FC = () => {
   const [stats, setStats] = useState<Statistic[]>([])
@@ -39,9 +38,9 @@ const About: FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Image Side */}
           <div className="relative">
-            <div className="relative aspect-4/5 rounded-lg overflow-hidden">
+            <div className="relative aspect-3/4 rounded-lg overflow-hidden">
               <Image
-                src="/images/about_me_image.jpg"
+                src="/images/about_me_image_newer.jpg"
                 alt="Artist at work"
                 fill
                 className="object-cover"
@@ -76,7 +75,7 @@ const About: FC = () => {
               </p>
             </div>
 
-            <div>
+            <div className="mb-12">
               <p className="text-sm font-sans font-medium tracking-[0.3em] uppercase text-secondary mb-4">
                 Wist je dat
               </p>
@@ -86,7 +85,6 @@ const About: FC = () => {
               </p>
             </div>
 
-            <ReferralDialog />
             {
               isAdmin ?
                 <Button

@@ -32,7 +32,7 @@ const ProductDetails: FC<Props> = ({ artPiece }) => {
                 {artPiece.title}
             </h1>
             <p className="text-lg text-muted-foreground font-sans mb-6">
-                door <span className="text-foreground">{artPiece.artist}</span> · {artPiece.dimensions}
+                <span className="text-foreground">{artPiece.artist}</span> · {artPiece.dimensions}
             </p>
 
             {/* Price */}

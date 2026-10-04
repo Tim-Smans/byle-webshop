@@ -130,9 +130,13 @@ body {
   font-family: var(--font-body);
 }
 
-.btn-green{
-  background-color: #85b198;
-  color: #6b4426;
+.btn-green {
+  background-color: #15474C;
+  color: #E0A247;
+}
+
+.color-bordeaux {
+  background-color: #6A0F0D;
 }
 
 h1,

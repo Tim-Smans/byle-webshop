@@ -511,7 +511,7 @@ export const TermsOfServiceDialog: FC<LegalDialogProps> = ({
                 </DialogTitle>
 
                 <p className="text-muted-foreground pt-2">
-                    Laatst bijgewerkt: 3 oktober 2026
+                    Laatst bijgewerkt: 4 oktober 2026
                 </p>
             </DialogHeader>
 
@@ -772,6 +772,11 @@ export const TermsOfServiceDialog: FC<LegalDialogProps> = ({
                             Wanneer een kunstwerk beschadigd, verkeerd of niet volgens de overeenkomst
                             wordt geleverd, blijven de wettelijke rechten van de consument van
                             toepassing.
+                        </p>
+
+                        <p className="mt-4">
+                            De wettelijke conformiteitsgarantie van 2 jaar voor consumptiegoederen
+                            is van toepassing.
                         </p>
 
                         <p className="mt-4">
