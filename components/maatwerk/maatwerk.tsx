@@ -93,13 +93,14 @@ const Maatwerk: FC = () => {
             <section className="mx-auto max-w-6xl px-6 lg:px-8 py-12">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                     <div className="relative order-1 hidden lg:block">
-                        <div className="relative aspect-4/5 rounded-lg overflow-hidden">
+                        <div className="relative rounded-lg overflow-hidden">
                             <Image
                                 src="/images/step1.jpg"
                                 alt="Kunstwerk op maat"
-                                fill
+                                width={1055}
+                                height={1491}
                                 sizes="50vw"
-                                className="object-cover"
+                                className="w-full h-auto"
                             />
                         </div>
                         <div className="absolute -bottom-6 -right-6 w-40 h-40 bg-secondary/20 rounded-lg -z-10" />
@@ -150,13 +151,14 @@ const Maatwerk: FC = () => {
             <section className="mx-auto max-w-6xl px-6 lg:px-8 py-16">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                     <div className="relative order-1 hidden lg:block">
-                        <div className="relative aspect-4/5 rounded-lg overflow-hidden">
+                        <div className="relative rounded-lg overflow-hidden">
                             <Image
                                 src="/images/step2.jpg"
                                 alt="Beeld op maat"
-                                fill
+                                width={1055}
+                                height={1491}
                                 sizes="50vw"
-                                className="object-cover"
+                                className="w-full h-auto"
                             />
                         </div>
                         <div className="absolute -bottom-6 -right-6 w-40 h-40 bg-secondary/20 rounded-lg -z-10" />
@@ -224,13 +226,14 @@ const Maatwerk: FC = () => {
                         </div>
 
                         <div className="relative order-1 lg:order-2 hidden lg:block">
-                            <div className="relative aspect-4/5 rounded-lg overflow-hidden">
+                            <div className="relative rounded-lg overflow-hidden">
                                 <Image
                                     src="/images/step3.jpg"
                                     alt="Schilderij op maat"
-                                    fill
+                                    width={1055}
+                                    height={1491}
                                     sizes="50vw"
-                                    className="object-cover"
+                                    className="w-full h-auto"
                                 />
                             </div>
                             <div className="absolute -bottom-6 -left-6 w-40 h-40 bg-accent/20 rounded-lg -z-10" />
