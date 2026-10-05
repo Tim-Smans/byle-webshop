@@ -10,7 +10,7 @@ import AdminModeButton from "../admin/admin-mode-button"
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "Gallery / Works", href: "/gallery" },
+  { name: "Gallerij", href: "/gallery" },
   { name: "Collecties", href: "/#collections" },
   { name: "Achter Art by Lé", href: "/#about" },
   { name: "Kunstwerk op maat", href: "/maatwerk" },

@@ -221,7 +221,7 @@ const FeaturedPieces: FC = () => {
             asChild
           >
             <Link href={'/gallery'}>
-              Werken
+              Bekijk mijn werken
             </Link>
           </Button>
         </div>
