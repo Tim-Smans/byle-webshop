@@ -154,6 +154,9 @@ const Footer: FC = () => {
             <Link href="#" className="hover:text-foreground transition-colors">
               <OrderAndDeliveryDialog triggerText="Bestellen & levering"/>
             </Link>
+            <Link href="/docs" className="hover:text-foreground transition-colors">
+              Hoe bestellen?
+            </Link>
             {/* Statutory withdrawal function: must stay easy to find */}
             <Link href="/herroepen" className="hover:text-foreground transition-colors">
               Bestelling herroepen

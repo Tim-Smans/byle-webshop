@@ -27,6 +27,7 @@ import {
     FileText,
     Package,
     Euro,
+    BookOpen,
 } from "lucide-react"
 
 async function getDashboardStats() {
@@ -334,6 +335,12 @@ export default async function AdminDashboard() {
                         title="Galerij bekijken"
                         description="Beheer bestaande werken: bewerk, verkoop of verwijder"
                         icon={<PaintbrushIcon size={20} />}
+                    />
+                    <AdminLink
+                        href="/docs#admin"
+                        title="Handleiding"
+                        description="Hoe je bestellingen, herroepingen en facturen afhandelt"
+                        icon={<BookOpen size={20} />}
                     />
                     <AdminLink
                         href="/admin/newsletter"
