@@ -15,7 +15,9 @@ import Header from "@/components/shared/header";
 import Footer from "@/components/shared/footer";
 import { FavoritesProvider } from "@/lib/context/favorites-context";
 import { Analytics } from "@vercel/analytics/next"
-import CartDrawer from "@/components/cart/favorites-drawer";
+import FavoritesDrawer from "@/components/cart/favorites-drawer";
+import CartDrawer from "@/components/cart/cart-drawer";
+import { CartProvider } from "@/lib/context/cart-context";
 import { FeedbackProvider } from "@/lib/context/feedback-context";
 
 const oldStandard = Old_Standard_TT({
@@ -78,14 +80,17 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <Analytics/>
-        <FavoritesProvider>
-          <FeedbackProvider>
-            <Header />
-            {children}
-            <Footer />
-            <CartDrawer />
-          </FeedbackProvider>
-        </FavoritesProvider>
+        <CartProvider>
+          <FavoritesProvider>
+            <FeedbackProvider>
+              <Header />
+              {children}
+              <Footer />
+              <FavoritesDrawer />
+              <CartDrawer />
+            </FeedbackProvider>
+          </FavoritesProvider>
+        </CartProvider>
       </body>
     </html>
   );

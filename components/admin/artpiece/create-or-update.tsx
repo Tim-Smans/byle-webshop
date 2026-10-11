@@ -35,6 +35,9 @@ import {
     useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { saveArtPiece } from "@/app/admin/artpiece/actions";
+import { createImageUploadUrls } from "@/app/admin/storage-actions";
+import type { SizeClass } from "@/lib/types";
 
 interface LabelType {
     id: string;
@@ -85,8 +88,8 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
         presentation: "",
         edition: "",
         finish: "",
-        etsyUrl: "",
-        shippingInfo: ""
+        shippingInfo: "",
+        sizeClass: "small" as SizeClass
     });
 
     const { showSuccess, showError } = useFeedback();
@@ -122,76 +125,48 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
     }
 
     async function uploadImages(): Promise<string[]> {
+        // Request signed upload URLs for all new images in one call:
+        // a display (1600px) and a thumb (200px) variant per image.
+        const uuids = new Map<string, string>();
+        for (const item of images) {
+            if (item.type === "new" && item.file) uuids.set(item.id, uuidv4());
+        }
+
+        const paths = [...uuids.values()].flatMap((uuid) => [`${uuid}.webp`, `${uuid}-t.webp`]);
+        const uploads = paths.length > 0 ? await createImageUploadUrls(paths) : [];
+        const uploadByPath = new Map(uploads.map((u) => [u.path, u]));
+
         const urls: string[] = [];
         for (const item of images) {
             if (item.type === "existing" && item.url) {
                 urls.push(item.url);
             } else if (item.type === "new" && item.file) {
-                const uuid = uuidv4();
+                const uuid = uuids.get(item.id)!;
 
-                // Generate display (1600px) and thumb (200px) variants client-side via Canvas API
+                // Generate display and thumb variants client-side via Canvas API
                 const [displayBlob, thumbBlob] = await Promise.all([
                     resizeToWebP(item.file, 1600, 0.85),
                     resizeToWebP(item.file, 200, 0.75),
                 ]);
 
                 // Upload display version — this URL becomes image.url in the database
-                const displayName = `${uuid}.webp`;
+                const display = uploadByPath.get(`${uuid}.webp`)!;
                 const { error } = await supabase.storage
                     .from("images")
-                    .upload(displayName, displayBlob, { contentType: "image/webp" });
+                    .uploadToSignedUrl(display.path, display.token, displayBlob, { contentType: "image/webp" });
                 if (error) throw error;
 
                 // Upload thumb — non-critical, ignore failures
+                const thumb = uploadByPath.get(`${uuid}-t.webp`)!;
                 await supabase.storage
                     .from("images")
-                    .upload(`${uuid}-t.webp`, thumbBlob, { contentType: "image/webp" })
+                    .uploadToSignedUrl(thumb.path, thumb.token, thumbBlob, { contentType: "image/webp" })
                     .catch(() => { });
 
-                const { data } = supabase.storage.from("images").getPublicUrl(displayName);
-                urls.push(data.publicUrl);
+                urls.push(display.publicUrl);
             }
         }
         return urls;
-    }
-
-    async function createLabelIfNeeded(): Promise<string[]> {
-        let ids = [...selectedLabelIds];
-
-        if (newLabel.trim()) {
-            const id = uuidv4();
-
-            const { error } = await supabase.from("Label").insert({
-                id,
-                title: newLabel
-            });
-
-            if (error) throw error;
-
-            ids.push(id);
-        }
-
-        return ids;
-    }
-
-    async function createCollectionIfNeeded(): Promise<string | null> {
-        if (collectionId) return collectionId;
-
-        if (newCollectionTitle.trim()) {
-            const id = uuidv4();
-
-            const { error } = await supabase.from("Collection").insert({
-                id,
-                title: newCollectionTitle,
-                description: newCollectionDescription
-            });
-
-            if (error) throw error;
-
-            return id;
-        }
-
-        return null;
     }
 
     async function handleSubmit(e: React.FormEvent) {
@@ -199,68 +174,17 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
         setLoading(true);
 
         try {
-            let imageUrls: string[] | null = await uploadImages();
+            const imageUrls = await uploadImages();
 
-            const labelIds = await createLabelIfNeeded();
-
-            const finalCollectionId = await createCollectionIfNeeded();
-
-
-            if (isEditMode) {
-                const { error } = await supabase.rpc("update_art_piece", {
-                    p_id: id,
-                    p_title: form.title,
-                    p_artist: form.artist,
-                    p_dimensions: form.dimensions,
-                    p_price: form.price,
-                    p_description: form.description,
-                    p_frame: form.frame,
-                    p_structure: form.structure,
-                    p_presentation: form.presentation,
-                    p_edition: form.edition,
-                    p_finish: form.finish,
-                    p_etsy_url: form.etsyUrl,
-                    p_shipping_info: form.shippingInfo,
-
-
-                    p_images: imageUrls,
-                    p_label_ids: labelIds,
-
-                    p_collection_id: finalCollectionId,
-
-                    p_collection_title: null,
-                    p_collection_description: null,
-                    p_collection_thumbnail_url: null,
-                    p_is_featured: false
-                });
-                if (error) throw error;
-            } else {
-                const { error } = await supabase.rpc("create_art_piece", {
-                    p_title: form.title,
-                    p_artist: form.artist,
-                    p_dimensions: form.dimensions,
-                    p_price: form.price,
-                    p_description: form.description,
-                    p_frame: form.frame,
-                    p_structure: form.structure,
-                    p_presentation: form.presentation,
-                    p_edition: form.edition,
-                    p_finish: form.finish,
-                    p_etsy_url: form.etsyUrl,
-                    p_shipping_info: form.shippingInfo,
-
-                    p_images: imageUrls,
-                    p_label_ids: labelIds,
-
-                    p_collection_id: finalCollectionId,
-
-                    p_collection_title: null,
-                    p_collection_description: null,
-                    p_collection_thumbnail_url: null,
-                    p_is_featured: false
-                });
-                if (error) throw error;
-            }
+            await saveArtPiece(isEditMode ? id : null, {
+                ...form,
+                imageUrls,
+                labelIds: selectedLabelIds,
+                newLabel,
+                collectionId,
+                newCollectionTitle,
+                newCollectionDescription,
+            });
 
             router.push("/");
             showSuccess("Je aanpassingen zijn opgeslagen!")
@@ -306,8 +230,8 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
             presentation: data.presentation,
             edition: data.edition,
             finish: data.finish,
-            etsyUrl: data.etsyUrl ?? "",
-            shippingInfo: data.shippingInfo ?? ""
+            shippingInfo: data.shippingInfo ?? "",
+            sizeClass: data.sizeClass === "large" ? "large" : "small"
         });
 
         setCollectionId(data.collectionId);
@@ -456,13 +380,30 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                                 </div>
 
                                 <div className="md:col-span-2">
-                                    <LabelComponent>Etsy Url</LabelComponent>
-                                    <Input
-                                        value={form.etsyUrl}
-                                        onChange={(e) =>
-                                            setForm({ ...form, etsyUrl: e.target.value })
-                                        }
-                                    />
+                                    <LabelComponent>Formaat voor verzending</LabelComponent>
+                                    <div className="grid grid-cols-2 gap-2 mt-2">
+                                        {([
+                                            { value: "small", title: "Klein", hint: "Tarief klein werk" },
+                                            { value: "large", title: "Groot", hint: "Tarief groot werk" },
+                                        ] as const).map((option) => (
+                                            <button
+                                                type="button"
+                                                key={option.value}
+                                                onClick={() => setForm({ ...form, sizeClass: option.value })}
+                                                aria-pressed={form.sizeClass === option.value}
+                                                className={`rounded-md border px-3 py-2 text-left text-sm transition ${form.sizeClass === option.value
+                                                    ? "border-primary bg-primary/5 font-semibold"
+                                                    : "hover:bg-muted"
+                                                    }`}
+                                            >
+                                                {option.title}
+                                                <span className="block text-xs font-normal text-muted-foreground">{option.hint}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <p className="text-xs text-muted-foreground mt-2">
+                                        De tarieven per land stel je in onder Admin → Verzending.
+                                    </p>
                                 </div>
 
                                 <div className="md:col-span-2">

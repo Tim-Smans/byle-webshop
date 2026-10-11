@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { resizeToWebP } from "@/lib/client/resize-image";
 import { updateImageUrl, deleteStorageFiles } from "./actions";
+import { createImageUploadUrls, listImageFiles } from "../storage-actions";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, AlertCircle, Loader2, ImageIcon, Trash2, ScanSearch } from "lucide-react";
 
@@ -104,19 +105,22 @@ export default function MigrateImagesClient() {
       resizeToWebP(blob, 200, 0.75),
     ]);
 
-    const displayName = `${item.image.id}.webp`;
+    const [display, thumb] = await createImageUploadUrls(
+      [`${item.image.id}.webp`, `${item.image.id}-t.webp`],
+      true
+    );
+
     const { error: uploadError } = await supabase.storage
       .from("images")
-      .upload(displayName, displayBlob, { contentType: "image/webp", upsert: true });
+      .uploadToSignedUrl(display.path, display.token, displayBlob, { contentType: "image/webp" });
     if (uploadError) throw new Error(uploadError.message);
 
     await supabase.storage
       .from("images")
-      .upload(`${item.image.id}-t.webp`, thumbBlob, { contentType: "image/webp", upsert: true })
+      .uploadToSignedUrl(thumb.path, thumb.token, thumbBlob, { contentType: "image/webp" })
       .catch(() => {});
 
-    const { data: urlData } = supabase.storage.from("images").getPublicUrl(displayName);
-    await updateImageUrl(item.image.id, urlData.publicUrl);
+    await updateImageUrl(item.image.id, display.publicUrl);
 
     updateItem(item.image.id, { status: "done" });
   }
@@ -141,13 +145,13 @@ export default function MigrateImagesClient() {
     setOrphans(null);
     setDeleteConfirm(false);
 
-    // List all files in the images bucket
-    const { data: files } = await supabase.storage.from("images").list("", { limit: 1000 });
-    const old = (files ?? [])
-      .map((f) => f.name)
-      .filter((name) => !NEW_STYLE_FILE.test(name));
-
-    setOrphans(old);
+    try {
+      // List all files in the images bucket
+      const files = await listImageFiles();
+      setOrphans(files.filter((name) => !NEW_STYLE_FILE.test(name)));
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Scannen mislukt");
+    }
     setScanning(false);
   }
 

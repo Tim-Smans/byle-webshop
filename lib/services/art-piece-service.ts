@@ -1,7 +1,9 @@
 import { ArtPiece } from "../types";
 import { supabase } from "../supabase/client"
-import { PostgrestError } from "@supabase/supabase-js";
 import { normalizeLabel } from "../utils";
+
+// Read-only queries with the public key. Mutations live in
+// app/admin/artpiece/actions.ts and run server-side with the service role.
 
 const ARTPIECE_TABLE = 'ArtPiece'
 const IMAGE_TABLE = 'Image'
@@ -54,102 +56,6 @@ export const getArtPieceById = async (artPieceId: string): Promise<ArtPiece | un
   return mapArtPiece(piece)
 }
 
-export const createArtPiece = async (
-  input: CreateArtPieceInput
-) => {
-  const { data, error } = await supabase.rpc(
-    "create_art_piece",
-    {
-      p_title: input.title,
-      p_artist: input.artist,
-      p_dimensions: input.dimensions,
-      p_price: input.price,
-      p_description: input.description,
-      p_frame: input.frame,
-      p_structure: input.structure,
-      p_presentation: input.presentation,
-      p_edition: input.edition,
-      p_finish: input.finish,
-      p_is_featured: input.isFeatured,
-      p_etsy_url: input.etsyUrl,
-
-      p_images: input.images,
-      p_label_ids: input.labelIds,
-
-      p_collection_id: input.collection?.id ?? null,
-      p_collection_title: input.collection?.title ?? null,
-      p_collection_thumbnail_url:
-        input.collection?.thumbnailUrl ?? null,
-      p_collection_description:
-        input.collection?.description ?? null,
-    }
-  );
-
-  if (error) throw error;
-
-  return data;
-}
-
-export const updateArtPiece = async (
-  id: string,
-  input: CreateArtPieceInput
-) => {
-  const { data, error } = await supabase.rpc(
-    "update_art_piece",
-    {
-      p_id: id,
-
-      p_title: input.title,
-      p_artist: input.artist,
-      p_dimensions: input.dimensions,
-      p_price: input.price,
-      p_description: input.description,
-      p_frame: input.frame,
-      p_structure: input.structure,
-      p_presentation: input.presentation,
-      p_edition: input.edition,
-      p_finish: input.finish,
-      p_is_featured: input.isFeatured,
-      p_etsy_url: input.etsyUrl,
-
-      p_images: input.images,
-      p_label_ids: input.labelIds,
-
-      p_collection_id: input.collection?.id ?? null,
-      p_collection_title: input.collection?.title ?? null,
-      p_collection_thumbnail_url:
-        input.collection?.thumbnailUrl ?? null,
-      p_collection_description:
-        input.collection?.description ?? null,
-    }
-  );
-
-  if (error) throw error;
-
-  return data;
-};
-
-export const toggleArtPieceFeatured = async (pieceId: string) => {
-  const { data, error: fetchError } = await supabase
-    .from(ARTPIECE_TABLE)
-    .select('isFeatured')
-    .eq('id', pieceId)
-    .single()
-
-  if (fetchError) {
-    throw fetchError
-  }
-
-  const { error } = await supabase
-    .from(ARTPIECE_TABLE)
-    .update({ isFeatured: !data.isFeatured })
-    .eq('id', pieceId)
-
-  if (error) {
-    throw error
-  }
-}
-
 export const isArtPieceFeatured = async (pieceId: string) => {
   const { data, error: fetchError } = await supabase
     .from(ARTPIECE_TABLE)
@@ -164,33 +70,6 @@ export const isArtPieceFeatured = async (pieceId: string) => {
   return data.isFeatured
 }
 
-export const toggleArtPieceSold = async (pieceId: string) => {
-  const { data, error: fetchError } = await supabase
-    .from(ARTPIECE_TABLE)
-    .select('isSold')
-    .eq('id', pieceId)
-    .single()
-
-  if (fetchError) {
-    throw fetchError
-  }
-
-  const willBeSold = !data.isSold
-
-  const { error } = await supabase
-    .from(ARTPIECE_TABLE)
-    .update(
-      willBeSold
-        ? { isSold: true, collectionId: SOLD_COLLECTION_ID }
-        : { isSold: false }
-    )
-    .eq('id', pieceId)
-
-  if (error) {
-    throw error
-  }
-}
-
 export const isArtPieceSold = async (pieceId: string) => {
   const { data, error: fetchError } = await supabase
     .from(ARTPIECE_TABLE)
@@ -203,17 +82,6 @@ export const isArtPieceSold = async (pieceId: string) => {
   }
 
   return data.isSold
-}
-
-export const deleteArtPiece = async (pieceId: string): Promise<PostgrestError | undefined> => {
-  const { error } = await supabase
-    .from(ARTPIECE_TABLE)
-    .delete()
-    .eq('id', pieceId)
-
-  if (error) {
-    return error
-  }
 }
 
 const mapArtPiece = (
@@ -233,8 +101,11 @@ const mapArtPiece = (
     presentation: dbPiece.presentation,
     edition: dbPiece.edition,
     finish: dbPiece.finish,
-    etsyUrl: dbPiece.etsyUrl ?? null,
     isSold: dbPiece.isSold,
+    status: dbPiece.status ?? (dbPiece.isSold ? "sold" : "available"),
+    sizeClass: dbPiece.sizeClass ?? "small",
+    reservedUntil: dbPiece.reservedUntil ?? null,
+    reservedByOrderId: dbPiece.reservedByOrderId ?? null,
     creationTime: dbPiece.creationTime,
     collectionId: dbPiece.collectionId,
     shippingInfo: dbPiece.shippingInfo ?? "",
@@ -254,30 +125,5 @@ const mapArtPiece = (
         title: normalizeLabel(pl.Label.title)
       })
     )
-  };
-}
-
-export interface CreateArtPieceInput {
-  title: string;
-  artist: string;
-  dimensions: string;
-  price: number;
-  description: string;
-  frame: string;
-  structure: string;
-  presentation: string;
-  edition: string;
-  finish: string;
-  isFeatured?: boolean;
-  etsyUrl?: string;
-
-  images: string[];          // urls
-  labelIds: string[];        // bestaande labels
-
-  collection?: {
-    id?: string;             // bestaande collection
-    title?: string;          // nieuwe collection
-    thumbnailUrl?: string;
-    description?: string;
   };
 }

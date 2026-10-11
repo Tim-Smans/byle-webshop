@@ -12,13 +12,34 @@ export interface Product {
   presentation: string,
   edition: string,
   finish: string,
-  etsyUrl: string | null,
   isSold: boolean,
+  status: ArtPieceStatus,
+  sizeClass: SizeClass,
   collectionId: string,
   creationTime: string,
   images: Image[],
   labels: Label[],
   shippingInfo: string
+}
+
+export type ArtPieceStatus = "available" | "reserved" | "sold"
+export type SizeClass = "small" | "large"
+
+// What a customer sees: an expired reservation counts as available again
+export type Availability = "available" | "reserved" | "sold"
+
+// Shopping cart: only ids are stored client-side, details are always refetched
+export interface CartItem {
+  artPieceId: string
+  title: string
+  dimensions: string
+  price: number
+  imageUrl: string | null
+  sizeClass: SizeClass
+  availability: Availability
+  reservedByOrderId: string | null
+  // Reserved by the order this browser started paying for
+  reservedByMe: boolean
 }
 
 // Cart types
@@ -97,11 +118,14 @@ export interface ArtPiece {
   isFeatured: boolean,
   frame: string,
   structure: string,
-  etsyUrl: string | null,
   presentation: string,
   edition: string,
   finish: string,
   isSold: boolean,
+  status: ArtPieceStatus,
+  sizeClass: SizeClass,
+  reservedUntil: string | null,
+  reservedByOrderId: string | null,
   collectionId: string,
   creationTime: string,
   images: Image[],

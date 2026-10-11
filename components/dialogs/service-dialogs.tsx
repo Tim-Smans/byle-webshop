@@ -2,6 +2,7 @@
 
 import { FC } from "react"
 import Link from "next/link"
+import { TERMS_LAST_UPDATED } from "@/lib/shop/config"
 import {
     Dialog,
     DialogContent,
@@ -163,27 +164,7 @@ export const PrivacyPolicyDialog: FC<LegalDialogProps> = ({
 
                     <div>
                         <h3 className="text-xl text-foreground font-medium mb-3">
-                            5. Etsy
-                        </h3>
-
-                        <p>
-                            Deze website kan nog links bevatten naar mijn Etsy-shop.
-                        </p>
-
-                        <p className="mt-4">
-                            Wanneer je een Etsy-link gebruikt en een aankoop via Etsy doet, gelden
-                            voor die aankoop de privacyvoorwaarden en voorwaarden van Etsy.
-                        </p>
-
-                        <p className="mt-4">
-                            Aankopen die rechtstreeks via de webshop van Art by Lé gebeuren, worden
-                            door Art by Lé verwerkt.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            6. Cookies
+                            5. Cookies
                         </h3>
 
                         <p>
@@ -211,7 +192,7 @@ export const PrivacyPolicyDialog: FC<LegalDialogProps> = ({
 
                     <div>
                         <h3 className="text-xl text-foreground font-medium mb-3">
-                            7. Hoe lang worden gegevens bewaard?
+                            6. Hoe lang worden gegevens bewaard?
                         </h3>
 
                         <p>
@@ -233,7 +214,7 @@ export const PrivacyPolicyDialog: FC<LegalDialogProps> = ({
 
                     <div>
                         <h3 className="text-xl text-foreground font-medium mb-3">
-                            8. Jouw rechten
+                            7. Jouw rechten
                         </h3>
 
                         <p>
@@ -255,7 +236,7 @@ export const PrivacyPolicyDialog: FC<LegalDialogProps> = ({
 
                     <div>
                         <h3 className="text-xl text-foreground font-medium mb-3">
-                            9. Beveiliging
+                            8. Beveiliging
                         </h3>
 
                         <p>
@@ -267,7 +248,7 @@ export const PrivacyPolicyDialog: FC<LegalDialogProps> = ({
 
                     <div>
                         <h3 className="text-xl text-foreground font-medium mb-3">
-                            10. Wijzigingen
+                            9. Wijzigingen
                         </h3>
 
                         <p>
@@ -416,13 +397,43 @@ export const OrderAndDeliveryDialog: FC<LegalDialogProps> = ({
 
                         <p>
                             Voor online aankopen van bestaande kunstwerken geldt de wettelijke
-                            bedenktijd van 14 dagen vanaf de dag van ontvangst.
+                            bedenktijd van 14 kalenderdagen, te rekenen vanaf de dag nadat je het
+                            werk hebt ontvangen. Je hoeft geen reden op te geven.
                         </p>
 
                         <p className="mt-4">
-                            Wil je hiervan gebruikmaken, neem dan binnen deze termijn contact met mij
-                            op. De kosten voor het terugsturen zijn voor rekening van de koper. Het
-                            kunstwerk moet zorgvuldig, veilig en onbeschadigd worden teruggestuurd.
+                            Herroepen kan op twee manieren:
+                        </p>
+
+                        <ul className="mt-4 space-y-2 list-disc pl-6">
+                            <li>
+                                online via{" "}
+                                <Link href="/herroepen" className="underline hover:text-foreground transition-colors">
+                                    Bestelling herroepen
+                                </Link>{" "}
+                                (je krijgt meteen een bevestiging per e-mail);
+                            </li>
+                            <li>
+                                met het{" "}
+                                <Link href="/herroeping/modelformulier" className="underline hover:text-foreground transition-colors">
+                                    modelformulier voor herroeping
+                                </Link>{" "}
+                                (ook als{" "}
+                                <a href="/herroeping/modelformulier/pdf" className="underline hover:text-foreground transition-colors">
+                                    PDF
+                                </a>
+                                ), per e-mail of per post.
+                            </li>
+                        </ul>
+
+                        <p className="mt-4">
+                            Stuur het werk daarna binnen 14 dagen terug. De kosten voor het terugsturen
+                            zijn voor rekening van de koper. Het kunstwerk moet zorgvuldig, veilig en
+                            onbeschadigd worden teruggestuurd. Je krijgt het aankoopbedrag, inclusief de
+                            oorspronkelijke standaard verzendkosten bij herroeping van de volledige
+                            bestelling, terug binnen 14 dagen na je herroeping. Ik mag wachten met
+                            terugbetalen tot ik het werk terug heb ontvangen of tot je aantoont dat je
+                            het hebt teruggestuurd.
                         </p>
 
                         <p className="mt-4">
@@ -511,10 +522,19 @@ export const TermsOfServiceDialog: FC<LegalDialogProps> = ({
                 </DialogTitle>
 
                 <p className="text-muted-foreground pt-2">
-                    Laatst bijgewerkt: 4 oktober 2026
+                    Laatst bijgewerkt: {TERMS_LAST_UPDATED}
                 </p>
             </DialogHeader>
 
+                <TermsOfServiceContent />
+            </DialogContent>
+        </Dialog>
+    )
+}
+
+// Shared by the dialog and the /voorwaarden page (linked from order e-mails)
+export const TermsOfServiceContent: FC = () => {
+    return (
                 <div className="space-y-8 text-muted-foreground leading-relaxed">
                     <p>
                         Welkom bij Art by Lé. Deze voorwaarden zijn van toepassing op het gebruik
@@ -788,28 +808,7 @@ export const TermsOfServiceDialog: FC<LegalDialogProps> = ({
 
                     <div>
                         <h3 className="text-xl text-foreground font-medium mb-3">
-                            12. Etsy
-                        </h3>
-
-                        <p>
-                            Deze website kan links bevatten naar de Etsy-shop van Art by Lé.
-                        </p>
-
-                        <p className="mt-4">
-                            Wanneer een aankoop rechtstreeks via Etsy wordt gedaan, verloopt die
-                            transactie via het Etsy-platform en zijn ook de toepasselijke voorwaarden
-                            en beleidsregels van Etsy van toepassing.
-                        </p>
-
-                        <p className="mt-4">
-                            Een aankoop via Etsy staat los van een bestelling die rechtstreeks via de
-                            webshop van Art by Lé wordt geplaatst.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            13. Externe links
+                            12. Externe links
                         </h3>
 
                         <p>
@@ -824,7 +823,7 @@ export const TermsOfServiceDialog: FC<LegalDialogProps> = ({
 
                     <div>
                         <h3 className="text-xl text-foreground font-medium mb-3">
-                            14. Aansprakelijkheid
+                            13. Aansprakelijkheid
                         </h3>
 
                         <p>
@@ -846,7 +845,7 @@ export const TermsOfServiceDialog: FC<LegalDialogProps> = ({
 
                     <div>
                         <h3 className="text-xl text-foreground font-medium mb-3">
-                            15. Privacy
+                            14. Privacy
                         </h3>
 
                         <p>
@@ -857,7 +856,7 @@ export const TermsOfServiceDialog: FC<LegalDialogProps> = ({
 
                     <div>
                         <h3 className="text-xl text-foreground font-medium mb-3">
-                            16. Wijzigingen
+                            15. Wijzigingen
                         </h3>
 
                         <p>
@@ -870,7 +869,5 @@ export const TermsOfServiceDialog: FC<LegalDialogProps> = ({
                         </p>
                     </div>
                 </div>
-            </DialogContent>
-        </Dialog>
     )
 }

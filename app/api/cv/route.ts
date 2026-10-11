@@ -1,6 +1,7 @@
 // app/api/cv/route.ts
 import { isAdmin } from '@/lib/auth/admin-auth'
 import { supabase } from '@/lib/supabase/client'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { processLock } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 
@@ -22,7 +23,7 @@ export async function PATCH(req: Request) {
   if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
   const body = await req.json()
-  const response = await supabase
+  const response = await createAdminClient()
     .from('CvPage')
     .update({ content: body })
     .eq('id', 1)

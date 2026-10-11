@@ -80,7 +80,7 @@ const ProductDetails: FC<Props> = ({ artPiece }) => {
                 </div>
                 <div className="flex flex-col items-center text-center">
                     <RotateCcw className="h-5 w-5 text-muted-foreground mb-2" />
-                    <span className="text-xs font-sans text-muted-foreground">Alles verkocht via Etsy</span>
+                    <span className="text-xs font-sans text-muted-foreground">14 dagen bedenktijd</span>
                 </div>
             </div>
 

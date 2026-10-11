@@ -16,6 +16,12 @@ export function getThumbUrl(url: string): string {
   return isNewStyleImage(url) ? url.replace(/\.webp$/, '-t.webp') : url;
 }
 
+const priceFormatter = new Intl.NumberFormat("nl-BE", { style: "currency", currency: "EUR" })
+
+export function formatPrice(amount: number): string {
+  return priceFormatter.format(amount)
+}
+
 export function normalizeLabel(title: string): string {
   const words = title.toLowerCase().replace(/[-_]+/g, ' ').trim().split(/\s+/);
   return words.map((word, i) => (i === 0 ? word.charAt(0).toUpperCase() + word.slice(1) : word)).join(' ');

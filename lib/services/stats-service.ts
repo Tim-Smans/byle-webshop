@@ -3,6 +3,7 @@
 import { Statistic } from "@/components/dialogs/edit-statistics";
 import { supabase } from "../supabase/client"
 import { isAdmin } from "../auth/admin-auth";
+import { createAdminClient } from "../supabase/admin";
 
 const STATS_TABLE = 'Stats'
 
@@ -18,9 +19,12 @@ export const getStats = async (): Promise<Statistic[] | undefined> => {
 }
 
 export const saveStatistics = async (stats: Statistic[]) => {
-    if (!isAdmin) {
-        return;
+    const authorized = await isAdmin()
+    if (!authorized) {
+        throw new Error("Unauthorized")
     }
+
+    const supabase = createAdminClient()
 
     const { data: existing } = await supabase
         .from(STATS_TABLE)
