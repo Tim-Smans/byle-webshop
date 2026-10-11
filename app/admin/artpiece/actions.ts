@@ -72,9 +72,8 @@ export async function saveArtPiece(id: string | null, input: SaveArtPieceInput):
     p_presentation: input.presentation,
     p_edition: input.edition,
     p_finish: input.finish,
-    // Legacy RPC parameter; removed when the RPCs are rewritten
-    p_etsy_url: null,
     p_shipping_info: input.shippingInfo,
+    p_size_class: input.sizeClass === "large" ? "large" : "small",
 
     p_images: input.imageUrls,
     p_label_ids: labelIds,
@@ -84,46 +83,14 @@ export async function saveArtPiece(id: string | null, input: SaveArtPieceInput):
     p_collection_title: null,
     p_collection_description: null,
     p_collection_thumbnail_url: null,
-    p_is_featured: false,
   };
 
-  const { data, error } = id
-    ? await supabase.rpc("update_art_piece", { p_id: id, ...params })
-    : await supabase.rpc("create_art_piece", params);
+  // On update, null keeps the current "featured" state (toggled in the gallery)
+  const { error } = id
+    ? await supabase.rpc("update_art_piece", { p_id: id, p_is_featured: null, ...params })
+    : await supabase.rpc("create_art_piece", { p_is_featured: false, ...params });
 
   if (error) throw new Error(error.message);
-
-  // The RPCs don't know sizeClass yet, so it is set in a separate update.
-  // TODO: move into the RPCs once they are rewritten.
-  const pieceId = id ?? (await resolveCreatedPieceId(data, input.title));
-  if (!pieceId) throw new Error("Kunstwerk opgeslagen, maar formaat (klein/groot) niet: pas het werk aan om het formaat in te stellen.");
-
-  const { error: sizeError } = await supabase
-    .from(ARTPIECE_TABLE)
-    .update({ sizeClass: input.sizeClass === "large" ? "large" : "small" })
-    .eq("id", pieceId);
-  if (sizeError) throw new Error(sizeError.message);
-}
-
-// create_art_piece's return value is not under our control; accept an id,
-// a row, or fall back to the newest piece with this title.
-async function resolveCreatedPieceId(rpcResult: unknown, title: string): Promise<string | null> {
-  if (typeof rpcResult === "string") return rpcResult;
-
-  const row = Array.isArray(rpcResult) ? rpcResult[0] : rpcResult;
-  if (row && typeof row === "object" && typeof (row as { id?: unknown }).id === "string") {
-    return (row as { id: string }).id;
-  }
-
-  const { data } = await createAdminClient()
-    .from(ARTPIECE_TABLE)
-    .select("id")
-    .eq("title", title)
-    .order("creationTime", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  return data?.id ?? null;
 }
 
 export async function toggleArtPieceFeatured(pieceId: string): Promise<void> {
