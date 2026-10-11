@@ -1,8 +1,18 @@
 // Webshop settings. Change here, not scattered through the code.
 
-// VAT rate (%) included in all prices. To confirm with the accountant: the
-// sale of original artworks by the artist may fall under the 6% rate.
-export const VAT_RATE = 21
+// Art by Lé falls under the Belgian VAT exemption for small enterprises
+// (art. 56bis WBTW): no VAT is charged. If that ever changes, set the rate
+// here; invoices, totals and texts follow automatically.
+export const VAT_RATE = 0
+
+// Legally required mention on invoices under the exemption
+export const VAT_EXEMPTION_NOTE = "Bijzondere vrijstellingsregeling kleine ondernemingen"
+
+// Shown with prices in the shop
+export const PRICE_VAT_TEXT =
+  VAT_RATE === 0
+    ? "Geen btw van toepassing (vrijstellingsregeling kleine ondernemingen)."
+    : "Prijzen inclusief btw."
 
 // How long a work stays reserved for someone who started paying
 export const RESERVATION_MINUTES = 30

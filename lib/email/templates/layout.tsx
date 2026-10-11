@@ -140,7 +140,7 @@ export function TotalsTable({ rows, total }: { rows: [string, string][]; total: 
           </tr>
         ))}
         <tr>
-          <td style={{ ...cell, fontSize: 16, fontWeight: 700, paddingTop: 10 }}>Totaal (incl. btw)</td>
+          <td style={{ ...cell, fontSize: 16, fontWeight: 700, paddingTop: 10 }}>Totaal</td>
           <td style={{ ...cell, fontSize: 16, fontWeight: 700, paddingTop: 10, textAlign: "right" }}>{total}</td>
         </tr>
       </tbody>

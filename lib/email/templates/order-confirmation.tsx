@@ -50,7 +50,7 @@ export default function OrderConfirmationEmail({
         rows={[
           ["Subtotaal", formatMoney(order.subtotal)],
           [order.shippingMethod === "pickup" ? "Afhalen" : "Verzending", order.shippingCost === 0 ? "Gratis" : formatMoney(order.shippingCost)],
-          ["Waarvan btw", formatMoney(order.vatAmount)],
+          ...(order.vatAmount > 0 ? [["Waarvan btw", formatMoney(order.vatAmount)] as [string, string]] : []),
         ]}
         total={formatMoney(order.total)}
       />

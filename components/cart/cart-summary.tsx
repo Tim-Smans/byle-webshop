@@ -5,6 +5,7 @@ import { FC } from "react"
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/lib/context/cart-context"
 import { formatPrice } from "@/lib/utils"
+import { PRICE_VAT_TEXT } from "@/lib/shop/config"
 
 interface Props {
     onNavigate?: () => void
@@ -24,7 +25,7 @@ const CartSummary: FC<Props> = ({ onNavigate }) => {
             </div>
 
             <p className="text-sm text-muted-foreground font-sans">
-                Prijzen inclusief btw. Verzendkosten worden berekend bij het afrekenen.
+                {PRICE_VAT_TEXT} Verzendkosten worden berekend bij het afrekenen.
             </p>
 
             <p className="text-sm text-muted-foreground font-sans">

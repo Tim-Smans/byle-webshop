@@ -14,6 +14,7 @@ import type { CheckoutErrors, CheckoutInput } from "@/lib/orders/checkout-valida
 import { formatPrice } from "@/lib/utils"
 import { placeOrder } from "@/app/afrekenen/actions"
 import { pendingOrderStore } from "@/lib/orders/pending-order"
+import { PRICE_VAT_TEXT } from "@/lib/shop/config"
 
 interface Props {
     rates: ShippingRate[]
@@ -304,7 +305,7 @@ const CheckoutForm: FC<Props> = ({ rates, deliveryTimeText, pickupLocationText }
                         <dt className="font-medium">Totaal</dt>
                         <dd className="text-xl font-medium">{formatPrice(total)}</dd>
                     </div>
-                    <p className="text-xs text-muted-foreground">Inclusief btw</p>
+                    <p className="text-xs text-muted-foreground">{PRICE_VAT_TEXT}</p>
                 </dl>
 
                 <div className="space-y-2 text-xs font-sans text-muted-foreground">

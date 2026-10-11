@@ -40,7 +40,7 @@ export default async function ShippingAdminPage() {
             <div className="mb-10">
                 <h1 className="text-3xl font-light tracking-tight text-primary mb-1">Verzending</h1>
                 <p className="text-muted-foreground text-sm max-w-2xl">
-                    Stel per land een prijs in voor kleine en grote werken (inclusief btw).
+                    Stel per land een prijs in voor kleine en grote werken. Dit is het bedrag dat de klant betaalt.
                     Per bestelling wordt één keer verzending aangerekend: het tarief van het grootste werk.
                     Landen die hier niet actief staan, kunnen niet gekozen worden bij het afrekenen.
                     Afhalen in Vlimmeren is altijd gratis.

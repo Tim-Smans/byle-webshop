@@ -179,10 +179,12 @@ export default async function OrderAdminDetailPage({ params }: { params: Promise
                                 <dt>Totaal</dt>
                                 <dd>{formatPrice(order.total)}</dd>
                             </div>
-                            <div className="flex justify-between text-xs text-muted-foreground">
-                                <dt>Waarvan btw</dt>
-                                <dd>{formatPrice(order.vatAmount)}</dd>
-                            </div>
+                            {order.vatAmount > 0 && (
+                                <div className="flex justify-between text-xs text-muted-foreground">
+                                    <dt>Waarvan btw</dt>
+                                    <dd>{formatPrice(order.vatAmount)}</dd>
+                                </div>
+                            )}
                             {refundedTotal > 0 && (
                                 <div className="flex justify-between text-rose-800">
                                     <dt>Terugbetaald</dt>

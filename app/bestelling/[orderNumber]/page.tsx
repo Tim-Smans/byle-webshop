@@ -199,7 +199,9 @@ function OrderSummary({ order }: { order: OrderView }) {
                     <dt className="font-medium">Totaal</dt>
                     <dd className="font-medium">{formatPrice(order.total)}</dd>
                 </div>
-                <p className="text-xs text-muted-foreground">Waarvan btw: {formatPrice(order.vatAmount)}</p>
+                {order.vatAmount > 0 && (
+                    <p className="text-xs text-muted-foreground">Waarvan btw: {formatPrice(order.vatAmount)}</p>
+                )}
             </dl>
 
             <div className="pt-4 border-t border-border text-sm">

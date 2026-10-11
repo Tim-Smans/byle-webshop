@@ -1,6 +1,7 @@
 import "server-only"
 import { Document, Page, StyleSheet, Text, View, renderToBuffer } from "@react-pdf/renderer"
 import { vatBreakdown } from "./invoice-lines"
+import { VAT_EXEMPTION_NOTE } from "../shop/config"
 import type { Invoice, InvoiceParty } from "./types"
 
 const money = new Intl.NumberFormat("nl-BE", { style: "currency", currency: "EUR" })
@@ -20,6 +21,8 @@ const styles = StyleSheet.create({
   row: { flexDirection: "row", paddingVertical: 6, borderBottomWidth: 1, borderColor: "#eee6dd" },
   headRow: { flexDirection: "row", paddingVertical: 6, borderBottomWidth: 1, borderColor: "#d9cfc4" },
   colDesc: { width: "46%" },
+  colDescWide: { width: "74%" },
+  exemption: { marginTop: 24, fontFamily: "Helvetica-Bold" },
   colQty: { width: "8%", textAlign: "right" },
   colVat: { width: "10%", textAlign: "right" },
   colExcl: { width: "18%", textAlign: "right" },
@@ -50,6 +53,8 @@ function Party({ party }: { party: InvoiceParty }) {
 
 function InvoiceDocument({ invoice }: { invoice: Invoice }) {
   const isCreditNote = invoice.type === "credit_note"
+  // Based on the invoice itself, so invoices issued with VAT keep their layout
+  const vatExempt = invoice.lines.every((line) => line.vatRate === 0)
 
   return (
     <Document title={`${isCreditNote ? "Creditnota" : "Factuur"} ${invoice.invoiceNumber}`} author="Art by Lé">
@@ -94,40 +99,62 @@ function InvoiceDocument({ invoice }: { invoice: Invoice }) {
         </View>
 
         <View style={styles.table}>
-          <View style={styles.headRow}>
-            <Text style={[styles.colDesc, styles.label]}>Omschrijving</Text>
-            <Text style={[styles.colQty, styles.label]}>Aantal</Text>
-            <Text style={[styles.colVat, styles.label]}>Btw</Text>
-            <Text style={[styles.colExcl, styles.label]}>Excl. btw</Text>
-            <Text style={[styles.colIncl, styles.label]}>Incl. btw</Text>
-          </View>
-          {invoice.lines.map((line, index) => (
-            <View key={index} style={styles.row} wrap={false}>
-              <Text style={styles.colDesc}>{line.description}</Text>
-              <Text style={styles.colQty}>{line.quantity}</Text>
-              <Text style={styles.colVat}>{line.vatRate}%</Text>
-              <Text style={styles.colExcl}>{money.format(line.totalExclVat)}</Text>
-              <Text style={styles.colIncl}>{money.format(line.totalInclVat)}</Text>
+          {vatExempt ? (
+            <View style={styles.headRow}>
+              <Text style={[styles.colDescWide, styles.label]}>Omschrijving</Text>
+              <Text style={[styles.colQty, styles.label]}>Aantal</Text>
+              <Text style={[styles.colIncl, styles.label]}>Bedrag</Text>
             </View>
-          ))}
+          ) : (
+            <View style={styles.headRow}>
+              <Text style={[styles.colDesc, styles.label]}>Omschrijving</Text>
+              <Text style={[styles.colQty, styles.label]}>Aantal</Text>
+              <Text style={[styles.colVat, styles.label]}>Btw</Text>
+              <Text style={[styles.colExcl, styles.label]}>Excl. btw</Text>
+              <Text style={[styles.colIncl, styles.label]}>Incl. btw</Text>
+            </View>
+          )}
+          {invoice.lines.map((line, index) =>
+            vatExempt ? (
+              <View key={index} style={styles.row} wrap={false}>
+                <Text style={styles.colDescWide}>{line.description}</Text>
+                <Text style={styles.colQty}>{line.quantity}</Text>
+                <Text style={styles.colIncl}>{money.format(line.totalInclVat)}</Text>
+              </View>
+            ) : (
+              <View key={index} style={styles.row} wrap={false}>
+                <Text style={styles.colDesc}>{line.description}</Text>
+                <Text style={styles.colQty}>{line.quantity}</Text>
+                <Text style={styles.colVat}>{line.vatRate}%</Text>
+                <Text style={styles.colExcl}>{money.format(line.totalExclVat)}</Text>
+                <Text style={styles.colIncl}>{money.format(line.totalInclVat)}</Text>
+              </View>
+            )
+          )}
         </View>
 
         <View style={styles.totals}>
-          <View style={styles.totalRow}>
-            <Text>Totaal excl. btw</Text>
-            <Text>{money.format(invoice.subtotalExclVat)}</Text>
-          </View>
-          {vatBreakdown(invoice.lines).map(({ rate, base, vat }) => (
-            <View key={rate} style={styles.totalRow}>
-              <Text>Btw {rate}% op {money.format(base)}</Text>
-              <Text>{money.format(vat)}</Text>
-            </View>
-          ))}
+          {!vatExempt && (
+            <>
+              <View style={styles.totalRow}>
+                <Text>Totaal excl. btw</Text>
+                <Text>{money.format(invoice.subtotalExclVat)}</Text>
+              </View>
+              {vatBreakdown(invoice.lines).map(({ rate, base, vat }) => (
+                <View key={rate} style={styles.totalRow}>
+                  <Text>Btw {rate}% op {money.format(base)}</Text>
+                  <Text>{money.format(vat)}</Text>
+                </View>
+              ))}
+            </>
+          )}
           <View style={styles.grandTotal}>
             <Text>{isCreditNote ? "Te crediteren" : "Totaal"}</Text>
             <Text>{money.format(invoice.total)}</Text>
           </View>
         </View>
+
+        {vatExempt && <Text style={styles.exemption}>{VAT_EXEMPTION_NOTE}</Text>}
 
         <Text style={styles.note}>
           {isCreditNote

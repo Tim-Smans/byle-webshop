@@ -1,6 +1,7 @@
 import "server-only"
 import { createAdminClient } from "../supabase/admin"
 import { getCountryName } from "../shop/countries"
+import { VAT_RATE } from "../shop/config"
 import { makeLine, negateLine, sumLines } from "./invoice-lines"
 import { SELLER } from "./seller"
 import type { Invoice, InvoiceLine, InvoiceParty, InvoiceType } from "./types"
@@ -79,7 +80,7 @@ export async function ensureInvoiceForOrder(orderId: string): Promise<string> {
   const shippingCost = Number(order.shippingCost)
   if (shippingCost > 0) {
     // Shipping follows the VAT rate of the goods
-    const vatRate = items.length > 0 ? Number(items[0].vatRate) : 21
+    const vatRate = items.length > 0 ? Number(items[0].vatRate) : VAT_RATE
     lines.push(makeLine("shipping", null, "Verzending", shippingCost, vatRate))
   }
 
