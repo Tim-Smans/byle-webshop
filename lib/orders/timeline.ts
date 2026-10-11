@@ -7,7 +7,7 @@ export interface TimelineStep {
   description: string
   date: string | null
   state: TimelineState
-  link?: { href: string; label: string }
+  trackingCode?: string
 }
 
 interface TimelineOrder {
@@ -17,7 +17,7 @@ interface TimelineOrder {
   shippedAt: string | null
   deliveredAt: string | null
   cancelledAt: string | null
-  trackingUrl: string | null
+  trackingCode: string | null
   withdrawals: { submittedAt: string; status: string; refundedAt: string | null }[]
 }
 
@@ -55,7 +55,7 @@ export function buildOrderTimeline(order: TimelineOrder, deliveryTimeText: strin
         : `Je kunstwerk wordt verpakt. ${deliveryTimeText}`,
       date: order.shippedAt,
       state: order.shippedAt ? "done" : "current",
-      link: order.shippedAt && order.trackingUrl ? { href: order.trackingUrl, label: "Volg je pakket" } : undefined,
+      trackingCode: order.shippedAt && order.trackingCode ? order.trackingCode : undefined,
     })
   }
 

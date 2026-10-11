@@ -31,7 +31,7 @@ export interface OrderView {
   shippedAt: string | null
   deliveredAt: string | null
   cancelledAt: string | null
-  trackingUrl: string | null
+  trackingCode: string | null
   withdrawals: { submittedAt: string; status: string; refundedAt: string | null }[]
   items: OrderItemView[]
 }
@@ -72,7 +72,7 @@ export async function getOrderForCustomer(orderNumber: string, accessToken: stri
     shippedAt: data.shippedAt,
     deliveredAt: data.deliveredAt,
     cancelledAt: data.cancelledAt,
-    trackingUrl: data.trackingUrl,
+    trackingCode: data.trackingCode,
     withdrawals: ((data.Withdrawal ?? []) as { submittedAt: string; status: string; refundedAt: string | null }[])
       .sort((a, b) => a.submittedAt.localeCompare(b.submittedAt)),
     items: ((data.OrderItem ?? []) as Record<string, unknown>[]).map((item) => ({

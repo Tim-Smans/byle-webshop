@@ -45,15 +45,11 @@ export default function OrderTimeline({ steps }: { steps: TimelineStep[] }) {
                                     <p className="text-xs text-muted-foreground">{dateFormatter.format(new Date(step.date))}</p>
                                 )}
                                 <p className="text-sm text-muted-foreground mt-1">{step.description}</p>
-                                {step.link && (
-                                    <a
-                                        href={step.link.href}
-                                        target="_blank"
-                                        rel="noopener"
-                                        className="inline-block mt-1 text-sm underline underline-offset-4 hover:text-foreground"
-                                    >
-                                        {step.link.label}
-                                    </a>
+                                {step.trackingCode && (
+                                    <p className="mt-1 text-sm">
+                                        Trackingcode:{" "}
+                                        <span className="font-mono font-medium select-all">{step.trackingCode}</span>
+                                    </p>
                                 )}
                             </div>
                         </li>

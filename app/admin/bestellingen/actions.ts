@@ -26,19 +26,16 @@ function refresh(orderId: string) {
 
 export async function markOrderShipped(
   orderId: string,
-  options: { trackingUrl: string; notifyCustomer: boolean }
+  options: { trackingCode: string; notifyCustomer: boolean }
 ): Promise<{ emailError?: string }> {
   await assertAdmin();
 
-  const trackingUrl = options.trackingUrl.trim();
-  if (trackingUrl && !/^https?:\/\/\S+$/i.test(trackingUrl)) {
-    throw new Error("De trackinglink moet beginnen met http:// of https://");
-  }
+  const trackingCode = options.trackingCode.trim().slice(0, 100);
 
   // Only from "paid", so a double click can't ship twice
   const { data, error } = await createAdminClient()
     .from("Order")
-    .update({ status: "shipped", shippedAt: new Date().toISOString(), trackingUrl: trackingUrl || null })
+    .update({ status: "shipped", shippedAt: new Date().toISOString(), trackingCode: trackingCode || null })
     .eq("id", orderId)
     .eq("status", "paid")
     .eq("shippingMethod", "ship")
@@ -48,7 +45,7 @@ export async function markOrderShipped(
   if (error) throw new Error(error.message);
   if (!data?.length) throw new Error("Deze bestelling kan niet (meer) als verzonden worden aangeduid.");
 
-  await logAdminEvent(orderId, "shipped", trackingUrl ? `Verzonden, tracking: ${trackingUrl}` : "Verzonden");
+  await logAdminEvent(orderId, "shipped", trackingCode ? `Verzonden, trackingcode: ${trackingCode}` : "Verzonden");
   refresh(orderId);
 
   if (options.notifyCustomer) {

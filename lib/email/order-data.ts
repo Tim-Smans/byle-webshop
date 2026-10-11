@@ -24,7 +24,7 @@ export interface EmailOrder {
   shippingCost: number
   total: number
   vatAmount: number
-  trackingUrl: string | null
+  trackingCode: string | null
   hasStockConflict: boolean
   items: (EmailOrderItem & { withdrawalApplicable: boolean })[]
 }
@@ -60,7 +60,7 @@ export async function loadEmailOrder(orderId: string): Promise<EmailOrder> {
     shippingCost: Number(data.shippingCost),
     total: Number(data.total),
     vatAmount: Number(data.vatAmount),
-    trackingUrl: data.trackingUrl,
+    trackingCode: data.trackingCode,
     hasStockConflict: ((data.OrderEvent ?? []) as { type: string }[]).some((event) => event.type === "stock_conflict"),
     items: ((data.OrderItem ?? []) as Record<string, unknown>[]).map((item) => ({
       title: item.title as string,

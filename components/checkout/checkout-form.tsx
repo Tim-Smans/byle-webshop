@@ -168,7 +168,7 @@ const CheckoutForm: FC<Props> = ({ rates, deliveryTimeText, pickupLocationText }
                             disabled={rates.length === 0}
                             onSelect={() => update("shippingMethod", "ship")}
                             title="Verzenden"
-                            description={rates.length === 0 ? "Momenteel niet beschikbaar" : "Zorgvuldig verpakt, met track & trace"}
+                            description={rates.length === 0 ? "Momenteel niet beschikbaar" : "Zorgvuldig verpakt, met trackingcode"}
                         />
                         <RadioCard
                             checked={form.shippingMethod === "pickup"}

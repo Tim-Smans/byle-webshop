@@ -241,10 +241,10 @@ export default async function OrderAdminDetailPage({ params }: { params: Promise
                                 <p>{order.shippingCountryCode && getCountryName(order.shippingCountryCode)}</p>
                             </>
                         )}
-                        {order.trackingUrl && (
-                            <a href={order.trackingUrl} target="_blank" rel="noopener" className="inline-flex items-center gap-1 pt-2 hover:underline underline-offset-4">
-                                Track & trace <ExternalLink size={12} />
-                            </a>
+                        {order.trackingCode && (
+                            <p className="pt-2">
+                                Trackingcode: <span className="font-mono select-all">{order.trackingCode}</span>
+                            </p>
                         )}
                         {billingAddress && (
                             <div className="pt-3">

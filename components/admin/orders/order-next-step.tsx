@@ -76,14 +76,14 @@ function StepCard({
 
 function ShipStep({ orderId }: Props) {
     const { showWarning, showSuccess, showError } = useFeedback()
-    const [trackingUrl, setTrackingUrl] = useState("")
+    const [trackingCode, setTrackingCode] = useState("")
     const [notifyCustomer, setNotifyCustomer] = useState(true)
     const [isSaving, setIsSaving] = useState(false)
 
     const ship = async () => {
         setIsSaving(true)
         try {
-            const { emailError } = await markOrderShipped(orderId, { trackingUrl, notifyCustomer })
+            const { emailError } = await markOrderShipped(orderId, { trackingCode, notifyCustomer })
             if (emailError) showError(`Aangeduid als verzonden, maar de e-mail naar de klant lukte niet: ${emailError}`)
             else showSuccess(notifyCustomer ? "Verzonden! De klant heeft een e-mail gekregen." : "Aangeduid als verzonden.")
         } catch (err) {
@@ -97,13 +97,13 @@ function ShipStep({ orderId }: Props) {
         <StepCard icon={<Truck size={20} />} title="Volgende stap: inpakken en verzenden">
             <div className="space-y-3">
                 <label className="block text-sm">
-                    <span className="block mb-1">Trackinglink (optioneel)</span>
+                    <span className="block mb-1">Trackingcode (optioneel)</span>
                     <Input
-                        type="url"
-                        placeholder="https://…"
-                        value={trackingUrl}
-                        onChange={(e) => setTrackingUrl(e.target.value)}
+                        placeholder="bv. 323212345678901234567890"
+                        value={trackingCode}
+                        onChange={(e) => setTrackingCode(e.target.value)}
                         disabled={isSaving}
+                        className="font-mono"
                     />
                 </label>
                 <label className="flex items-center gap-2 text-sm cursor-pointer">
@@ -152,7 +152,7 @@ function DeliveredStep({ orderId, today, pickup }: Props & { pickup: boolean }) 
             <p className="text-sm text-muted-foreground mb-3">
                 {pickup
                     ? "Spreek een moment af met de klant. Duid daarna aan op welke dag het werk werd afgehaald."
-                    : "Kijk in de track & trace op welke dag het pakket werd afgeleverd."}{" "}
+                    : "Zoek de trackingcode op bij de vervoerder en kijk op welke dag het pakket werd afgeleverd."}{" "}
                 Vanaf de dag erna loopt de bedenktijd van 14 dagen.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:items-end">

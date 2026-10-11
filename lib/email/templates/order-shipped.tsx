@@ -22,11 +22,14 @@ export default function OrderShippedEmail({
 
       <ItemsTable items={order.items} />
 
-      {order.trackingUrl ? (
-        <ButtonLink href={order.trackingUrl}>Volg je pakket</ButtonLink>
-      ) : (
-        <ButtonLink href={orderUrl}>Bekijk je bestelling</ButtonLink>
+      {order.trackingCode && (
+        <InfoBox>
+          Je trackingcode: <strong style={{ fontFamily: "monospace", fontSize: 16 }}>{order.trackingCode}</strong>
+          <br />
+          Hiermee kan je je pakket volgen op de website van de vervoerder.
+        </InfoBox>
       )}
+      <ButtonLink href={orderUrl}>Bekijk je bestelling</ButtonLink>
 
       <Paragraph style={{ fontSize: 14 }}>
         Komt je werk beschadigd aan? Gooi de verpakking dan nog niet weg, maak foto&apos;s van het werk, de schade

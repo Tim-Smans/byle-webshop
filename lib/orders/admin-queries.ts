@@ -120,7 +120,7 @@ export interface AdminOrderDetail {
   shippingCost: number
   total: number
   vatAmount: number
-  trackingUrl: string | null
+  trackingCode: string | null
   adminNote: string | null
   termsVersion: string
   items: { id: string; artPieceId: string | null; title: string; dimensions: string | null; imageUrl: string | null; price: number; withdrawalApplicable: boolean }[]
