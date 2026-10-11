@@ -28,6 +28,7 @@ import {
     Package,
     Euro,
     BookOpen,
+    CreditCard,
 } from "lucide-react"
 
 async function getDashboardStats() {
@@ -292,6 +293,12 @@ export default async function AdminDashboard() {
                         }
                         icon={<ShoppingBag size={20} />}
                         primary={webshop.ordersToPrepare > 0}
+                    />
+                    <AdminLink
+                        href="/admin/mollie"
+                        title="Mollie"
+                        description="Betalingen, terugbetalingen, chargebacks en cijfers"
+                        icon={<CreditCard size={20} />}
                     />
                     <AdminLink
                         href="/admin/verzending"
