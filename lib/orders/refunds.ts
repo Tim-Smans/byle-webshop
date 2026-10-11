@@ -11,8 +11,10 @@ export interface RefundResult {
   warnings: string[]
 }
 
-async function logEvent(orderId: string, type: string, message: string, data?: Record<string, unknown>) {
-  await createAdminClient().from("OrderEvent").insert({ orderId, type, message, actor: "admin", data: data ?? null })
+type Actor = "admin" | "customer"
+
+async function logEvent(orderId: string, actor: Actor, type: string, message: string, data?: Record<string, unknown>) {
+  await createAdminClient().from("OrderEvent").insert({ orderId, type, message, actor, data: data ?? null })
 }
 
 // Refunds (part of) an order through Mollie, issues the credit note and
@@ -26,9 +28,13 @@ async function refundOrder(options: {
   withdrawalId: string | null
   makeAvailable: boolean
   description: string
+  actor?: Actor
+  // The caller sends its own e-mail (e.g. the cancellation confirmation)
+  skipRefundEmail?: boolean
 }): Promise<RefundResult> {
   const supabase = createAdminClient()
   const warnings: string[] = []
+  const actor = options.actor ?? "admin"
 
   const { data: order, error } = await supabase
     .from("Order")
@@ -84,7 +90,7 @@ async function refundOrder(options: {
     throw new Error(`Mollie kon de terugbetaling niet uitvoeren: ${message}`)
   }
 
-  await logEvent(order.id, "refunded", `€ ${amount.toFixed(2)} terugbetaald via Mollie`, { amount })
+  await logEvent(order.id, actor, "refunded", `€ ${amount.toFixed(2)} terugbetaald via Mollie`, { amount })
 
   try {
     await ensureInvoiceForOrder(order.id)
@@ -107,10 +113,12 @@ async function refundOrder(options: {
     }
   }
 
-  try {
-    await sendRefundEmail(order.id, amount)
-  } catch (err) {
-    warnings.push(`De klant kreeg geen e-mail over de terugbetaling: ${err instanceof Error ? err.message : err}`)
+  if (!options.skipRefundEmail) {
+    try {
+      await sendRefundEmail(order.id, amount)
+    } catch (err) {
+      warnings.push(`De klant kreeg geen e-mail over de terugbetaling: ${err instanceof Error ? err.message : err}`)
+    }
   }
 
   return { amount, warnings }
@@ -185,9 +193,13 @@ export async function refundWithdrawal(withdrawalId: string, makeAvailable: bool
   return result
 }
 
-// Cancels a paid order completely (e.g. stock conflict, or the work got
-// damaged before shipping) and refunds everything
-export async function cancelAndRefundOrder(orderId: string, makeAvailable: boolean): Promise<RefundResult> {
+// Cancels a paid order completely and refunds everything: by the admin (e.g.
+// stock conflict, damage before shipping) or by the customer before shipping
+export async function cancelAndRefundOrder(
+  orderId: string,
+  makeAvailable: boolean,
+  options: { actor?: Actor; skipRefundEmail?: boolean } = {}
+): Promise<RefundResult> {
   const { data: order, error } = await createAdminClient()
     .from("Order")
     .select("orderNumber, OrderItem (id)")
@@ -202,5 +214,6 @@ export async function cancelAndRefundOrder(orderId: string, makeAvailable: boole
     withdrawalId: null,
     makeAvailable,
     description: `Art by Lé – terugbetaling bestelling ${order.orderNumber}`,
+    ...options,
   })
 }

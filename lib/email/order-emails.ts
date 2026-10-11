@@ -10,6 +10,8 @@ import { loadEmailOrder, type EmailOrder } from "./order-data"
 import OrderConfirmationEmail from "./templates/order-confirmation"
 import AdminNewOrderEmail from "./templates/admin-new-order"
 import OrderShippedEmail from "./templates/order-shipped"
+import OrderCancelledEmail from "./templates/order-cancelled"
+import AdminOrderCancelledEmail from "./templates/admin-order-cancelled"
 
 function orderLinks(order: EmailOrder) {
   const site = getSiteUrl()
@@ -103,6 +105,43 @@ async function sendAdminNewOrder(order: EmailOrder, adminUrl: string) {
     })
   } catch (error) {
     console.error("[email] admin notification failed:", error)
+  }
+}
+
+// The customer cancelled before shipping: confirmation to them, heads-up to Lé
+export async function sendOrderCancelledEmails(orderId: string, amount: number): Promise<void> {
+  const order = await loadEmailOrder(orderId)
+  const links = orderLinks(order)
+
+  await sendEmail({
+    to: order.customerEmail,
+    subject: `Je bestelling ${order.orderNumber} is geannuleerd`,
+    react: OrderCancelledEmail({
+      firstName: order.customerFirstName,
+      orderNumber: order.orderNumber,
+      amount,
+      items: order.items,
+    }),
+    replyTo: ADMIN_EMAIL,
+    idempotencyKey: `order-cancelled/${orderId}`,
+  })
+
+  try {
+    await sendEmail({
+      to: ADMIN_EMAIL,
+      subject: `Bestelling ${order.orderNumber} geannuleerd door de klant`,
+      react: AdminOrderCancelledEmail({
+        customerName: `${order.customerFirstName} ${order.customerLastName}`,
+        orderNumber: order.orderNumber,
+        amount,
+        items: order.items,
+        adminUrl: links.adminUrl,
+      }),
+      replyTo: order.customerEmail,
+      idempotencyKey: `admin-order-cancelled/${orderId}`,
+    })
+  } catch (error) {
+    console.error("[email] admin cancellation notification failed:", error)
   }
 }
 

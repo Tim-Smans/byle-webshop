@@ -100,9 +100,10 @@ export const TERMS_SECTIONS: TermsSection[] = [
     ],
   },
   {
-    title: "9. Bedenktijd en retourneren",
+    title: "9. Annuleren, bedenktijd en retourneren",
     blocks: [
-      p("Voor bestaande kunstwerken die je als consument online via de webshop koopt, heb je het recht om de aankoop zonder opgave van redenen te herroepen binnen 14 kalenderdagen, te rekenen vanaf de dag nadat je het werk hebt ontvangen."),
+      p("Zolang je bestelling niet verzonden of afgehaald is, kan je ze kosteloos annuleren via de pagina van je bestelling (de link staat in je bevestigingsmail) of via Bestelling herroepen. Je krijgt het volledige bedrag meteen terug."),
+      p("Is je bestelling verzonden, dan heb je als consument voor bestaande kunstwerken het recht om de aankoop zonder opgave van redenen te herroepen binnen 14 kalenderdagen, te rekenen vanaf de dag nadat je het werk hebt ontvangen."),
       p(
         "Herroepen kan online via ",
         { text: "Bestelling herroepen", href: "/herroepen" },

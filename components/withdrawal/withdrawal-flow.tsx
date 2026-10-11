@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { formatPrice } from "@/lib/utils"
+import CustomerCancelOrderButton from "@/components/checkout/cancel-order-button"
 import {
     lookupOrderForWithdrawal,
     submitWithdrawal,
@@ -31,6 +32,7 @@ export default function WithdrawalFlow({ initial }: Props) {
     const [reason, setReason] = useState("")
     const [confirmation, setConfirmation] = useState<Confirmation | null>(null)
     const [message, setMessage] = useState<string | null>(null)
+    const [cancellable, setCancellable] = useState<{ orderNumber: string } | null>(null)
     const [isBusy, setIsBusy] = useState(false)
 
     const update = (key: keyof typeof form, value: string) => setForm((prev) => ({ ...prev, [key]: value }))
@@ -39,6 +41,7 @@ export default function WithdrawalFlow({ initial }: Props) {
         e.preventDefault()
         setIsBusy(true)
         setMessage(null)
+        setCancellable(null)
         try {
             const result = await lookupOrderForWithdrawal(form)
             if (result.ok) {
@@ -46,6 +49,7 @@ export default function WithdrawalFlow({ initial }: Props) {
                 setSelected(result.items.map((item) => item.id))
             } else {
                 setMessage(result.message)
+                setCancellable(result.canCancel ?? null)
             }
         } catch {
             setMessage("Er ging iets mis. Controleer je internetverbinding en probeer opnieuw.")
@@ -179,7 +183,18 @@ export default function WithdrawalFlow({ initial }: Props) {
                 <input tabIndex={-1} autoComplete="off" value={form.website} onChange={(e) => update("website", e.target.value)} />
             </div>
 
-            {message && <ErrorMessage message={message} />}
+            {cancellable ? (
+                <div className="space-y-3">
+                    <p className="rounded-md border border-border bg-muted/40 p-3 text-sm">{message}</p>
+                    <CustomerCancelOrderButton
+                        orderNumber={cancellable.orderNumber}
+                        token={form.token || undefined}
+                        email={form.email}
+                    />
+                </div>
+            ) : (
+                message && <ErrorMessage message={message} />
+            )}
 
             <Button type="submit" disabled={isBusy} className="w-full py-6 text-base">
                 {isBusy && <Loader2 className="h-4 w-4 animate-spin" />}

@@ -18,7 +18,8 @@ export interface WithdrawalFormInput {
 
 export type LookupResult =
   | { ok: true; orderNumber: string; lastDayLabel: string | null; items: WithdrawableItem[] }
-  | { ok: false; message: string };
+  // canCancel: not shipped yet, so the customer can cancel instead
+  | { ok: false; message: string; canCancel?: { orderNumber: string } };
 
 export type SubmitResult =
   | { ok: true; orderNumber: string; submittedAtLabel: string; itemTitles: string[]; emailSent: boolean }
@@ -62,11 +63,17 @@ async function lookup(input: WithdrawalFormInput): Promise<LookupResult> {
   const messages: Record<typeof result.reason, string> = {
     not_found: "We vinden geen bestelling met dit bestelnummer en e-mailadres. Kijk ze even na: je vindt ze in je bevestigingsmail.",
     not_paid: "Deze bestelling werd niet betaald, dus er is niets te herroepen.",
+    not_shipped:
+      "Je bestelling is nog niet verzonden of afgehaald. Herroepen is dus niet nodig: je kan ze kosteloos annuleren en krijgt het volledige bedrag meteen terug.",
     expired: `De herroepingstermijn voor deze bestelling liep af${result.lastDayLabel ? ` op ${result.lastDayLabel}` : ""}. ${CONTACT}`,
     nothing_left: "Alle werken van deze bestelling werden al herroepen. Je kreeg daarvan een bevestiging per e-mail.",
     custom_work: `Deze bestelling betreft maatwerk dat volgens jouw persoonlijke wensen werd gemaakt. Daarvoor geldt het wettelijke herroepingsrecht niet. ${CONTACT}`,
   };
-  return { ok: false, message: messages[result.reason] };
+  return {
+    ok: false,
+    message: messages[result.reason],
+    ...(result.reason === "not_shipped" && result.orderNumber ? { canCancel: { orderNumber: result.orderNumber } } : {}),
+  };
 }
 
 export async function lookupOrderForWithdrawal(raw: Record<string, unknown>): Promise<LookupResult> {

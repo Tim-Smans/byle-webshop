@@ -6,7 +6,9 @@ import {
   isWithinWithdrawalPeriod,
 } from "../orders/withdrawal-period"
 
-const WITHDRAWABLE_STATUSES = ["paid", "shipped", "delivered", "completed", "withdrawn"]
+// Before shipping (status "paid") the customer cancels instead of withdrawing.
+// From shipping on, withdrawal must be possible (also while in transit).
+const WITHDRAWABLE_STATUSES = ["shipped", "delivered", "completed", "withdrawn"]
 
 export interface WithdrawableItem {
   id: string
@@ -25,7 +27,12 @@ export type WithdrawalLookup =
       lastDayLabel: string | null
       items: WithdrawableItem[]
     }
-  | { ok: false; reason: "not_found" | "not_paid" | "expired" | "nothing_left" | "custom_work"; lastDayLabel?: string }
+  | {
+      ok: false
+      reason: "not_found" | "not_paid" | "not_shipped" | "expired" | "nothing_left" | "custom_work"
+      lastDayLabel?: string
+      orderNumber?: string
+    }
 
 const normalizeEmail = (email: string) => email.trim().toLowerCase()
 
@@ -57,6 +64,7 @@ export async function lookupWithdrawableOrder(input: {
       normalizeEmail(order.customerEmail) === normalizeEmail(input.email))
   if (!order || !matches) return { ok: false, reason: "not_found" }
 
+  if (order.status === "paid") return { ok: false, reason: "not_shipped", orderNumber: order.orderNumber }
   if (!WITHDRAWABLE_STATUSES.includes(order.status)) return { ok: false, reason: "not_paid" }
 
   const lastDay = getWithdrawalLastDay(order.deliveredAt)

@@ -19,7 +19,7 @@ export const RESERVATION_MINUTES = 30
 
 // Version of the terms the customer accepts at checkout. Update together with
 // the "Laatst bijgewerkt" date in the Terms of Service dialog.
-export const TERMS_VERSION = "2026-10-11"
+export const TERMS_VERSION = "2026-10-11.2"
 export const TERMS_LAST_UPDATED = "11 oktober 2026"
 
 // Shown before ordering (legally required delivery information)

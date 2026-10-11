@@ -42,6 +42,8 @@ export async function markOrderShipped(
     .eq("id", orderId)
     .eq("status", "paid")
     .eq("shippingMethod", "ship")
+    // The customer may be cancelling right now
+    .is("cancelledAt", null)
     .select("id");
   if (error) throw new Error(error.message);
   if (!data?.length) throw new Error("Deze bestelling kan niet (meer) als verzonden worden aangeduid.");
@@ -88,6 +90,7 @@ export async function markOrderDelivered(orderId: string, deliveredOn: string): 
     .update({ status: "delivered", deliveredAt: `${deliveredOn}T12:00:00Z` })
     .eq("id", orderId)
     .in("status", allowed)
+    .is("cancelledAt", null)
     .select("id");
   if (error) throw new Error(error.message);
   if (!data?.length) throw new Error("Deze bestelling werd intussen gewijzigd. Herlaad de pagina.");

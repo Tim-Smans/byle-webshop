@@ -106,6 +106,8 @@ export async function cancelAndRefundOrderAction(orderId: string, makeAvailable:
 
   try {
     const result = await cancelAndRefundOrder(orderId, makeAvailable);
+    // Shown as "Geannuleerd" in the customer's timeline
+    await createAdminClient().from("Order").update({ cancelledAt: new Date().toISOString() }).eq("id", orderId);
     await logAdminEvent(orderId, "cancelled_by_admin", "Bestelling geannuleerd en volledig terugbetaald door de admin");
     return result;
   } finally {

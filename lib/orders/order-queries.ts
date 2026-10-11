@@ -27,6 +27,12 @@ export interface OrderView {
   total: number
   vatAmount: number
   createdAt: string
+  paidAt: string | null
+  shippedAt: string | null
+  deliveredAt: string | null
+  cancelledAt: string | null
+  trackingUrl: string | null
+  withdrawals: { submittedAt: string; status: string; refundedAt: string | null }[]
   items: OrderItemView[]
 }
 
@@ -37,7 +43,7 @@ export async function getOrderForCustomer(orderNumber: string, accessToken: stri
 
   const { data, error } = await createAdminClient()
     .from("Order")
-    .select("*, OrderItem (id, artPieceId, title, dimensions, imageUrl, price)")
+    .select("*, OrderItem (id, artPieceId, title, dimensions, imageUrl, price), Withdrawal (submittedAt, status, refundedAt)")
     .eq("orderNumber", orderNumber)
     .eq("accessToken", accessToken)
     .maybeSingle()
@@ -62,6 +68,13 @@ export async function getOrderForCustomer(orderNumber: string, accessToken: stri
     total: Number(data.total),
     vatAmount: Number(data.vatAmount),
     createdAt: data.createdAt,
+    paidAt: data.paidAt,
+    shippedAt: data.shippedAt,
+    deliveredAt: data.deliveredAt,
+    cancelledAt: data.cancelledAt,
+    trackingUrl: data.trackingUrl,
+    withdrawals: ((data.Withdrawal ?? []) as { submittedAt: string; status: string; refundedAt: string | null }[])
+      .sort((a, b) => a.submittedAt.localeCompare(b.submittedAt)),
     items: ((data.OrderItem ?? []) as Record<string, unknown>[]).map((item) => ({
       id: item.id as string,
       artPieceId: (item.artPieceId as string | null) ?? null,

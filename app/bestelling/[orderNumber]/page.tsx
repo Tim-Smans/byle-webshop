@@ -13,6 +13,10 @@ import { formatPrice } from "@/lib/utils";
 import ClearCartOnPaid from "@/components/checkout/clear-cart-on-paid";
 import PaymentPendingRefresher from "@/components/checkout/payment-pending-refresher";
 import ForgetPendingOrder from "@/components/checkout/forget-pending-order";
+import OrderTimeline from "@/components/checkout/order-timeline";
+import CustomerCancelOrderButton from "@/components/checkout/cancel-order-button";
+import { buildOrderTimeline } from "@/lib/orders/timeline";
+import { isWithinWithdrawalPeriod } from "@/lib/orders/withdrawal-period";
 
 export const metadata: Metadata = {
     title: "Je bestelling | Art by Lé",
@@ -50,8 +54,12 @@ export default async function OrderPage({
     }
 
     const hasInvoice = (await getInvoicesForOrder(order.id)).some((invoice) => invoice.type === "invoice");
-    // The page itself re-checks the period and which works are left
-    const canWithdraw = ["paid", "shipped", "delivered", "completed"].includes(order.status);
+    // Before shipping: cancel. From shipping on: withdraw (the /herroepen page
+    // re-checks the period and which works are left).
+    const canCancel = order.status === "paid" && !order.cancelledAt;
+    const canWithdraw =
+        ["shipped", "delivered", "completed"].includes(order.status) && isWithinWithdrawalPeriod(order.deliveredAt);
+    const timeline = buildOrderTimeline(order, DELIVERY_TIME_TEXT);
 
     return (
         <main className="min-h-screen pt-32 pb-24">
@@ -65,7 +73,17 @@ export default async function OrderPage({
                 {order.status === "pending_payment"
                     ? <PaymentPendingRefresher />
                     : <ForgetPendingOrder orderNumber={order.orderNumber} />}
+                <OrderTimeline steps={timeline} />
                 <OrderSummary order={order} />
+                {canCancel && (
+                    <div className="mt-6 text-center">
+                        <CustomerCancelOrderButton
+                            orderNumber={order.orderNumber}
+                            token={token}
+                            totalLabel={formatPrice(order.total)}
+                        />
+                    </div>
+                )}
                 {canWithdraw && (
                     <div className="mt-6 text-center">
                         <Link
@@ -95,6 +113,32 @@ export default async function OrderPage({
 }
 
 function StatusHeader({ order }: { order: OrderView }) {
+    // Later visits: the timeline tells the story
+    if (["shipped", "delivered", "completed"].includes(order.status)) {
+        return (
+            <div className="mb-10 text-center">
+                <h1 className="text-oker text-4xl font-light tracking-tight mb-3">
+                    Je bestelling {order.orderNumber}
+                </h1>
+                <p className="text-muted-foreground">Hieronder zie je hoe ver je bestelling staat.</p>
+            </div>
+        );
+    }
+
+    if (order.status === "refunded" && order.cancelledAt) {
+        return (
+            <div className="mb-10 text-center">
+                <XCircle className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <h1 className="text-oker text-4xl font-light tracking-tight mb-3">
+                    Je bestelling is geannuleerd
+                </h1>
+                <p className="text-muted-foreground">
+                    Het volledige bedrag werd terugbetaald met je oorspronkelijke betaalmiddel.
+                </p>
+            </div>
+        );
+    }
+
     if (PAID_STATUSES.includes(order.status)) {
         return (
             <div className="mb-10 text-center">

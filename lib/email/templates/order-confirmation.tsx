@@ -79,6 +79,11 @@ export default function OrderConfirmationEmail({
       )}
 
       <ButtonLink href={orderUrl}>Bekijk je bestelling</ButtonLink>
+      <Paragraph style={{ fontSize: 14 }}>
+        Op die pagina volg je je bestelling stap voor stap. Bedenk je je nog vóór je werk{" "}
+        {order.shippingMethod === "pickup" ? "afgehaald" : "verzonden"} is? Dan kan je je bestelling daar kosteloos
+        annuleren en krijg je het volledige bedrag meteen terug.
+      </Paragraph>
 
       {withdrawalApplies && (
         <>
@@ -86,8 +91,9 @@ export default function OrderConfirmationEmail({
           <InfoBox>
             Je hebt het recht om deze aankoop binnen <strong>14 kalenderdagen</strong> zonder opgave van redenen
             te herroepen. Die termijn gaat in op de dag nadat jij (of iemand die je aanduidt) het kunstwerk hebt ontvangen.
+            Zolang je werk nog niet verzonden of afgehaald is, annuleer je gewoon je bestelling.
             <br /><br />
-            Herroepen kan eenvoudig online via{" "}
+            Na verzending herroepen kan eenvoudig online via{" "}
             <a href={withdrawUrl} style={{ color: "#6b4a2b" }}>Bestelling herroepen</a>,
             of met het modelformulier in bijlage (per e-mail of per post). Na je herroeping stuur je het werk
             zorgvuldig verpakt en onbeschadigd terug; de kosten voor het terugsturen zijn voor jouw rekening.

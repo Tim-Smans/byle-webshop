@@ -439,7 +439,13 @@ export const OrderAndDeliveryDialog: FC<LegalDialogProps> = ({
                         </p>
 
                         <p className="mt-4">
-                            Herroepen kan op twee manieren:
+                            Bedenk je je nog vóór je werk verzonden of afgehaald is? Dan annuleer je je
+                            bestelling kosteloos via de pagina van je bestelling (de link staat in je
+                            bevestigingsmail). Je krijgt het volledige bedrag meteen terug.
+                        </p>
+
+                        <p className="mt-4">
+                            Na verzending herroepen kan op twee manieren:
                         </p>
 
                         <ul className="mt-4 space-y-2 list-disc pl-6">
