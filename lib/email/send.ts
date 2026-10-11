@@ -7,7 +7,7 @@ export const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "byle.art@outlook.com"
 
 // Use an address on a domain verified in Resend, e.g.
 // "Art by Lé <bestellingen@artbyle.be>"
-const DEFAULT_FROM = "Art by Lé <contact@timsmans.be>"
+const DEFAULT_FROM = "Art by Lé <mailing@artbyle.be>"
 
 export interface EmailAttachment {
   filename: string
