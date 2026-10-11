@@ -9,6 +9,7 @@ import {
     toBrusselsDateString,
 } from "@/lib/orders/withdrawal-period"
 import { getCountryName } from "@/lib/shop/countries"
+import { CARRIER_NAME, getTrackingUrl } from "@/lib/shop/tracking"
 import { formatPrice } from "@/lib/utils"
 import OrderStatusBadge from "@/components/admin/orders/order-status-badge"
 import OrderNextStep from "@/components/admin/orders/order-next-step"
@@ -242,9 +243,17 @@ export default async function OrderAdminDetailPage({ params }: { params: Promise
                             </>
                         )}
                         {order.trackingCode && (
-                            <p className="pt-2">
-                                Trackingcode: <span className="font-mono select-all">{order.trackingCode}</span>
-                            </p>
+                            <div className="pt-2">
+                                <p>Trackingcode: <span className="font-mono select-all">{order.trackingCode}</span></p>
+                                <a
+                                    href={getTrackingUrl(order.trackingCode, order.shippingPostalCode)}
+                                    target="_blank"
+                                    rel="noopener"
+                                    className="inline-flex items-center gap-1 hover:underline underline-offset-4"
+                                >
+                                    Volgen bij {CARRIER_NAME} <ExternalLink size={12} />
+                                </a>
+                            </div>
                         )}
                         {billingAddress && (
                             <div className="pt-3">

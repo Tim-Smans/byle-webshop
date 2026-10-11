@@ -1,4 +1,5 @@
 import { formatDateString, getWithdrawalLastDay, isWithinWithdrawalPeriod } from "./withdrawal-period"
+import { getTrackingUrl } from "../shop/tracking"
 
 export type TimelineState = "done" | "current" | "upcoming"
 
@@ -7,7 +8,7 @@ export interface TimelineStep {
   description: string
   date: string | null
   state: TimelineState
-  trackingCode?: string
+  tracking?: { code: string; url: string }
 }
 
 interface TimelineOrder {
@@ -18,6 +19,7 @@ interface TimelineOrder {
   deliveredAt: string | null
   cancelledAt: string | null
   trackingCode: string | null
+  shippingPostalCode?: string | null
   withdrawals: { submittedAt: string; status: string; refundedAt: string | null }[]
 }
 
@@ -55,7 +57,10 @@ export function buildOrderTimeline(order: TimelineOrder, deliveryTimeText: strin
         : `Je kunstwerk wordt verpakt. ${deliveryTimeText}`,
       date: order.shippedAt,
       state: order.shippedAt ? "done" : "current",
-      trackingCode: order.shippedAt && order.trackingCode ? order.trackingCode : undefined,
+      tracking:
+        order.shippedAt && order.trackingCode
+          ? { code: order.trackingCode, url: getTrackingUrl(order.trackingCode, order.shippingPostalCode) }
+          : undefined,
     })
   }
 

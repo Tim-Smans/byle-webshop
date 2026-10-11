@@ -97,7 +97,7 @@ function ShipStep({ orderId }: Props) {
         <StepCard icon={<Truck size={20} />} title="Volgende stap: inpakken en verzenden">
             <div className="space-y-3">
                 <label className="block text-sm">
-                    <span className="block mb-1">Trackingcode (optioneel)</span>
+                    <span className="block mb-1">Trackingcode van bpost (optioneel)</span>
                     <Input
                         placeholder="bv. 323212345678901234567890"
                         value={trackingCode}
@@ -152,7 +152,7 @@ function DeliveredStep({ orderId, today, pickup }: Props & { pickup: boolean }) 
             <p className="text-sm text-muted-foreground mb-3">
                 {pickup
                     ? "Spreek een moment af met de klant. Duid daarna aan op welke dag het werk werd afgehaald."
-                    : "Zoek de trackingcode op bij de vervoerder en kijk op welke dag het pakket werd afgeleverd."}{" "}
+                    : "Kijk via \"Volgen bij bpost\" bij het leveringsadres op welke dag het pakket werd afgeleverd."}{" "}
                 Vanaf de dag erna loopt de bedenktijd van 14 dagen.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:items-end">

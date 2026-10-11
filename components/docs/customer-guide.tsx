@@ -83,7 +83,7 @@ export default function CustomerGuide() {
                         <p>Bij afhalen is het: Bestelling ontvangen → Afgehaald → Afgerond. <em>Afgerond</em> betekent dat de bedenktijd van 14 dagen voorbij is.</p>
 
                         <SubTitle>Verzending</SubTitle>
-                        <p>Je kunstwerk wordt zorgvuldig verpakt en <strong>binnen 5 werkdagen na betaling</strong> verzonden. Zodra het vertrekt, krijg je een e-mail, waar mogelijk met een trackingcode om je pakket te volgen bij de vervoerder. Die code staat ook op je bestelpagina. Kies je voor afhalen, dan neemt Lé contact op om een moment af te spreken.</p>
+                        <p>Je kunstwerk wordt zorgvuldig verpakt en <strong>binnen 5 werkdagen na betaling</strong> verzonden. Werken worden verzonden met bpost. Zodra je pakket vertrekt, krijg je een e-mail met een link om het te volgen bij bpost. Die link en de trackingcode staan ook op je bestelpagina. Kies je voor afhalen, dan neemt Lé contact op om een moment af te spreken.</p>
                         <p>Bij elk origineel werk hoort een <strong>Certificaat van Echtheid</strong>.</p>
                     </Topic>
 

@@ -63,8 +63,8 @@ export default function AdminGuide() {
                         <Flow steps={["Betaald", "Verzonden", "Geleverd", "Afgerond"]} />
                         <Steps>
                             <li>Pak het werk in en verzend het binnen 5 werkdagen.</li>
-                            <li>Vul de trackingcode van de vervoerder in (optioneel), laat <Ui>Klant een e-mail sturen</Ui> aangevinkt en klik op <Ui>Markeer als verzonden</Ui>. De klant krijgt de verzendmail met de trackingcode.</li>
-                            <li>Zoek de trackingcode op bij de vervoerder en kijk op welke dag het pakket afgeleverd werd. Vul die datum in bij <strong>Geleverd op</strong> en klik op <Ui>Markeer als geleverd</Ui>.</li>
+                            <li>Vul de trackingcode van bpost in (optioneel), laat <Ui>Klant een e-mail sturen</Ui> aangevinkt en klik op <Ui>Markeer als verzonden</Ui>. De klant krijgt de verzendmail met de knop <em>Volg je pakket bij bpost</em>.</li>
+                            <li>Klik op de bestelpagina op <Ui>Volgen bij bpost</Ui> en kijk op welke dag het pakket afgeleverd werd. Vul die datum in bij <strong>Geleverd op</strong> en klik op <Ui>Markeer als geleverd</Ui>.</li>
                             <li>Klaar. De bestelling staat op <em>Afgerond</em> zodra de bedenktijd voorbij is; daar hoef je niets voor te doen.</li>
                         </Steps>
 

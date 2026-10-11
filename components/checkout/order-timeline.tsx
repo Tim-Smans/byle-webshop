@@ -1,5 +1,6 @@
 import { Check } from "lucide-react"
 import type { TimelineStep } from "@/lib/orders/timeline"
+import { CARRIER_NAME } from "@/lib/shop/tracking"
 
 const dateFormatter = new Intl.DateTimeFormat("nl-BE", { dateStyle: "long", timeZone: "Europe/Brussels" })
 
@@ -45,10 +46,19 @@ export default function OrderTimeline({ steps }: { steps: TimelineStep[] }) {
                                     <p className="text-xs text-muted-foreground">{dateFormatter.format(new Date(step.date))}</p>
                                 )}
                                 <p className="text-sm text-muted-foreground mt-1">{step.description}</p>
-                                {step.trackingCode && (
+                                {step.tracking && (
                                     <p className="mt-1 text-sm">
-                                        Trackingcode:{" "}
-                                        <span className="font-mono font-medium select-all">{step.trackingCode}</span>
+                                        <a
+                                            href={step.tracking.url}
+                                            target="_blank"
+                                            rel="noopener"
+                                            className="underline underline-offset-4 hover:text-foreground"
+                                        >
+                                            Volg je pakket bij {CARRIER_NAME}
+                                        </a>
+                                        <span className="block text-muted-foreground">
+                                            Trackingcode: <span className="font-mono select-all">{step.tracking.code}</span>
+                                        </span>
                                     </p>
                                 )}
                             </div>
