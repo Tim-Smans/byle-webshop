@@ -14,7 +14,13 @@ export default function VoorwaardenPage() {
                     Legal
                 </p>
                 <h1 className="text-4xl font-light text-oker mb-2">Algemene voorwaarden</h1>
-                <p className="text-muted-foreground mb-10">Laatst bijgewerkt: {TERMS_LAST_UPDATED}</p>
+                <p className="text-muted-foreground mb-2">Laatst bijgewerkt: {TERMS_LAST_UPDATED}</p>
+                <a
+                    href="/voorwaarden/pdf"
+                    className="inline-block mb-10 text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
+                >
+                    Download als PDF
+                </a>
 
                 <TermsOfServiceContent />
             </div>

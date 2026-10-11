@@ -4,6 +4,7 @@ import { getSiteUrl, DELIVERY_TIME_TEXT, PICKUP_LOCATION_TEXT } from "../shop/co
 import { ensureInvoiceForOrder, getInvoice } from "../invoicing/invoice-service"
 import { invoiceFileName, renderInvoicePdf } from "../invoicing/invoice-pdf"
 import { renderWithdrawalFormPdf, WITHDRAWAL_FORM_FILENAME } from "../legal/withdrawal-form-pdf"
+import { renderTermsPdf, TERMS_PDF_FILENAME } from "../legal/terms-pdf"
 import { ADMIN_EMAIL, sendEmail, type EmailAttachment } from "./send"
 import { loadEmailOrder, type EmailOrder } from "./order-data"
 import OrderConfirmationEmail from "./templates/order-confirmation"
@@ -63,6 +64,8 @@ export async function sendOrderConfirmation(orderId: string, options: { force?: 
   if (invoice) {
     attachments.push({ filename: invoiceFileName(invoice), content: await renderInvoicePdf(invoice) })
   }
+  // The terms on a durable medium, as required for distance contracts
+  attachments.push({ filename: TERMS_PDF_FILENAME, content: await renderTermsPdf() })
   if (order.items.some((item) => item.withdrawalApplicable)) {
     attachments.push({ filename: WITHDRAWAL_FORM_FILENAME, content: await renderWithdrawalFormPdf() })
   }

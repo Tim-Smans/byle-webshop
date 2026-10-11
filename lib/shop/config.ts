@@ -19,8 +19,8 @@ export const RESERVATION_MINUTES = 30
 
 // Version of the terms the customer accepts at checkout. Update together with
 // the "Laatst bijgewerkt" date in the Terms of Service dialog.
-export const TERMS_VERSION = "2026-10-04"
-export const TERMS_LAST_UPDATED = "4 oktober 2026"
+export const TERMS_VERSION = "2026-10-11"
+export const TERMS_LAST_UPDATED = "11 oktober 2026"
 
 // Shown before ordering (legally required delivery information)
 export const DELIVERY_TIME_TEXT = "Je kunstwerk wordt binnen 5 werkdagen na betaling verzonden."

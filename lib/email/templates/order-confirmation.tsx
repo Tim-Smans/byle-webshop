@@ -107,7 +107,7 @@ export default function OrderConfirmationEmail({
       </Paragraph>
       <Paragraph style={{ fontSize: 14 }}>
         Op deze bestelling zijn de <a href={termsUrl} style={{ color: "#6b4a2b" }}>algemene voorwaarden</a> van
-        Art by Lé van toepassing. Vragen? Antwoord gewoon op deze e-mail.
+        Art by Lé van toepassing; je vindt ze ook als PDF in bijlage. Vragen? Antwoord gewoon op deze e-mail.
       </Paragraph>
 
       <Paragraph style={{ marginTop: 24 }}>

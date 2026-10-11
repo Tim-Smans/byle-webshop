@@ -17,9 +17,16 @@ export function getThumbUrl(url: string): string {
 }
 
 const priceFormatter = new Intl.NumberFormat("nl-BE", { style: "currency", currency: "EUR" })
+const wholePriceFormatter = new Intl.NumberFormat("nl-BE", {
+  style: "currency",
+  currency: "EUR",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+})
 
+// Belgian format; decimals only when there are any: "€ 1.250", "€ 12,50"
 export function formatPrice(amount: number): string {
-  return priceFormatter.format(amount)
+  return Number.isInteger(amount) ? wholePriceFormatter.format(amount) : priceFormatter.format(amount)
 }
 
 export function normalizeLabel(title: string): string {

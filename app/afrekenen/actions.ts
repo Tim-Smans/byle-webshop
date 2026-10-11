@@ -1,6 +1,8 @@
 "use server";
 
 import { Locale } from "@mollie/api-client";
+import { after } from "next/server";
+import { deleteOldUnpaidOrders } from "@/lib/orders/cleanup";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getMollieClient } from "@/lib/mollie/client";
 import {
@@ -146,6 +148,9 @@ export async function placeOrder(raw: Record<string, unknown>): Promise<PlaceOrd
 
     const checkoutUrl = payment.getCheckoutUrl();
     if (!checkoutUrl) throw new Error("Mollie returned no checkout URL");
+
+    // Retention from the privacy policy, done after the response is sent
+    after(deleteOldUnpaidOrders);
 
     return {
       ok: true,

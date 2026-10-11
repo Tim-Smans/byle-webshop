@@ -12,6 +12,7 @@ import Link from "next/link"
 import { FaStar } from "react-icons/fa"
 import { useAdmin } from "@/lib/hooks/use-admin"
 import { primeCache } from "@/lib/client/image-cache"
+import { formatPrice } from "@/lib/utils"
 import { useRouter } from "next/navigation";
 
 const FeaturedPieces: FC = () => {
@@ -198,7 +199,7 @@ const FeaturedPieces: FC = () => {
                       </span>
                     ) : (
                       <span className="text-lg font-light text-foreground">
-                        € {piece.price.toLocaleString("en-US")}
+                        {formatPrice(piece.price)}
                       </span>
                     )}
                     <button

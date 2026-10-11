@@ -24,6 +24,7 @@ import { useFeedback } from "@/lib/context/feedback-context";
 import { FaStar } from "react-icons/fa";
 import { useAdmin } from "@/lib/hooks/use-admin";
 import { primeCache } from "@/lib/client/image-cache";
+import { formatPrice } from "@/lib/utils";
 
 const ShopComponent: FC = () => {
     const searchParams = useSearchParams();
@@ -463,7 +464,7 @@ const ShopComponent: FC = () => {
                                             </span>
                                         ) : (
                                             <span className="text-lg font-light text-foreground">
-                                                € {piece.price.toLocaleString("en-US")}
+                                                {formatPrice(piece.price)}
                                             </span>
                                         )}
                                         <button

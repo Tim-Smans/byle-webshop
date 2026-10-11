@@ -6,6 +6,7 @@ import Specifications from "./specifications";
 import DetailsActions from "./details-actions";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { formatPrice } from "@/lib/utils";
 
 interface Props {
     artPiece: ArtPiece
@@ -38,7 +39,7 @@ const ProductDetails: FC<Props> = ({ artPiece }) => {
             {/* Price */}
             <div className="mb-8">
                 <p className="text-4xl font-light text-foreground">
-                    € {artPiece.price.toLocaleString()}
+                    {formatPrice(artPiece.price)}
                 </p>
                 {!artPiece.isSold && (
                     <>

@@ -3,6 +3,7 @@
 import { FC } from "react"
 import Link from "next/link"
 import { TERMS_LAST_UPDATED } from "@/lib/shop/config"
+import { TERMS_INTRO, TERMS_SECTIONS } from "@/lib/legal/terms"
 import {
     Dialog,
     DialogContent,
@@ -37,7 +38,7 @@ export const PrivacyPolicyDialog: FC<LegalDialogProps> = ({
                     </DialogTitle>
 
                     <p className="text-muted-foreground pt-2">
-                        Laatst bijgewerkt: 3 oktober 2026
+                        Laatst bijgewerkt: 11 oktober 2026
                     </p>
                 </DialogHeader>
 
@@ -63,7 +64,10 @@ export const PrivacyPolicyDialog: FC<LegalDialogProps> = ({
                         </p>
 
                         <div className="mt-4 p-4 rounded-2xl bg-muted/40 border border-border/40">
-                            <p>E-mail: byle.art@outlook.com</p>
+                            <p>Art by Lé</p>
+                            <p>Hei-Ende 102, 2340 Vlimmeren (Beerse), België</p>
+                            <p>Ondernemingsnummer: 1043.462.454</p>
+                            <p className="mt-3">E-mail: byle.art@outlook.com</p>
                         </div>
 
                         <p className="mt-4">
@@ -86,27 +90,24 @@ export const PrivacyPolicyDialog: FC<LegalDialogProps> = ({
                             <li>e-mailadres</li>
                             <li>telefoonnummer, indien opgegeven</li>
                             <li>factuur- en leveringsadres</li>
-                            <li>gegevens over je bestelling</li>
+                            <li>bedrijfsnaam en btw-nummer, als je als bedrijf bestelt</li>
+                            <li>gegevens over je bestelling, betaling, levering en factuur</li>
+                            <li>gegevens over een herroeping, retour of terugbetaling</li>
+                            <li>je e-mailadres, als je je inschrijft voor de nieuwsbrief</li>
                             <li>informatie die je zelf doorgeeft via e-mail of een contactformulier</li>
-                            <li>gegevens die nodig zijn voor betaling en levering</li>
                         </ul>
 
                         <p className="mt-4">
-                            Betalingsgegevens kunnen worden verwerkt via de betaalprovider die voor
-                            de webshop wordt gebruikt.
+                            Je betaalgegevens, zoals je kaart- of rekeningnummer, worden rechtstreeks
+                            door de betaalprovider Mollie verwerkt. Art by Lé krijgt die gegevens niet
+                            te zien, alleen of en hoe er betaald werd.
                         </p>
 
                         <p className="mt-4">
-                            Daarnaast kunnen automatisch technische gegevens worden verzameld, zoals:
+                            Daarnaast worden automatisch beperkte technische gegevens verwerkt, zoals
+                            je IP-adres en browsertype (nodig om de website te tonen en te beveiligen)
+                            en anonieme bezoekersstatistieken zoals bezochte pagina&apos;s.
                         </p>
-
-                        <ul className="mt-4 space-y-2 list-disc pl-6">
-                            <li>IP-adres</li>
-                            <li>browsertype</li>
-                            <li>bezochte pagina’s</li>
-                            <li>duur van het bezoek</li>
-                            <li>noodzakelijke cookies en, indien toegestaan, statistische cookies</li>
-                        </ul>
                     </div>
 
                     <div>
@@ -126,14 +127,22 @@ export const PrivacyPolicyDialog: FC<LegalDialogProps> = ({
                             <li>contact opnemen over een bestelling</li>
                             <li>vragen of berichten beantwoorden</li>
                             <li>voldoen aan wettelijke en administratieve verplichtingen</li>
+                            <li>herroepingen, retours en terugbetalingen afhandelen</li>
+                            <li>de nieuwsbrief versturen, als je je daarvoor hebt ingeschreven</li>
                             <li>de website veilig en goed laten functioneren</li>
-                            <li>bezoekersstatistieken bekijken, indien hiervoor toestemming is gegeven</li>
+                            <li>anonieme bezoekersstatistieken bekijken om de website te verbeteren</li>
                         </ul>
 
                         <p className="mt-4">
-                            Gegevens die nodig zijn om een bestelling uit te voeren, worden verwerkt
-                            voor de uitvoering van die bestelling.
+                            Dit gebeurt op basis van:
                         </p>
+
+                        <ul className="mt-4 space-y-2 list-disc pl-6">
+                            <li>de uitvoering van de overeenkomst, voor alles wat met je bestelling te maken heeft</li>
+                            <li>een wettelijke verplichting, bijvoorbeeld de boekhoud- en factuurregels en het herroepingsrecht</li>
+                            <li>je toestemming, voor de nieuwsbrief (je kan je altijd uitschrijven)</li>
+                            <li>een gerechtvaardigd belang, voor de beveiliging van de website en anonieme statistieken</li>
+                        </ul>
 
                         <p className="mt-4">
                             Persoonsgegevens worden niet verkocht aan derden.
@@ -151,14 +160,21 @@ export const PrivacyPolicyDialog: FC<LegalDialogProps> = ({
                         </p>
 
                         <ul className="mt-4 space-y-2 list-disc pl-6">
-                            <li>de betaalprovider</li>
-                            <li>de vervoerder die het kunstwerk levert</li>
-                            <li>de hosting- of webshopprovider</li>
-                            <li>boekhoudkundige of administratieve dienstverleners wanneer dit wettelijk nodig is</li>
+                            <li>Mollie B.V. (Nederland), voor de online betalingen en terugbetalingen</li>
+                            <li>de vervoerder die het kunstwerk levert (naam, adres en eventueel telefoonnummer)</li>
+                            <li>Supabase, voor de opslag van de gegevens van de webshop</li>
+                            <li>Vercel, voor de hosting van de website en de anonieme bezoekersstatistieken</li>
+                            <li>Resend, voor het versturen van e-mails over je bestelling</li>
+                            <li>de boekhouder, wanneer dit wettelijk nodig is</li>
                         </ul>
 
                         <p className="mt-4">
-                            Deze partijen ontvangen alleen de gegevens die nodig zijn voor hun taak.
+                            Deze partijen ontvangen alleen de gegevens die nodig zijn voor hun taak en
+                            mogen ze niet voor eigen doeleinden gebruiken. Sommige van deze diensten
+                            kunnen gegevens buiten de Europese Unie verwerken. In dat geval gebeurt dat
+                            alleen met de waarborgen die de privacywetgeving voorschrijft, zoals het
+                            EU-VS-gegevensprivacykader of de standaardcontractbepalingen van de Europese
+                            Commissie.
                         </p>
                     </div>
 
@@ -168,25 +184,21 @@ export const PrivacyPolicyDialog: FC<LegalDialogProps> = ({
                         </h3>
 
                         <p>
-                            Deze website gebruikt cookies die noodzakelijk kunnen zijn voor de goede
-                            werking van de website en webshop, bijvoorbeeld voor het winkelmandje of
-                            beveiliging.
+                            Deze website gebruikt geen marketing- of trackingcookies.
                         </p>
 
                         <p className="mt-4">
-                            Voor niet-noodzakelijke cookies, zoals bepaalde statistische of
-                            marketingcookies, wordt vooraf toestemming gevraagd via de
-                            cookie-instellingen.
+                            Je winkelmand, je favorieten en een lopende bestelling worden alleen in je
+                            eigen browser bewaard (lokale opslag), zodat ze niet verloren gaan wanneer je
+                            de pagina sluit. Die gegevens worden niet naar derden gestuurd. Daarnaast
+                            gebruikt het beheergedeelte een noodzakelijke cookie om ingelogd te blijven.
                         </p>
 
                         <p className="mt-4">
-                            Strikt noodzakelijke cookies kunnen zonder voorafgaande toestemming worden
-                            gebruikt. Voor andere cookies wordt, waar nodig, toestemming gevraagd.
-                        </p>
-
-                        <p className="mt-4">
-                            Je kan je cookievoorkeuren aanpassen via de cookie-instellingen van de
-                            website en cookies ook verwijderen via je browser.
+                            De bezoekersstatistieken worden zonder cookies en anoniem verzameld. Omdat
+                            alleen strikt noodzakelijke opslag gebruikt wordt, is hiervoor geen
+                            toestemming nodig. Je kan deze gegevens altijd verwijderen via de
+                            instellingen van je browser.
                         </p>
                     </div>
 
@@ -200,16 +212,21 @@ export const PrivacyPolicyDialog: FC<LegalDialogProps> = ({
                             waarvoor ze werden verzameld.
                         </p>
 
-                        <p className="mt-4">
-                            Gegevens die deel uitmaken van bestellingen, facturen of de boekhouding
-                            worden bewaard zolang dit wettelijk verplicht is. Voor bepaalde
-                            boekhoudkundige documenten geldt een wettelijke bewaartermijn van 10 jaar.
-                        </p>
-
-                        <p className="mt-4">
-                            Andere gegevens, bijvoorbeeld uit een gewone contactaanvraag, worden
-                            verwijderd zodra ze niet meer nodig zijn.
-                        </p>
+                        <ul className="mt-4 space-y-2 list-disc pl-6">
+                            <li>
+                                bestellingen, facturen, creditnota&apos;s en gegevens over herroepingen en
+                                terugbetalingen: 10 jaar, omdat de boekhoudwetgeving dat verplicht
+                            </li>
+                            <li>
+                                bestellingen die nooit betaald werden: 12 maanden, daarna worden ze
+                                automatisch verwijderd
+                            </li>
+                            <li>nieuwsbrief: tot je je uitschrijft</li>
+                            <li>
+                                contactaanvragen: tot je vraag beantwoord is en er geen opvolging meer
+                                nodig is
+                            </li>
+                        </ul>
                     </div>
 
                     <div>
@@ -226,11 +243,19 @@ export const PrivacyPolicyDialog: FC<LegalDialogProps> = ({
                             <li>onjuiste gegevens te laten verbeteren</li>
                             <li>in bepaalde gevallen gegevens te laten verwijderen</li>
                             <li>bezwaar te maken tegen bepaalde verwerkingen</li>
+                            <li>de verwerking in bepaalde gevallen te laten beperken</li>
+                            <li>je gegevens in een gangbaar formaat te ontvangen (overdraagbaarheid)</li>
                             <li>je toestemming in te trekken wanneer een verwerking op toestemming gebaseerd is</li>
                         </ul>
 
                         <p className="mt-4">
                             Voor vragen of verzoeken kan je contact opnemen via byle.art@outlook.com.
+                        </p>
+
+                        <p className="mt-4">
+                            Ben je niet tevreden over hoe met je gegevens wordt omgegaan, dan kan je een
+                            klacht indienen bij de Gegevensbeschermingsautoriteit
+                            (www.gegevensbeschermingsautoriteit.be).
                         </p>
                     </div>
 
@@ -330,14 +355,20 @@ export const OrderAndDeliveryDialog: FC<LegalDialogProps> = ({
                         </h3>
 
                         <p>
-                            De volledige betaling gebeurt bij de bestelling via de betaalmogelijkheden
-                            die in de webshop worden aangeboden.
+                            De volledige betaling gebeurt bij de bestelling, veilig via Mollie. Je kan
+                            onder andere betalen met Bancontact, een kredietkaart of Apple Pay.
                         </p>
 
                         <p className="mt-4">
-                            Alle prijzen worden duidelijk bij het kunstwerk vermeld. Eventuele
-                            verzendkosten worden vóór het afronden van je bestelling weergegeven, zodat
-                            je vooraf weet wat het totaalbedrag is.
+                            Alle prijzen worden duidelijk bij het kunstwerk vermeld. De verzendkosten
+                            hangen af van het land en van het formaat van het werk. Bij meerdere werken
+                            betaal je één keer verzending, aan het tarief van het grootste werk. Je ziet
+                            het totaalbedrag altijd vóór je je bestelling bevestigt.
+                        </p>
+
+                        <p className="mt-4">
+                            Art by Lé valt onder de bijzondere vrijstellingsregeling voor kleine
+                            ondernemingen; er wordt geen btw aangerekend.
                         </p>
                     </div>
 
@@ -348,7 +379,13 @@ export const OrderAndDeliveryDialog: FC<LegalDialogProps> = ({
 
                         <p>
                             Elk kunstwerk wordt met veel zorg verpakt om het zo goed mogelijk te
-                            beschermen tijdens het transport.
+                            beschermen tijdens het transport. Je kunstwerk wordt binnen 5 werkdagen na
+                            betaling verzonden.
+                        </p>
+
+                        <p className="mt-4">
+                            Verzenden kan naar de landen die je bij het afrekenen kan kiezen. Woon je
+                            elders? Neem dan contact op voor een persoonlijke berekening.
                         </p>
 
                         <p className="mt-4">
@@ -535,339 +572,42 @@ export const TermsOfServiceDialog: FC<LegalDialogProps> = ({
 // Shared by the dialog and the /voorwaarden page (linked from order e-mails)
 export const TermsOfServiceContent: FC = () => {
     return (
-                <div className="space-y-8 text-muted-foreground leading-relaxed">
-                    <p>
-                        Welkom bij Art by Lé. Deze voorwaarden zijn van toepassing op het gebruik
-                        van deze website en op aankopen die rechtstreeks via de webshop van
-                        Art by Lé worden gedaan.
-                    </p>
+        <div className="space-y-8 text-muted-foreground leading-relaxed">
+            <p>{TERMS_INTRO}</p>
 
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            1. Art by Lé
-                        </h3>
+            {TERMS_SECTIONS.map((section) => (
+                <div key={section.title}>
+                    <h3 className="text-xl text-foreground font-medium mb-3">
+                        {section.title}
+                    </h3>
 
-                        <p>
-                            Deze website en webshop behoren tot Art by Lé.
-                        </p>
-
-                        <div className="mt-4 p-4 rounded-2xl bg-muted/40 border border-border/40">
-                            <p>Art by Lé</p>
-                            <p>Hei-Ende 102</p>
-                            <p>2340 Vlimmeren (Beerse)</p>
-                            <p>België</p>
-                            <p className="mt-3">E-mail: byle.art@outlook.com</p>
-                            <p>Telefoon: +32 491 364 332</p>
-                            <p>Ondernemingsnummer: 1043.462.454</p>
-                            <p>Btw-nummer: BE 1043.462.454</p>
-                        </div>
-
-                        <p className="mt-4">
-                            Voor vragen over een kunstwerk, bestelling of deze voorwaarden kan je
-                            contact opnemen via bovenstaande gegevens.
-                        </p>
-
-                        <p className="mt-4">
-                            De website wordt technisch onderhouden door Tim Smans.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            2. Gebruik van de website
-                        </h3>
-
-                        <p>
-                            Deze website dient voor de presentatie en verkoop van originele,
-                            handgemaakte schilderijen, mixed-media kunstwerken en sculpturen van
-                            Art by Lé.
-                        </p>
-
-                        <p className="mt-4">
-                            De website mag uitsluitend op een wettelijke en respectvolle manier
-                            worden gebruikt.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            3. Intellectuele eigendom
-                        </h3>
-
-                        <p>
-                            Alle foto&apos;s, teksten, ontwerpen, kunstwerken en andere creatieve
-                            inhoud op deze website zijn eigendom van Art by Lé, tenzij anders vermeld.
-                        </p>
-
-                        <p className="mt-4">
-                            Het is niet toegestaan om foto&apos;s, teksten of ontwerpen zonder
-                            voorafgaande toestemming te kopiëren, verspreiden, reproduceren,
-                            publiceren of commercieel te gebruiken.
-                        </p>
-
-                        <p className="mt-4">
-                            De aankoop van een kunstwerk houdt geen overdracht in van auteursrechten
-                            of reproductierechten.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            4. Productinformatie
-                        </h3>
-
-                        <p>
-                            Elk kunstwerk wordt zo duidelijk en waarheidsgetrouw mogelijk beschreven
-                            en afgebeeld.
-                        </p>
-
-                        <p className="mt-4">
-                            Omdat het om handgemaakte kunst gaat, kunnen structuren, details en
-                            materialen kleine natuurlijke onregelmatigheden bevatten.
-                        </p>
-
-                        <p className="mt-4">
-                            Kleuren kunnen daarnaast licht verschillen naargelang de instellingen en
-                            weergave van het gebruikte scherm.
-                        </p>
-
-                        <p className="mt-4">
-                            Deze verschillen maken deel uit van het handgemaakte karakter van het werk
-                            en betekenen niet automatisch dat het kunstwerk gebrekkig is.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            5. Prijzen
-                        </h3>
-
-                        <p>
-                            De actuele verkoopprijs wordt bij ieder kunstwerk vermeld.
-                        </p>
-
-                        <p className="mt-4">
-                            Eventuele bijkomende kosten, zoals verzendkosten, worden vóór het afronden
-                            van de bestelling duidelijk meegedeeld.
-                        </p>
-
-                        <p className="mt-4">
-                            Prijzen en beschikbare werken kunnen worden aangepast zolang er nog geen
-                            bestelling tot stand is gekomen.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            6. Beschikbaarheid
-                        </h3>
-
-                        <p>
-                            De meeste kunstwerken van Art by Lé zijn unieke werken waarvan slechts
-                            één exemplaar bestaat.
-                        </p>
-
-                        <p className="mt-4">
-                            Een kunstwerk is daarom slechts beschikbaar zolang het niet verkocht is.
-                        </p>
-
-                        <p className="mt-4">
-                            Mocht uitzonderlijk blijken dat een besteld werk toch niet meer
-                            beschikbaar is, dan wordt de koper hiervan zo snel mogelijk op de hoogte
-                            gebracht en wordt een reeds ontvangen betaling terugbetaald.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            7. Bestellen en betalen
-                        </h3>
-
-                        <p>
-                            Bestellingen kunnen rechtstreeks via de webshop worden geplaatst via de
-                            aangeboden betaalmogelijkheden.
-                        </p>
-
-                        <p className="mt-4">
-                            Na het plaatsen van de bestelling ontvangt de koper een bevestiging.
-                        </p>
-
-                        <p className="mt-4">
-                            Meer praktische informatie over betaling, verpakking, verzending, afhaling
-                            en levering staat op de pagina Bestellen &amp; levering.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            8. Verzending en levering
-                        </h3>
-
-                        <p>
-                            Kunstwerken worden zorgvuldig verpakt voor transport.
-                        </p>
-
-                        <p className="mt-4">
-                            Wanneer Art by Lé de verzending regelt, blijft het kunstwerk de
-                            verantwoordelijkheid van Art by Lé totdat het bij de koper is afgeleverd.
-                        </p>
-
-                        <p className="mt-4">
-                            Wanneer een pakket beschadigd aankomt, wordt gevraagd zo snel mogelijk
-                            contact op te nemen en duidelijke foto&apos;s van het kunstwerk, de
-                            beschadiging en de verpakking te bezorgen.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            9. Bedenktijd en retourneren
-                        </h3>
-
-                        <p>
-                            Voor bestaande kunstwerken die als consument online via de webshop worden
-                            gekocht, geldt het wettelijke herroepingsrecht wanneer dit volgens de
-                            toepasselijke wetgeving van toepassing is.
-                        </p>
-
-                        <p className="mt-4">
-                            De praktische voorwaarden en informatie hierover staan vermeld onder
-                            Bestellen &amp; levering.
-                        </p>
-
-                        <p className="mt-4">
-                            Buiten de wettelijke bedenktijd worden geen vrijwillige retouren of
-                            omruilingen aangeboden.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            10. Kunstwerk op maat
-                        </h3>
-
-                        <p>
-                            Voor kunstwerken die speciaal volgens persoonlijke wensen of specificaties
-                            worden gemaakt, gelden afzonderlijke voorwaarden.
-                        </p>
-
-                        <p className="mt-4">
-                            Voor een opdracht wordt vooraf een richtprijs besproken en wordt een
-                            aanbetaling van 25% gevraagd.
-                        </p>
-
-                        <p className="mt-4">
-                            De resterende 75% wordt betaald wanneer het kunstwerk klaar is en vóór
-                            verzending of afhaling.
-                        </p>
-
-                        <p className="mt-4">
-                            Een kunstwerk op maat wordt speciaal volgens de wensen van de opdrachtgever
-                            gemaakt. Daarom geldt hiervoor niet de gebruikelijke bedenktijd voor online
-                            aankopen wanneer het werk onder de wettelijke uitzondering voor maatwerk valt.
-                        </p>
-
-                        <p className="mt-4">
-                            Alle informatie over prijzen, werkwijze, levertijd en voorwaarden staat op
-                            de pagina{" "}
-                            <Link href="/maatwerk" className="underline hover:text-foreground transition-colors">
-                                Kunstwerk op maat
-                            </Link>
-                            .
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            11. Wettelijke rechten en garantie
-                        </h3>
-
-                        <p>
-                            Art by Lé staat ervoor in dat een geleverd kunstwerk overeenkomt met wat
-                            werd besteld en beschikt over de eigenschappen die redelijkerwijs van het
-                            kunstwerk mogen worden verwacht.
-                        </p>
-
-                        <p className="mt-4">
-                            Wanneer een kunstwerk beschadigd, verkeerd of niet volgens de overeenkomst
-                            wordt geleverd, blijven de wettelijke rechten van de consument van
-                            toepassing.
-                        </p>
-
-                        <p className="mt-4">
-                            De wettelijke conformiteitsgarantie van 2 jaar voor consumptiegoederen
-                            is van toepassing.
-                        </p>
-
-                        <p className="mt-4">
-                            Het handgemaakte karakter, zichtbare textuur en kleine natuurlijke
-                            verschillen die eigen zijn aan de gebruikte materialen worden daarbij niet
-                            automatisch als een gebrek beschouwd.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            12. Externe links
-                        </h3>
-
-                        <p>
-                            Deze website kan links bevatten naar websites of diensten van derden.
-                        </p>
-
-                        <p className="mt-4">
-                            Art by Lé is niet verantwoordelijk voor de inhoud, beschikbaarheid of
-                            privacypraktijken van externe websites.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            13. Aansprakelijkheid
-                        </h3>
-
-                        <p>
-                            Art by Lé doet haar best om de informatie op deze website correct en
-                            actueel te houden.
-                        </p>
-
-                        <p className="mt-4">
-                            Kennelijke fouten of vergissingen in teksten, prijzen of technische
-                            informatie kunnen worden gecorrigeerd.
-                        </p>
-
-                        <p className="mt-4">
-                            Niets in deze voorwaarden beperkt de wettelijke rechten van consumenten of
-                            aansprakelijkheid die volgens de toepasselijke wetgeving niet kan worden
-                            uitgesloten.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            14. Privacy
-                        </h3>
-
-                        <p>
-                            Voor informatie over de verwerking en bescherming van persoonsgegevens kan
-                            je het Privacy Policy van Art by Lé raadplegen.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="text-xl text-foreground font-medium mb-3">
-                            15. Wijzigingen
-                        </h3>
-
-                        <p>
-                            Deze voorwaarden kunnen worden aangepast wanneer de website, webshop,
-                            werkwijze of toepasselijke regelgeving verandert.
-                        </p>
-
-                        <p className="mt-4">
-                            De meest recente versie is steeds beschikbaar op deze website.
-                        </p>
-                    </div>
+                    {section.blocks.map((block, index) =>
+                        block.kind === "box" ? (
+                            <div key={index} className="mt-4 p-4 rounded-2xl bg-muted/40 border border-border/40">
+                                {block.lines.map((line) => (
+                                    <p key={line}>{line}</p>
+                                ))}
+                            </div>
+                        ) : (
+                            <p key={index} className={index > 0 ? "mt-4" : undefined}>
+                                {block.content.map((part, partIndex) =>
+                                    typeof part === "string" ? (
+                                        part
+                                    ) : (
+                                        <Link
+                                            key={partIndex}
+                                            href={part.href}
+                                            className="underline hover:text-foreground transition-colors"
+                                        >
+                                            {part.text}
+                                        </Link>
+                                    )
+                                )}
+                            </p>
+                        )
+                    )}
                 </div>
+            ))}
+        </div>
     )
 }
