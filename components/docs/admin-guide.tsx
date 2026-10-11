@@ -11,6 +11,7 @@ const TOPICS = [
     { id: "a-annulaties", title: "Annulaties" },
     { id: "a-herroepingen", title: "Herroepingen" },
     { id: "a-conflict", title: "Voorraadconflict" },
+    { id: "a-mollie", title: "Mollie" },
     { id: "a-facturen", title: "Facturen" },
     { id: "a-mails", title: "Automatische e-mails" },
     { id: "a-kunstwerken", title: "Kunstwerken" },
@@ -38,7 +39,7 @@ export default function AdminGuide() {
                             <li><strong>Klaar te maken</strong>: betaalde bestellingen die je nog moet verzenden of laten afhalen. Oranje als er iets wacht.</li>
                             <li><strong>Open herroepingen</strong>: herroepingen die je nog moet afhandelen. Rood als er iets openstaat.</li>
                             <li><strong>Omzet deze maand</strong>: betaalde bestellingen min terugbetalingen.</li>
-                            <li>De kaarten <strong>Bestellingen</strong>, <strong>Verzending</strong>, <strong>Herroepingen &amp; retours</strong> en <strong>Facturen</strong>.</li>
+                            <li>De kaarten <strong>Bestellingen</strong>, <strong>Mollie</strong>, <strong>Verzending</strong>, <strong>Herroepingen &amp; retours</strong> en <strong>Facturen</strong>.</li>
                         </Bullets>
                         <p>Je hoeft het dashboard niet dagelijks te controleren: bij elke nieuwe bestelling, annulatie en herroeping krijg je een e-mail.</p>
                     </Topic>
@@ -137,6 +138,66 @@ export default function AdminGuide() {
                         <p>Neem contact op met de klant en gebruik <Ui>Bestelling annuleren en terugbetalen</Ui>. Het werk blijft bij de andere koper.</p>
                     </Topic>
 
+                    <Topic id="a-mollie" title="Mollie">
+                        <p>
+                            Onder <Link href="/admin/mollie" className={linkClass}>Mollie</Link> zie je alle betalingen, terugbetalingen
+                            en chargebacks, rechtstreeks uit Mollie en gekoppeld aan je bestellingen. Bovenaan staat of je in
+                            <strong> Testmodus</strong> of <strong>Live</strong> werkt. Kies de periode met de knoppen
+                            <em> Laatste 30 dagen</em>, <em>Deze maand</em>, <em>Dit jaar</em> of <em>Alles</em>.
+                        </p>
+
+                        <SubTitle>Aandacht nodig</SubTitle>
+                        <p>Dit rode blok verschijnt alleen als er iets niet klopt:</p>
+                        <Bullets>
+                            <li>
+                                <strong>Betaald bij Mollie, maar niet in de webshop</strong>, bijvoorbeeld als de melding van Mollie niet
+                                aankwam. Klik op <Ui>Nu synchroniseren</Ui>: de bestelling gaat op betaald en de factuur en de
+                                bevestiging worden verstuurd.
+                            </li>
+                            <li>
+                                <strong>Terugbetalingen met een andere status dan bij Mollie.</strong> Klik op <Ui>Statussen bijwerken</Ui>.
+                            </li>
+                            <li>
+                                <strong>Mislukte terugbetalingen.</strong> Meestal is je Mollie-saldo te laag. Vul het aan in Mollie en
+                                betaal opnieuw terug vanaf de bestelling.
+                            </li>
+                        </Bullets>
+
+                        <SubTitle>Cijfers</SubTitle>
+                        <Table
+                            head={["Cijfer", "Betekenis"]}
+                            rows={[
+                                ["Ontvangen", "Alle betaalde bestellingen in de periode."],
+                                ["Terugbetaald", "Wat je via annulaties en herroepingen terugbetaalde."],
+                                ["Netto", "Ontvangen min terugbetaald en chargebacks."],
+                                ["Gemiddelde betaling", "Ontvangen gedeeld door het aantal betaalde bestellingen."],
+                                ["Geslaagde betalingen", "Welk deel van de afgeronde betaalpogingen effectief betaald werd. Verlopen of geannuleerd betekent dat de klant het betalen niet afrondde."],
+                                ["Chargebacks", "Betalingen die een klant via zijn bank of kaartuitgever terugdraaide. Hoort normaal 0 te zijn."],
+                            ]}
+                        />
+                        <p>
+                            Daaronder staan een grafiek van wat je per dag (of per maand) ontving, met het bedrag als je over een staaf
+                            gaat, en de verdeling per betaalmethode en per status.
+                        </p>
+
+                        <SubTitle>Lijsten</SubTitle>
+                        <Bullets>
+                            <li>
+                                <strong>Betalingen</strong>: filter op status of zoek op bestelnummer, naam of Mollie-id. Klik op het
+                                bestelnummer om de bestelling te openen, of op het Mollie-id om de betaling in Mollie te bekijken.
+                            </li>
+                            <li><strong>Terugbetalingen</strong> en <strong>Chargebacks</strong>, telkens met de bijhorende bestelling.</li>
+                            <li>
+                                <strong>Ingeschakelde betaalmethoden</strong>, met het minimum- en maximumbedrag. Staat overschrijving aan,
+                                dan krijg je een waarschuwing: zet die best uit in Mollie.
+                            </li>
+                        </Bullets>
+                        <Note>
+                            Je <strong>saldo</strong>, de <strong>uitbetalingen</strong> naar je rekening en de <strong>Mollie-kosten</strong>{" "}
+                            staan niet op deze pagina. Die vind je in het Mollie-dashboard zelf, via <Ui>Open Mollie-dashboard</Ui>.
+                        </Note>
+                    </Topic>
+
                     <Topic id="a-facturen" title="Facturen">
                         <Bullets>
                             <li>Een factuur wordt automatisch gemaakt zodra een bestelling betaald is, en gaat mee met de bevestigingsmail.</li>
@@ -199,11 +260,13 @@ export default function AdminGuide() {
                         <SubTitle>De klant zegt dat de bevestigingsmail niet aankwam</SubTitle>
                         <p>Vraag eerst om in de map ongewenste e-mail te kijken. Gebruik anders <Ui>Bevestiging opnieuw versturen</Ui> op de bestelpagina. De mail gaat opnieuw, met de bijlagen.</p>
                         <SubTitle>Mollie toont &quot;betaald&quot;, maar de bestelling wacht nog op betaling</SubTitle>
-                        <p>Open de bestelling via <Ui>Bekijk zoals de klant</Ui>. Die pagina vraagt de status opnieuw op bij Mollie en zet de bestelling dan alsnog op betaald, met factuur en mails.</p>
+                        <p>Open <Link href="/admin/mollie" className={linkClass}>Mollie</Link>: de betaling staat dan onder <strong>Aandacht nodig</strong>. Klik op <Ui>Nu synchroniseren</Ui>. De bestelling gaat op betaald, met factuur en mails. Je kan ook de bestelling openen via <Ui>Bekijk zoals de klant</Ui>; die pagina vraagt de status ook opnieuw op bij Mollie.</p>
                         <SubTitle>Een betaalde bestelling heeft geen factuur</SubTitle>
                         <p>Klik op <Link href="/admin/facturen" className={linkClass}>Facturen</Link> → <Ui>Ontbrekende facturen aanmaken</Ui>.</p>
                         <SubTitle>Terugbetalen lukt niet</SubTitle>
-                        <p>Mollie betaalt terug vanuit je Mollie-saldo. Is dat te laag, dan weigert Mollie. Kijk in het Mollie-dashboard, vul je saldo aan en probeer opnieuw. Er is in dat geval niets terugbetaald.</p>
+                        <p>Mollie betaalt terug vanuit je Mollie-saldo. Is dat te laag, dan weigert Mollie. Kijk in het Mollie-dashboard, vul je saldo aan en probeer opnieuw. Er is in dat geval niets terugbetaald. Mislukte terugbetalingen zie je ook onder <Link href="/admin/mollie" className={linkClass}>Mollie</Link> → <strong>Aandacht nodig</strong>.</p>
+                        <SubTitle>Een terugbetaling blijft op &quot;in behandeling&quot; staan</SubTitle>
+                        <p>Mollie voert een terugbetaling soms pas na een tijdje uit. Klik onder <Link href="/admin/mollie" className={linkClass}>Mollie</Link> op <Ui>Statussen bijwerken</Ui> om de actuele status uit Mollie over te nemen.</p>
                         <SubTitle>Een werk staat na een terugbetaling in de verkeerde collectie</SubTitle>
                         <p>Open het werk via <Ui>aanpassen</Ui> en kies de juiste collectie.</p>
                         <SubTitle>Iets anders</SubTitle>
