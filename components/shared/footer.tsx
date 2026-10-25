@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { FaEtsy, FaFacebook, FaInstagram } from "react-icons/fa"
+import { FaFacebook, FaInstagram } from "react-icons/fa"
 import { Mail, MapPin, Phone } from "lucide-react"
 import { FC } from "react"
 import { OrderAndDeliveryDialog, PrivacyPolicyDialog, TermsOfServiceDialog } from "../dialogs/service-dialogs"
@@ -19,7 +19,7 @@ const footerLinks = {
 
 const Footer: FC = () => {
   return (
-    <footer id="contact" className="bg-muted/50 border-t border-border">
+    <footer id="contact" className="bg-muted/50 border-t border-border print:hidden">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
           {/* Brand Column */}
@@ -63,14 +63,6 @@ const Footer: FC = () => {
               >
                 <FaFacebook className="h-5 w-5" />
                 <span className="sr-only">Facebook</span>
-              </Link>
-              <Link 
-                href="https://www.etsy.com/shop/ArtByLeBE"
-                target="_blank" 
-                className="h-10 w-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors"
-              >
-                <FaEtsy className="h-5 w-5" />
-                <span className="sr-only">Etsy</span>
               </Link>
             </div>
           </div>
@@ -161,6 +153,13 @@ const Footer: FC = () => {
             </Link>
             <Link href="#" className="hover:text-foreground transition-colors">
               <OrderAndDeliveryDialog triggerText="Bestellen & levering"/>
+            </Link>
+            <Link href="/docs" className="hover:text-foreground transition-colors">
+              Hoe bestellen?
+            </Link>
+            {/* Statutory withdrawal function: must stay easy to find */}
+            <Link href="/herroepen" className="hover:text-foreground transition-colors">
+              Bestelling herroepen
             </Link>
           </div>
         </div>

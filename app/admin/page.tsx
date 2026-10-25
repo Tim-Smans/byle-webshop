@@ -4,6 +4,7 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import LogoutButton from "@/components/admin/logout-button"
 import MoveSoldButton from "@/components/admin/move-sold-button"
+import { countOpenWithdrawals, countOrdersToPrepare, getRevenueThisMonth } from "@/lib/orders/admin-queries"
 import {
     ImageIcon,
     Layers,
@@ -20,6 +21,14 @@ import {
     Users,
     Eye,
     Mail,
+    Truck,
+    ShoppingBag,
+    RotateCcw,
+    FileText,
+    Package,
+    Euro,
+    BookOpen,
+    CreditCard,
 } from "lucide-react"
 
 async function getDashboardStats() {
@@ -57,6 +66,15 @@ async function getDashboardStats() {
         storageSize,
         storageFileCount,
     }
+}
+
+async function getWebshopStats() {
+    const [ordersToPrepare, revenueThisMonth, openWithdrawals] = await Promise.all([
+        countOrdersToPrepare(),
+        getRevenueThisMonth(),
+        countOpenWithdrawals(),
+    ])
+    return { ordersToPrepare, revenueThisMonth: Math.round(revenueThisMonth), openWithdrawals }
 }
 
 type AnalyticsStats = {
@@ -130,7 +148,7 @@ export default async function AdminDashboard() {
         redirect("/admin/login")
     }
 
-    const [stats, analytics] = await Promise.all([getDashboardStats(), getAnalyticsStats()])
+    const [stats, analytics, webshop] = await Promise.all([getDashboardStats(), getAnalyticsStats(), getWebshopStats()])
 
     return (
         <div className="min-h-screen px-6 pt-28 pb-10 max-w-5xl mx-auto">
@@ -242,6 +260,72 @@ export default async function AdminDashboard() {
                 </section>
             )}
 
+            {/* Webshop: everything around orders */}
+            <section className="mb-10">
+                <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">Webshop</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+                    <StatCard
+                        label="Klaar te maken"
+                        value={webshop.ordersToPrepare}
+                        icon={<Package size={18} />}
+                        accent={webshop.ordersToPrepare > 0 ? "amber" : undefined}
+                    />
+                    <StatCard
+                        label="Open herroepingen"
+                        value={webshop.openWithdrawals}
+                        icon={<RotateCcw size={18} />}
+                        accent={webshop.openWithdrawals > 0 ? "red" : undefined}
+                    />
+                    <StatCard
+                        label="Omzet deze maand (€)"
+                        value={webshop.revenueThisMonth}
+                        icon={<Euro size={18} />}
+                    />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <AdminLink
+                        href="/admin/bestellingen"
+                        title="Bestellingen"
+                        description={
+                            webshop.ordersToPrepare > 0
+                                ? `${webshop.ordersToPrepare} bestelling${webshop.ordersToPrepare === 1 ? "" : "en"} klaar te maken`
+                                : "Bestellingen opvolgen, verzenden en afhandelen"
+                        }
+                        icon={<ShoppingBag size={20} />}
+                        primary={webshop.ordersToPrepare > 0}
+                    />
+                    <AdminLink
+                        href="/admin/mollie"
+                        title="Mollie"
+                        description="Betalingen, terugbetalingen, chargebacks en cijfers"
+                        icon={<CreditCard size={20} />}
+                    />
+                    <AdminLink
+                        href="/admin/verzending"
+                        title="Verzending"
+                        description="Verzendkosten per land voor kleine en grote werken"
+                        icon={<Truck size={20} />}
+                    />
+                    <AdminLink
+                        href="/admin/herroepingen"
+                        title="Herroepingen & retours"
+                        description={
+                            webshop.openWithdrawals > 0
+                                ? `${webshop.openWithdrawals} openstaande herroeping${webshop.openWithdrawals === 1 ? "" : "en"}`
+                                : "Herroepingen bekijken en terugbetalen"
+                        }
+                        icon={<RotateCcw size={20} />}
+                        primary={webshop.openWithdrawals > 0}
+                    />
+                    <AdminLink
+                        href="/admin/facturen"
+                        title="Facturen"
+                        description="Facturen en creditnota's downloaden en exporteren"
+                        icon={<FileText size={20} />}
+                    />
+                </div>
+            </section>
+
             {/* Quick actions */}
             <section>
                 <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">Beheer</h2>
@@ -258,6 +342,12 @@ export default async function AdminDashboard() {
                         title="Galerij bekijken"
                         description="Beheer bestaande werken: bewerk, verkoop of verwijder"
                         icon={<PaintbrushIcon size={20} />}
+                    />
+                    <AdminLink
+                        href="/docs#admin"
+                        title="Handleiding"
+                        description="Hoe je bestellingen, herroepingen en facturen afhandelt"
+                        icon={<BookOpen size={20} />}
                     />
                     <AdminLink
                         href="/admin/newsletter"

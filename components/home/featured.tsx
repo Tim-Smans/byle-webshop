@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button"
 import { Heart } from "lucide-react"
 import { useFavorites } from "@/lib/context/favorites-context"
 import { ArtPiece, Product } from "@/lib/types"
-import { getArtPieces, toggleArtPieceFeatured } from "@/lib/services/art-piece-service"
+import { getArtPieces } from "@/lib/services/art-piece-service"
+import { toggleArtPieceFeatured } from "@/app/admin/artpiece/actions"
 import Link from "next/link"
 import { FaStar } from "react-icons/fa"
 import { useAdmin } from "@/lib/hooks/use-admin"
 import { primeCache } from "@/lib/client/image-cache"
+import { formatPrice } from "@/lib/utils"
 import { useRouter } from "next/navigation";
 
 const FeaturedPieces: FC = () => {
@@ -19,10 +21,10 @@ const FeaturedPieces: FC = () => {
 
   const isAdmin = useAdmin()
   const router = useRouter()
-  const { addItem } = useFavorites()
+  const { toggleItem, isFavorite } = useFavorites()
 
-  const handleAddItem = (product: Product) => {
-    addItem(product, 1)
+  const handleToggleFavorite = (product: Product) => {
+    toggleItem(product)
   }
 
   const handleToggleFeatured = async (id: string) => {
@@ -143,12 +145,13 @@ const FeaturedPieces: FC = () => {
                         size="icon"
                         variant="secondary"
                         className="h-10 w-10 rounded-full bg-foreground/90 backdrop-blur-sm hover:bg-foreground"
-                        onClick={(e) => { e.stopPropagation(); handleAddItem({ ...piece }); }}
+                        onClick={(e) => { e.stopPropagation(); handleToggleFavorite({ ...piece }); }}
+                        aria-pressed={isFavorite(piece.id)}
                       >
                         <Heart
-                          className={`h-5 w-5`}
+                          className={`h-5 w-5 ${isFavorite(piece.id) ? "fill-current" : ""}`}
                         />
-                        <span className="sr-only">Toevoegen aan favorieten</span>
+                        <span className="sr-only">Favoriet</span>
                       </Button>
                       {
                         isAdmin === true ?
@@ -196,7 +199,7 @@ const FeaturedPieces: FC = () => {
                       </span>
                     ) : (
                       <span className="text-lg font-light text-foreground">
-                        € {piece.price.toLocaleString("en-US")}
+                        {formatPrice(piece.price)}
                       </span>
                     )}
                     <button

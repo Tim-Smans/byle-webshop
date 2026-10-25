@@ -6,11 +6,11 @@ import Link from "next/link";
 import Image from "next/image"
 import { ArtPiece, Collection, Product } from "@/lib/types";
 import { useFavorites } from "@/lib/context/favorites-context";
-import { deleteArtPiece, getArtPieces, isArtPieceFeatured, SOLD_COLLECTION_ID, toggleArtPieceSold } from "@/lib/services/art-piece-service";
+import { getArtPieces, isArtPieceFeatured, SOLD_COLLECTION_ID } from "@/lib/services/art-piece-service";
+import { deleteArtPiece, toggleArtPieceFeatured, toggleArtPieceSold } from "@/app/admin/artpiece/actions";
 import { Heart, Pencil, ShoppingBasket, Star, TrashIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getCollections } from "@/lib/services/collection-service";
-import { toggleArtPieceFeatured } from "@/lib/services/art-piece-service";
 import WarningDialog from "@/components/dialogs/warning-dialog";
 import {
     Pagination,
@@ -24,6 +24,7 @@ import { useFeedback } from "@/lib/context/feedback-context";
 import { FaStar } from "react-icons/fa";
 import { useAdmin } from "@/lib/hooks/use-admin";
 import { primeCache } from "@/lib/client/image-cache";
+import { formatPrice } from "@/lib/utils";
 
 const ShopComponent: FC = () => {
     const searchParams = useSearchParams();
@@ -169,10 +170,10 @@ const ShopComponent: FC = () => {
         });
     }, [paginatedArtPieces]);
 
-    const { addItem } = useFavorites();
+    const { toggleItem, isFavorite } = useFavorites();
 
-    const handleAddItem = (product: Product) => {
-        addItem(product, 1)
+    const handleToggleFavorite = (product: Product) => {
+        toggleItem(product)
     }
 
     const handleNavigateToDetail = (url: string) => {
@@ -375,12 +376,13 @@ const ShopComponent: FC = () => {
                                                 size="icon"
                                                 variant="secondary"
                                                 className="h-10 w-10 rounded-full bg-foreground/90 backdrop-blur-sm hover:bg-foreground"
-                                                onClick={(e) => { e.stopPropagation(); handleAddItem({ ...piece }); }}
+                                                onClick={(e) => { e.stopPropagation(); handleToggleFavorite({ ...piece }); }}
+                                                aria-pressed={isFavorite(piece.id)}
                                             >
                                                 <Heart
-                                                    className={`h-5 w-5`}
+                                                    className={`h-5 w-5 ${isFavorite(piece.id) ? "fill-current" : ""}`}
                                                 />
-                                                <span className="sr-only">Add to favorites</span>
+                                                <span className="sr-only">Favoriet</span>
                                             </Button>
                                             {
                                                 isAdmin ?
@@ -462,7 +464,7 @@ const ShopComponent: FC = () => {
                                             </span>
                                         ) : (
                                             <span className="text-lg font-light text-foreground">
-                                                € {piece.price.toLocaleString("en-US")}
+                                                {formatPrice(piece.price)}
                                             </span>
                                         )}
                                         <button

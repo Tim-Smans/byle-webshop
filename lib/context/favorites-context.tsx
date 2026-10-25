@@ -15,6 +15,8 @@ interface FavoritesContextValue {
   removeItem: (cartItemId: string) => Promise<void>
   updateQuantity: (cartItemId: string, quantity: number) => Promise<void>
   clearFavorites: () => Promise<void>
+  toggleItem: (product: Product) => Promise<void>
+  isFavorite: (productId: string) => boolean
 }
 
 const emptyFavorites: Favorites = { items: [], total: 0, itemCount: 0 }
@@ -50,7 +52,6 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     try {
       const updatedFavorites = await favoritesService.addItem(product, quantity)
       setFavorites(updatedFavorites)
-      setIsOpen(true) // Open favorites when adding item
     } catch (error) {
       console.error("Failed to add item:", error)
       throw error
@@ -87,6 +88,20 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
+  const toggleItem = useCallback(async (product: Product) => {
+    const existing = favorites.items.find(item => item.product.id === product.id)
+    if (existing) {
+      await removeItem(existing.id)
+    } else {
+      await addItem(product)
+    }
+  }, [favorites, addItem, removeItem])
+
+  const isFavorite = useCallback(
+    (productId: string) => favorites.items.some(item => item.product.id === productId),
+    [favorites]
+  )
+
   return (
     <FavoritesContext.Provider
       value={{
@@ -100,6 +115,8 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
         removeItem,
         updateQuantity,
         clearFavorites,
+        toggleItem,
+        isFavorite,
       }}
     >
       {children}

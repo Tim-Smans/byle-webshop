@@ -1,17 +1,25 @@
 "use client"
 
 import Image from "next/image"
-import { X, ShoppingBag, Trash2, Star } from "lucide-react"
+import Link from "next/link"
+import { X, Heart, Trash2, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useFavorites } from "@/lib/context/favorites-context"
+import { useCart } from "@/lib/context/cart-context"
+import { formatPrice } from "@/lib/utils"
 import { FC } from "react"
 
 const FavoritesDrawer: FC = () => {
     const { favorites, isOpen, closeFavorites, removeItem, clearFavorites, isLoading } = useFavorites()
-    
-    const etsyUrl = process.env.NEXT_PUBLIC_ETSY_STORE_URL ?? "";
+    const { addItem: addToCart, isInCart } = useCart()
 
     if (!isOpen) return null
+
+    const handleAddToCart = (artPieceId: string) => {
+        closeFavorites()
+        addToCart(artPieceId)
+    }
+
     return (
         <>
             {/* Backdrop */}
@@ -25,13 +33,8 @@ const FavoritesDrawer: FC = () => {
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-border">
                     <div className="flex items-center gap-3">
-                        <Star className="h-5 w-5" />
-                        <h2 className="text-xl font-medium">Jou Favorieten</h2>
-                        {favorites.itemCount > 0 && (
-                            <span className="px-2 py-0.5 text-xs font-sans font-medium bg-accent text-accent-foreground rounded-full">
-                                {favorites.itemCount}
-                            </span>
-                        )}
+                        <Heart className="h-5 w-5" />
+                        <h2 className="text-xl font-medium">Jouw favorieten</h2>
                     </div>
                     <Button variant="ghost" size="icon" onClick={closeFavorites}>
                         <X className="h-5 w-5" />
@@ -39,7 +42,7 @@ const FavoritesDrawer: FC = () => {
                     </Button>
                 </div>
 
-                {/* Cart Content */}
+                {/* Content */}
                 <div className="flex-1 overflow-y-auto">
                     {isLoading ? (
                         <div className="flex items-center justify-center h-full">
@@ -47,63 +50,76 @@ const FavoritesDrawer: FC = () => {
                         </div>
                     ) : favorites.items.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-center px-6">
-                            <ShoppingBag className="h-16 w-16 text-muted-foreground/30 mb-4" />
-                            <h3 className="text-xl font-medium text-foreground mb-2">
-                                Je hebt geen favorieten
-                            </h3>
+                            <Heart className="h-12 w-12 text-muted-foreground/30 mb-4" />
                             <p className="text-muted-foreground mb-6">
-                                Bekijk mijn collectie en voeg werken toe aan je favorieten.
+                                Tik op het hartje bij een kunstwerk om het hier te bewaren.
                             </p>
-                            <Button onClick={closeFavorites}>
-                                Verder winkelen
+                            <Button variant="outline" onClick={closeFavorites}>
+                                Verder rondkijken
                             </Button>
                         </div>
                     ) : (
-                        <div className="px-6 py-4 space-y-4">
+                        <div className="px-6 py-4 divide-y divide-border">
                             {favorites.items.map((item) => (
-                                <div
-                                    key={item.id}
-                                    className="flex gap-4 p-4 bg-muted/30 rounded-lg"
-                                >
-                                    {/* Image */}
-                                    <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-md">
-                                    <Image
-                                        src={item.product.images[0].url}
-                                        alt={item.product.title}
-                                        fill
-                                        sizes="80px"
-                                        className="object-cover"
-                                    />
-                                    </div>
+                                <div key={item.id} className="flex gap-4 py-4">
+                                    <Link
+                                        href={`/art/${item.product.id}`}
+                                        onClick={closeFavorites}
+                                        className="relative h-20 w-16 shrink-0 overflow-hidden rounded-md bg-muted"
+                                    >
+                                        {item.product.images[0] && (
+                                            <Image
+                                                src={item.product.images[0].url}
+                                                alt={item.product.title}
+                                                fill
+                                                sizes="64px"
+                                                className="object-cover"
+                                            />
+                                        )}
+                                    </Link>
 
-                                    {/* Details */}
-                                    <div className="flex-1 flex flex-col">
-                                        <div className="flex justify-between">
-                                            <div>
-                                                <h3 className="font-medium text-foreground">
+                                    <div className="flex-1 flex flex-col min-w-0">
+                                        <div className="flex justify-between gap-2">
+                                            <div className="min-w-0">
+                                                <Link
+                                                    href={`/art/${item.product.id}`}
+                                                    onClick={closeFavorites}
+                                                    className="font-medium text-foreground hover:underline underline-offset-4"
+                                                >
                                                     {item.product.title}
-                                                </h3>
+                                                </Link>
                                                 <p className="text-sm text-muted-foreground font-sans">
-                                                    {item.product.dimensions}
+                                                    {item.product.isSold ? "Verkocht" : formatPrice(item.product.price)}
                                                 </p>
                                             </div>
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
-                                                className="h-8 w-8 -mt-1 -mr-2"
+                                                className="h-8 w-8 -mt-1 -mr-2 shrink-0"
                                                 onClick={() => removeItem(item.id)}
                                             >
                                                 <Trash2 className="h-4 w-4" />
-                                                <span className="sr-only">Remove</span>
+                                                <span className="sr-only">Verwijder uit favorieten</span>
                                             </Button>
                                         </div>
 
-                                        <div className="mt-auto flex items-center justify-between">
-                                            {/* Price */}
-                                            <p className="font-medium">
-                                                ${(item.product.price * item.quantity).toLocaleString()}
-                                            </p>
-                                        </div>
+                                        {!item.product.isSold && (
+                                            <div className="mt-auto pt-2">
+                                                {isInCart(item.product.id) ? (
+                                                    <span className="inline-flex items-center gap-1 text-xs font-sans text-muted-foreground">
+                                                        <Check className="h-3.5 w-3.5" />
+                                                        In je winkelmand
+                                                    </span>
+                                                ) : (
+                                                    <button
+                                                        className="text-xs font-sans tracking-wide text-muted-foreground hover:text-foreground underline underline-offset-4 transition-colors"
+                                                        onClick={() => handleAddToCart(item.product.id)}
+                                                    >
+                                                        In winkelmand
+                                                    </button>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}
@@ -113,42 +129,16 @@ const FavoritesDrawer: FC = () => {
 
                 {/* Footer */}
                 {favorites.items.length > 0 && (
-                    <div className="border-t border-border px-6 py-4 space-y-4">
-                        {/* Subtotal */}
-                        <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground font-sans">Subtotaal</span>
-                            <span className="text-xl font-medium">
-                                ${favorites.total.toLocaleString()}
-                            </span>
-                        </div>
-
-                        <p className="text-sm text-muted-foreground font-sans">
-                            Uiteindelijke prijzen worden berekend op Etsy
-                        </p>
-
-                        {/* Actions */}
-                        <div className="space-y-2">
-                            <Button asChild className="w-full py-6 text-base font-sans tracking-wide">
-                                <a target="blank" href={etsyUrl}>   
-                                    Ga naar Etsy pagina
-                                </a>
-                            </Button>
-                            <Button
-                                variant="outline"
-                                className="w-full font-sans"
-                                onClick={closeFavorites}
-                            >
-                                Verder Winkelen
-                            </Button>
-                        </div>
-
-                        {/* Clear Favorites */}
+                    <div className="border-t border-border px-6 py-4 flex items-center justify-between">
                         <button
-                            className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors font-sans underline"
+                            className="text-sm text-muted-foreground hover:text-foreground transition-colors font-sans underline"
                             onClick={clearFavorites}
                         >
-                            Maak Favorieten Leeg
+                            Lijst leegmaken
                         </button>
+                        <Button variant="outline" className="font-sans" onClick={closeFavorites}>
+                            Verder rondkijken
+                        </Button>
                     </div>
                 )}
             </div>

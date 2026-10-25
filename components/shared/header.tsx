@@ -3,9 +3,10 @@
 import Link from "next/link"
 import Image from "next/image"
 import { FC, useState } from "react"
-import { Menu, X, Heart } from "lucide-react"
+import { Menu, X, Heart, ShoppingBag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useFavorites } from "@/lib/context/favorites-context"
+import { useCart } from "@/lib/context/cart-context"
 import AdminModeButton from "../admin/admin-mode-button"
 
 const navigation = [
@@ -22,9 +23,10 @@ const navigation = [
 const Header: FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false)
   const { favorites, openFavorites } = useFavorites()
+  const { itemCount, openCart } = useCart()
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border print:hidden">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-1 lg:px-8">
 
         {/* Logo */}
@@ -60,16 +62,26 @@ const Header: FC = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="relative"
+            className="relative text-muted-foreground hover:text-foreground"
             onClick={openFavorites}
           >
-            <Heart className="h-5 w-5" />
-            {favorites.itemCount > 0 && (
+            <Heart className={`h-[18px] w-[18px] ${favorites.itemCount > 0 ? "fill-current" : ""}`} />
+            <span className="sr-only">Favorieten ({favorites.itemCount})</span>
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative"
+            onClick={openCart}
+          >
+            <ShoppingBag className="h-5 w-5" />
+            {itemCount > 0 && (
               <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-accent text-[10px] font-sans font-medium text-accent-foreground flex items-center justify-center">
-                {favorites.itemCount > 9 ? "9+" : favorites.itemCount}
+                {itemCount > 9 ? "9+" : itemCount}
               </span>
             )}
-            <span className="sr-only">Favorieten</span>
+            <span className="sr-only">Winkelmand ({itemCount})</span>
           </Button>
 
           <AdminModeButton />
