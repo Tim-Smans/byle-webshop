@@ -27,7 +27,7 @@ export default function CustomerGuide() {
                 <div className="min-w-0 max-w-2xl">
                     <Topic id="k-kopen" title="Een kunstwerk kopen">
                         <Steps>
-                            <li>Kies een werk in de <Link href="/gallery" className="underline underline-offset-4">Galerij</Link> en open de detailpagina.</li>
+                            <li>Kies een werk in de <Link href="/gallery" className="underline underline-offset-4">Galerie</Link> en open de detailpagina.</li>
                             <li>Klik op <Ui>In winkelmand</Ui>. Je winkelmand opent aan de zijkant; je vindt ze ook altijd via het tasje rechtsboven.</li>
                             <li>Klik op <Ui>Afrekenen</Ui>.</li>
                             <li>Vul je gegevens in. Bestel je als bedrijf, vink dan <Ui>Ik bestel als bedrijf</Ui> aan en vul je bedrijfsnaam en btw-nummer in.</li>

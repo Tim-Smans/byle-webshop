@@ -53,11 +53,11 @@ const CartDrawer: FC = () => {
                                 Je winkelmand is leeg
                             </h3>
                             <p className="text-muted-foreground mb-6">
-                                Bekijk de galerij en voeg een kunstwerk toe.
+                                Bekijk de galerie en voeg een kunstwerk toe.
                             </p>
                             <Button asChild>
                                 <Link href="/gallery" onClick={closeCart}>
-                                    Naar de galerij
+                                    Naar de galerie
                                 </Link>
                             </Button>
                         </div>

@@ -154,7 +154,7 @@ export default async function AdminDashboard() {
         <div className="min-h-screen px-6 pt-28 pb-10 max-w-5xl mx-auto">
             <div className="mb-10">
                 <h1 className="text-3xl font-light tracking-tight text-primary mb-1">Admin Dashboard</h1>
-                <p className="text-muted-foreground text-sm">Overzicht van de galerij en beheeropties</p>
+                <p className="text-muted-foreground text-sm">Overzicht van de galerie en beheeropties</p>
             </div>
 
             {/* Artpieces stats */}
@@ -339,7 +339,7 @@ export default async function AdminDashboard() {
                     />
                     <AdminLink
                         href="/gallery"
-                        title="Galerij bekijken"
+                        title="Galerie bekijken"
                         description="Beheer bestaande werken: bewerk, verkoop of verwijder"
                         icon={<PaintbrushIcon size={20} />}
                     />

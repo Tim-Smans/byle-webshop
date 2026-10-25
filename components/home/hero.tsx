@@ -45,7 +45,7 @@ const Hero: FC = () => {
             asChild
           >
             <Link href={'/gallery'}>
-              Kies uw stijl
+              Werk aankopen
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

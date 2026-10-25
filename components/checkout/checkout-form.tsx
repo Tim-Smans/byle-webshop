@@ -70,9 +70,9 @@ const CheckoutForm: FC<Props> = ({ rates, deliveryTimeText, pickupLocationText }
             <div className="flex flex-col items-center text-center py-24">
                 <ShoppingBag className="h-16 w-16 text-muted-foreground/30 mb-4" />
                 <h2 className="text-xl font-medium text-foreground mb-2">Je winkelmand is leeg</h2>
-                <p className="text-muted-foreground mb-6">Bekijk de galerij en voeg een kunstwerk toe.</p>
+                <p className="text-muted-foreground mb-6">Bekijk de galerie en voeg een kunstwerk toe.</p>
                 <Button asChild>
-                    <Link href="/gallery">Naar de galerij</Link>
+                    <Link href="/gallery">Naar de galerie</Link>
                 </Button>
             </div>
         )

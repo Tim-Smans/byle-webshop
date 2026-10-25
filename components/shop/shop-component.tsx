@@ -254,7 +254,7 @@ const ShopComponent: FC = () => {
                         Kijk rond tussen mijn kunstwerken
                     </p>
                     <h2 className="text-oker text-4xl sm:text-5xl font-light tracking-tight text-foreground mb-4">
-                        Gallery
+                        Galerie
                     </h2>
                     <p className="max-w-2xl mx-auto text-muted-foreground text-lg">
                         Ontdek mijn unieke creaties, stuk voor stuk met liefde en zorg handgemaakt. Laat u inspireren door warme details,

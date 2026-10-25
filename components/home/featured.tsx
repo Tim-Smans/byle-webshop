@@ -99,7 +99,7 @@ const FeaturedPieces: FC = () => {
           </h2>
           <p className="max-w-2xl mx-auto text-muted-foreground text-lg">
             Duik in een wisselende selectie van mijn werk, stuk voor stuk met zorg en gevoel
-            gemaakt. Benieuwd naar meer? Ontdek de volledige collectie in de Gallery.
+            gemaakt. Benieuwd naar meer? Ontdek de volledige collectie in de Galerie.
           </p>
         </div>
 
@@ -224,7 +224,7 @@ const FeaturedPieces: FC = () => {
             asChild
           >
             <Link href={'/gallery'}>
-              Bekijk mijn gallerij
+              Bekijk mijn galerie
             </Link>
           </Button>
         </div>

@@ -29,7 +29,7 @@ const Collections = () => {
                 <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16 gap-6">
                     <div>
                         <p className="text-sm font-sans font-medium tracking-[0.3em] uppercase text-secondary mb-4">
-                            Kies uw stijl
+                            Werk aankopen
                         </p>
                         <h2 className="text-4xl text-oker sm:text-5xl font-light tracking-tight text-foreground">
                             Mijn <span className="italic font-medium">collecties</span>

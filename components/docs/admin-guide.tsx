@@ -233,7 +233,7 @@ export default function AdminGuide() {
 
                     <Topic id="a-kunstwerken" title="Kunstwerken">
                         <Bullets>
-                            <li><strong>Verkocht</strong>: na een betaling gaat een werk automatisch op verkocht en naar de collectie <strong>Verkocht</strong>. De knop &quot;verkocht&quot; in de galerij heb je alleen nog nodig voor verkopen buiten de webshop.</li>
+                            <li><strong>Verkocht</strong>: na een betaling gaat een werk automatisch op verkocht en naar de collectie <strong>Verkocht</strong>. De knop &quot;verkocht&quot; in de galerie heb je alleen nog nodig voor verkopen buiten de webshop.</li>
                             <li><strong>Uitgelicht</strong> blijft staan als je een werk bewerkt.</li>
                             <li><strong>Formaat</strong> (klein of groot) bepaalt het verzendtarief. Kies het bij elk nieuw werk.</li>
                             <li><strong>Verzendinformatie</strong> in het formulier is een vrije tekst die bij het werk getoond wordt. De echte verzendkosten komen uit de tarieven onder Verzending.</li>

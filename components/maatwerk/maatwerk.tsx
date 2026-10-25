@@ -217,7 +217,7 @@ const Maatwerk: FC = () => {
 
                             <div className="mt-6 space-y-6 text-lg leading-relaxed text-muted-foreground">
                                 <p>
-                                    De prijzen van vergelijkbare werken in mijn galerij geven daarnaast een goede indicatie van wat je mag verwachten.
+                                    De prijzen van vergelijkbare werken in mijn galerie geven daarnaast een goede indicatie van wat je mag verwachten.
                                 </p>
                                 <p className="font-medium text-foreground">
                                     Voor elk maatwerk wordt vooraf een duidelijke richtprijs besproken, afgestemd op jouw wensen en het gekozen formaat.

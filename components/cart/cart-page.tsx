@@ -34,10 +34,10 @@ const CartPage: FC = () => {
                             Je winkelmand is leeg
                         </h2>
                         <p className="text-muted-foreground mb-6">
-                            Bekijk de galerij en voeg een kunstwerk toe.
+                            Bekijk de galerie en voeg een kunstwerk toe.
                         </p>
                         <Button asChild>
-                            <Link href="/gallery">Naar de galerij</Link>
+                            <Link href="/gallery">Naar de galerie</Link>
                         </Button>
                     </div>
                 ) : (
