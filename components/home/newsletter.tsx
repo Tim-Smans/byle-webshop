@@ -42,8 +42,7 @@ const NewsLetter: FC = () => {
           Een kijkje achter het canvas
         </h2>
         <p className="text-lg text-primary-foreground/80 max-w-2xl mx-auto mb-10">
-          Ontdek waar ik aan werk, hoe mijn kunst stap voor stap ontstaat en welke nieuwe werken hun weg naar buiten
-        </p>
+Ontdek waar ik aan werk, hoe mijn kunst stap voor stap tot leven komt en welke nieuwe creaties binnenkort het atelier verlaten. Van de eerste inspiratie tot het afgewerkte kunstwerk: ik neem je graag mee achter de schermen van Art by Lé.        </p>
 
         {isSubscribed ? (
           <div className="flex items-center justify-center gap-3 text-lg">
