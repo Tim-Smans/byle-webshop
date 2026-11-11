@@ -29,6 +29,8 @@ import {
     Euro,
     BookOpen,
     CreditCard,
+    Percent,
+    Megaphone,
 } from "lucide-react"
 
 async function getDashboardStats() {
@@ -299,6 +301,18 @@ export default async function AdminDashboard() {
                         title="Mollie"
                         description="Betalingen, terugbetalingen, chargebacks en cijfers"
                         icon={<CreditCard size={20} />}
+                    />
+                    <AdminLink
+                        href="/admin/kortingen"
+                        title="Kortingen"
+                        description="Kortingscodes en werken in korting"
+                        icon={<Percent size={20} />}
+                    />
+                    <AdminLink
+                        href="/admin/banner"
+                        title="Banner"
+                        description="Aankondigingen onder het menu, met kortingscode en aftelklok"
+                        icon={<Megaphone size={20} />}
                     />
                     <AdminLink
                         href="/admin/verzending"

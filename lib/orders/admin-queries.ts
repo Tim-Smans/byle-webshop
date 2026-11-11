@@ -117,13 +117,27 @@ export interface AdminOrderDetail {
   billingPostalCode: string | null
   billingCity: string | null
   subtotal: number
+  discountCode: string | null
+  discountAmount: number
   shippingCost: number
   total: number
   vatAmount: number
   trackingCode: string | null
   adminNote: string | null
   termsVersion: string
-  items: { id: string; artPieceId: string | null; title: string; dimensions: string | null; imageUrl: string | null; price: number; withdrawalApplicable: boolean }[]
+  items: {
+    id: string
+    artPieceId: string | null
+    title: string
+    dimensions: string | null
+    imageUrl: string | null
+    // Paid for this work (also the refund amount)
+    price: number
+    // Before the discount code, after the sale
+    linePrice: number
+    originalPrice: number | null
+    withdrawalApplicable: boolean
+  }[]
   payments: { id: string; molliePaymentId: string; status: string; method: string | null; amount: number; createdAt: string }[]
   invoices: { id: string; type: string; invoiceNumber: string; total: number; issuedAt: string }[]
   events: { id: string; type: string; message: string | null; actor: string; createdAt: string }[]
@@ -208,7 +222,7 @@ export async function getAdminOrder(id: string): Promise<AdminOrderDetail | null
     .from("Order")
     .select(`
       *,
-      OrderItem (id, artPieceId, title, dimensions, imageUrl, price, withdrawalApplicable),
+      OrderItem (id, artPieceId, title, dimensions, imageUrl, price, originalPrice, codeDiscount, withdrawalApplicable),
       Payment (id, molliePaymentId, status, method, amount, createdAt),
       Invoice (id, type, invoiceNumber, total, issuedAt),
       OrderEvent (id, type, message, actor, createdAt),
@@ -227,6 +241,8 @@ export async function getAdminOrder(id: string): Promise<AdminOrderDetail | null
   return {
     ...data,
     subtotal: Number(data.subtotal),
+    discountCode: data.discountCode ?? null,
+    discountAmount: Number(data.discountAmount ?? 0),
     shippingCost: Number(data.shippingCost),
     total: Number(data.total),
     vatAmount: Number(data.vatAmount),
@@ -237,6 +253,9 @@ export async function getAdminOrder(id: string): Promise<AdminOrderDetail | null
       dimensions: (item.dimensions as string | null) ?? null,
       imageUrl: (item.imageUrl as string | null) ?? null,
       price: Number(item.price),
+      // Price of the work before the discount code (the sale price when on sale)
+      linePrice: Number(item.price) + Number(item.codeDiscount ?? 0),
+      originalPrice: item.originalPrice == null ? null : Number(item.originalPrice),
       withdrawalApplicable: Boolean(item.withdrawalApplicable),
     })),
     payments: byDate((data.Payment ?? []).map((payment: Record<string, unknown>) => ({

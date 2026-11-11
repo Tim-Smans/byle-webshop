@@ -19,6 +19,9 @@ import FavoritesDrawer from "@/components/cart/favorites-drawer";
 import CartDrawer from "@/components/cart/cart-drawer";
 import { CartProvider } from "@/lib/context/cart-context";
 import { FeedbackProvider } from "@/lib/context/feedback-context";
+import AnnouncementBar from "@/components/announcements/announcement-bar";
+import { getAnnouncementBanner } from "@/lib/announcements/banner";
+import { BANNER_DISMISSED_KEY, BANNER_HIDDEN_ATTRIBUTE } from "@/lib/announcements/types";
 
 const oldStandard = Old_Standard_TT({
   subsets: ["latin"],
@@ -59,13 +62,17 @@ export const metadata: Metadata = {
   description: "Art by Lé galery app"
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const banner = await getAnnouncementBanner();
+
   return (
     <html
+      // The banner script below may set an attribute before hydration
+      suppressHydrationWarning
       lang="en"
       className={cn(
         "h-full",
@@ -79,11 +86,22 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col">
+        {banner && (
+          // Runs while the page is parsed, before the banner paints: hides it
+          // when the visitor closed this version of the banner
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `try{if(localStorage.getItem(${JSON.stringify(BANNER_DISMISSED_KEY)})===${JSON.stringify(banner.version)})document.documentElement.setAttribute(${JSON.stringify(BANNER_HIDDEN_ATTRIBUTE)},"")}catch(e){}`,
+            }}
+          />
+        )}
         <Analytics/>
         <CartProvider>
           <FavoritesProvider>
             <FeedbackProvider>
-              <Header />
+              <Header banner={banner ? <AnnouncementBar banner={banner} /> : null} />
+              {/* Pushes the page down by the height of the banner */}
+              {banner && <div className="announcement-spacer shrink-0" aria-hidden />}
               {children}
               <Footer />
               <FavoritesDrawer />

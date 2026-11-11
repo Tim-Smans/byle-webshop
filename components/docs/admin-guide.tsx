@@ -15,6 +15,8 @@ const TOPICS = [
     { id: "a-facturen", title: "Facturen" },
     { id: "a-mails", title: "Automatische e-mails" },
     { id: "a-kunstwerken", title: "Kunstwerken" },
+    { id: "a-kortingen", title: "Kortingen" },
+    { id: "a-banner", title: "Banner" },
     { id: "a-termijnen", title: "Termijnen" },
     { id: "a-problemen", title: "Als iets misloopt" },
 ]
@@ -237,6 +239,60 @@ export default function AdminGuide() {
                             <li><strong>Uitgelicht</strong> blijft staan als je een werk bewerkt.</li>
                             <li><strong>Formaat</strong> (klein of groot) bepaalt het verzendtarief. Kies het bij elk nieuw werk.</li>
                             <li><strong>Verzendinformatie</strong> in het formulier is een vrije tekst die bij het werk getoond wordt. De echte verzendkosten komen uit de tarieven onder Verzending.</li>
+                        </Bullets>
+                    </Topic>
+
+                    <Topic id="a-kortingen" title="Kortingen">
+                        <p>Er zijn twee soorten korting. Je kan ze combineren.</p>
+
+                        <SubTitle>Een werk in korting zetten</SubTitle>
+                        <Steps>
+                            <li>Open het werk via <Ui>aanpassen</Ui> in de galerie.</li>
+                            <li>Zet de schakelaar bij <strong>Korting</strong> aan en vul een percentage in (1 tot 99). Je ziet meteen de nieuwe prijs.</li>
+                            <li>Klik op <Ui>Update kunstwerk</Ui>.</li>
+                        </Steps>
+                        <p>In de galerie, bij de uitgelichte werken en op de pagina van het werk staat de normale prijs dan doorstreept naast de nieuwe prijs, met een label <strong>-20%</strong>. Alle werken in korting zie je onder <Link href="/admin/kortingen" className={linkClass}>Kortingen</Link>, waar je de korting ook met één klik stopt.</p>
+                        <Warn>
+                            De doorstreepte prijs moet de laagste prijs zijn die je de <strong>30 dagen ervoor</strong> vroeg (Belgische regels voor prijsverminderingen). Verhoog een prijs dus nooit vlak voor je er korting op geeft, en laat een korting niet maandenlang doorlopen: dan wordt de kortingsprijs de echte prijs.
+                        </Warn>
+
+                        <SubTitle>Kortingscodes</SubTitle>
+                        <Steps>
+                            <li>Ga naar <Link href="/admin/kortingen" className={linkClass}>Kortingen</Link>.</li>
+                            <li>Vul onder <Ui>Nieuwe kortingscode</Ui> de code in (bv. <strong>ZOMER20</strong>) en kies een percentage of een vast bedrag.</li>
+                            <li>Kies eventueel een minimumbedrag, hoe vaak de code gebruikt mag worden en van wanneer tot wanneer ze geldt.</li>
+                            <li>Klik op <Ui>Code aanmaken</Ui>.</li>
+                        </Steps>
+                        <Bullets>
+                            <li>De klant vult de code in bij het afrekenen. Die geldt alleen op de kunstwerken, nooit op de verzendkosten.</li>
+                            <li>Staat een werk al in korting, dan komt de code er bovenop. Wil je dat niet, vink dan <strong>Niet geldig op werken die al in korting staan</strong> aan.</li>
+                            <li>Een vast bedrag wordt over de werken verdeeld naar hun prijs. Meer korting dan de werken kosten kan niet.</li>
+                            <li>Een betaling die mislukt of geannuleerd wordt, telt niet mee als gebruik.</li>
+                            <li>Met de schakelaar zet je een code meteen aan of uit. Een code die al gebruikt is, kan je niet verwijderen; zet ze dan uit.</li>
+                        </Bullets>
+
+                        <SubTitle>Op de bestelling en de factuur</SubTitle>
+                        <p>Op de bestelling, de bevestigingsmail en in de admin staat de korting als aparte lijn. Op de factuur staat per werk het bedrag dat de klant echt betaald heeft, met de normale prijs en de korting in de omschrijving.</p>
+                        <p>Bij een herroeping krijgt de klant terug wat er voor dat werk betaald werd, dus na korting. Dat rekent de webshop zelf uit.</p>
+                    </Topic>
+
+                    <Topic id="a-banner" title="Banner">
+                        <p>De banner is een balk onder het menu, op elke pagina. Je beheert hem onder <Link href="/admin/banner" className={linkClass}>Banner</Link>.</p>
+                        <Steps>
+                            <li>Kies onder <Ui>Nieuw bericht</Ui> een sjabloon, of begin met een lege tekst.</li>
+                            <li>Kies een kleur, eventueel een link en een kortingscode. Het voorbeeld toont meteen hoe het eruitziet, ook op een gsm.</li>
+                            <li>Klik op <Ui>Toevoegen aan de banner</Ui>.</li>
+                            <li>Zet bovenaan de schakelaar <strong>Banner op de website</strong> aan.</li>
+                        </Steps>
+                        <Bullets>
+                            <li>Met de grote schakelaar zet je de hele banner aan of uit. Elk bericht heeft daarnaast een eigen schakelaar.</li>
+                            <li>Meerdere berichten wisselen elkaar om de 6 seconden af. De volgorde verander je met de pijltjes. Gaat een bezoeker met de muis over de banner, dan blijft het bericht staan.</li>
+                            <li><strong>Kortingscode</strong>: de klant klikt op de code om ze te kopiëren. Bij het afrekenen wordt ze dan vanzelf toegepast. Verloopt de code, staat ze uit of is ze op, dan verdwijnt het bericht vanzelf.</li>
+                            <li><strong>Aftelklok</strong>: telt af tot het einde van het bericht of van de kortingscode. Op de laatste dag tikken de seconden mee.</li>
+                            <li><strong>Tonen vanaf / tot</strong>: plan een bericht vooraf. Het verschijnt en verdwijnt vanzelf (binnen een paar minuten).</li>
+                            <li>De link <strong>Werken in korting</strong> opent de galerie met alleen de werken die in korting staan.</li>
+                            <li>Een bezoeker kan de banner wegklikken. Pas je daarna iets aan, dan ziet die bezoeker de banner opnieuw.</li>
+                            <li>Hou de tekst kort. Op een gsm schuift een lange tekst langzaam heen en weer.</li>
                         </Bullets>
                     </Topic>
 

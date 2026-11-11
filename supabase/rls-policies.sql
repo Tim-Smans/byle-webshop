@@ -37,7 +37,6 @@ create policy "Public read" on public."Image"      for select to anon, authentic
 create policy "Public read" on public."Label"      for select to anon, authenticated using (true);
 create policy "Public read" on public."PieceLabel" for select to anon, authenticated using (true);
 create policy "Public read" on public."Collection" for select to anon, authenticated using (true);
-create policy "Public read" on public."Stats"      for select to anon, authenticated using (true);
 create policy "Public read" on public."CvPage"     for select to anon, authenticated using (true);
 
 -- NewsletterSubscriber: deliberately NO policy -> email addresses are not readable
@@ -55,7 +54,8 @@ begin
     join pg_namespace n on n.oid = p.pronamespace
     where n.nspname = 'public'
       and p.proname in ('create_art_piece', 'update_art_piece', 'next_order_number', 'next_invoice_number',
-                         'create_order', 'mark_order_paid', 'release_order', 'issue_invoice', 'register_withdrawal')
+                         'create_order', 'mark_order_paid', 'release_order', 'issue_invoice', 'register_withdrawal',
+                         'price_cart')
   loop
     execute format('revoke execute on function %s from public, anon, authenticated', f.sig);
     execute format('grant execute on function %s to service_role', f.sig);

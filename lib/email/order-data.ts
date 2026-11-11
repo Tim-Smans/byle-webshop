@@ -21,6 +21,8 @@ export interface EmailOrder {
   shippingCity: string | null
   shippingCountry: string | null
   subtotal: number
+  discountCode: string | null
+  discountAmount: number
   shippingCost: number
   total: number
   vatAmount: number
@@ -32,7 +34,7 @@ export interface EmailOrder {
 export async function loadEmailOrder(orderId: string): Promise<EmailOrder> {
   const { data, error } = await createAdminClient()
     .from("Order")
-    .select("*, OrderItem (title, dimensions, imageUrl, price, withdrawalApplicable), OrderEvent (type)")
+    .select("*, OrderItem (title, dimensions, imageUrl, price, originalPrice, codeDiscount, withdrawalApplicable), OrderEvent (type)")
     .eq("id", orderId)
     .single()
   if (error) throw new Error(error.message)
@@ -57,6 +59,8 @@ export async function loadEmailOrder(orderId: string): Promise<EmailOrder> {
       ? getCountryName(data.shippingCountryCode) ?? data.shippingCountryCode
       : null,
     subtotal: Number(data.subtotal),
+    discountCode: data.discountCode ?? null,
+    discountAmount: Number(data.discountAmount ?? 0),
     shippingCost: Number(data.shippingCost),
     total: Number(data.total),
     vatAmount: Number(data.vatAmount),
@@ -66,7 +70,9 @@ export async function loadEmailOrder(orderId: string): Promise<EmailOrder> {
       title: item.title as string,
       dimensions: (item.dimensions as string | null) ?? null,
       imageUrl: (item.imageUrl as string | null) ?? null,
-      price: Number(item.price),
+      // Before the discount code (shown as its own line under the items)
+      price: Number(item.price) + Number(item.codeDiscount ?? 0),
+      originalPrice: item.originalPrice == null ? null : Number(item.originalPrice),
       withdrawalApplicable: Boolean(item.withdrawalApplicable),
     })),
   }

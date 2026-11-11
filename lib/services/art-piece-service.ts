@@ -1,6 +1,7 @@
 import { ArtPiece } from "../types";
 import { supabase } from "../supabase/client"
 import { normalizeLabel } from "../utils";
+import { normalizeDiscountPercent } from "../shop/discount";
 
 // Read-only queries with the public key. Mutations live in
 // app/admin/artpiece/actions.ts and run server-side with the service role.
@@ -94,6 +95,7 @@ const mapArtPiece = (
     artist: dbPiece.artist,
     dimensions: dbPiece.dimensions,
     price: dbPiece.price,
+    discountPercent: normalizeDiscountPercent(dbPiece.discountPercent),
     description: dbPiece.description,
     isFeatured: dbPiece.isFeatured,
     frame: dbPiece.frame,

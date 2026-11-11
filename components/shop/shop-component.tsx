@@ -24,7 +24,8 @@ import { useFeedback } from "@/lib/context/feedback-context";
 import { FaStar } from "react-icons/fa";
 import { useAdmin } from "@/lib/hooks/use-admin";
 import { primeCache } from "@/lib/client/image-cache";
-import { formatPrice } from "@/lib/utils";
+import PriceTag, { SaleBadge } from "@/components/shared/price-tag";
+import { SALE_FILTER } from "@/lib/announcements/types";
 
 const ShopComponent: FC = () => {
     const searchParams = useSearchParams();
@@ -144,7 +145,9 @@ const ShopComponent: FC = () => {
 
         const matchesCollection =
             selectedCollectionId === "all" ||
-            piece.collectionId === selectedCollectionId;
+            (selectedCollectionId === SALE_FILTER
+                ? !!piece.discountPercent && !piece.isSold
+                : piece.collectionId === selectedCollectionId);
 
         const isHiddenSoldPiece =
             selectedCollectionId !== SOLD_COLLECTION_ID &&
@@ -152,6 +155,8 @@ const ShopComponent: FC = () => {
 
         return matchesSearch && matchesCollection && !isHiddenSoldPiece;
     });
+
+    const hasSaleWorks = artPieces.some((piece) => piece.discountPercent && !piece.isSold);
 
     const totalPages = Math.ceil(filteredArtPieces.length / ITEMS_PER_PAGE);
 
@@ -322,6 +327,12 @@ const ShopComponent: FC = () => {
                             Alle collecties
                         </option>
 
+                        {(hasSaleWorks || selectedCollectionId === SALE_FILTER) && (
+                            <option value={SALE_FILTER}>
+                                In korting
+                            </option>
+                        )}
+
                         {collections.map((collection) => (
                             <option
                                 key={collection.id}
@@ -446,6 +457,9 @@ const ShopComponent: FC = () => {
                                                 NEW
                                             </span>
                                         )}
+                                        {piece.discountPercent && !piece.isSold && (
+                                            <SaleBadge percent={piece.discountPercent} className="px-3 py-1 shadow self-start" />
+                                        )}
                                     </div>
                                 </div>
 
@@ -463,9 +477,11 @@ const ShopComponent: FC = () => {
                                                 niet beschikbaar
                                             </span>
                                         ) : (
-                                            <span className="text-lg font-light text-foreground">
-                                                {formatPrice(piece.price)}
-                                            </span>
+                                            <PriceTag
+                                                price={piece.price}
+                                                discountPercent={piece.discountPercent}
+                                                className="text-lg font-light"
+                                            />
                                         )}
                                         <button
                                             className="text-xs font-sans tracking-wide text-muted-foreground hover:text-foreground underline underline-offset-4 transition-colors"

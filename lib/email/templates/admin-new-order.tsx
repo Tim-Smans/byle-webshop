@@ -21,6 +21,9 @@ export default function AdminNewOrderEmail({ order, adminUrl }: { order: EmailOr
       <TotalsTable
         rows={[
           ["Subtotaal", formatMoney(order.subtotal)],
+          ...(order.discountAmount > 0
+            ? [[`Korting (${order.discountCode ?? "kortingscode"})`, `– ${formatMoney(order.discountAmount)}`] as [string, string]]
+            : []),
           [order.shippingMethod === "pickup" ? "Afhalen" : "Verzending", formatMoney(order.shippingCost)],
         ]}
         total={formatMoney(order.total)}

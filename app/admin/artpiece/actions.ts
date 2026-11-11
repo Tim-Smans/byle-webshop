@@ -5,6 +5,8 @@ import { isAdmin } from "@/lib/auth/admin-auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { SOLD_COLLECTION_ID } from "@/lib/services/art-piece-service";
 import type { SizeClass } from "@/lib/types";
+import { normalizeDiscountPercent } from "@/lib/shop/discount";
+import { revalidatePath } from "next/cache";
 
 const ARTPIECE_TABLE = "ArtPiece";
 
@@ -13,6 +15,8 @@ export interface SaveArtPieceInput {
   artist: string;
   dimensions: string;
   price: number;
+  // Sale percentage 1-99, null = not on sale
+  discountPercent: number | null;
   description: string;
   frame: string;
   structure: string;
@@ -85,12 +89,38 @@ export async function saveArtPiece(id: string | null, input: SaveArtPieceInput):
     p_collection_thumbnail_url: null,
   };
 
+  if (input.discountPercent !== null && normalizeDiscountPercent(input.discountPercent) === null) {
+    throw new Error("De korting moet een heel getal tussen 1 en 99 zijn.");
+  }
+
   // On update, null keeps the current "featured" state (toggled in the gallery)
-  const { error } = id
+  const { data, error } = id
     ? await supabase.rpc("update_art_piece", { p_id: id, p_is_featured: null, ...params })
     : await supabase.rpc("create_art_piece", { p_is_featured: false, ...params });
 
   if (error) throw new Error(error.message);
+
+  // The art piece functions don't know the sale percentage; set it separately
+  const pieceId = id ?? (data as string);
+  await setArtPieceDiscount(pieceId, input.discountPercent);
+}
+
+// Puts a work on sale (1-99%) or takes it off sale (null)
+export async function setArtPieceDiscount(pieceId: string, discountPercent: number | null): Promise<void> {
+  await assertAdmin();
+
+  const percent = discountPercent === null ? null : normalizeDiscountPercent(discountPercent);
+  if (discountPercent !== null && percent === null) {
+    throw new Error("De korting moet een heel getal tussen 1 en 99 zijn.");
+  }
+
+  const { error } = await createAdminClient()
+    .from(ARTPIECE_TABLE)
+    .update({ discountPercent: percent })
+    .eq("id", pieceId);
+  if (error) throw new Error(error.message);
+
+  revalidatePath("/admin/kortingen");
 }
 
 export async function toggleArtPieceFeatured(pieceId: string): Promise<void> {

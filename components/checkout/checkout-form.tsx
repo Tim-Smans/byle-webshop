@@ -2,8 +2,8 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { FC, ReactNode, useState } from "react"
-import { Loader2, Lock, ShoppingBag } from "lucide-react"
+import { FC, ReactNode, useEffect, useState } from "react"
+import { Loader2, Lock, ShoppingBag, Tag, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { OrderAndDeliveryDialog, TermsOfServiceDialog } from "@/components/dialogs/service-dialogs"
@@ -12,8 +12,10 @@ import { getShippingCost, type ShippingRate } from "@/lib/shop/shipping"
 import { SHIPPING_COUNTRIES } from "@/lib/shop/countries"
 import type { CheckoutErrors, CheckoutInput } from "@/lib/orders/checkout-validation"
 import { formatPrice } from "@/lib/utils"
-import { placeOrder } from "@/app/afrekenen/actions"
+import { placeOrder, previewDiscountCode } from "@/app/afrekenen/actions"
+import PriceTag from "@/components/shared/price-tag"
 import { pendingOrderStore } from "@/lib/orders/pending-order"
+import { PENDING_DISCOUNT_EVENT, pendingDiscountStore } from "@/lib/shop/pending-discount"
 import { PRICE_VAT_TEXT } from "@/lib/shop/config"
 
 interface Props {
@@ -22,7 +24,12 @@ interface Props {
     pickupLocationText: string
 }
 
-type FormState = Omit<CheckoutInput, "artPieceIds">
+type FormState = Omit<CheckoutInput, "artPieceIds" | "discountCode">
+
+interface AppliedDiscount {
+    code: string
+    discountAmount: number
+}
 
 const CheckoutForm: FC<Props> = ({ rates, deliveryTimeText, pickupLocationText }) => {
     const { items, unavailableItems, subtotal, isLoading, refresh } = useCart()
@@ -51,6 +58,104 @@ const CheckoutForm: FC<Props> = ({ rates, deliveryTimeText, pickupLocationText }
     const [errors, setErrors] = useState<CheckoutErrors>({})
     const [message, setMessage] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
+
+    const [codeInput, setCodeInput] = useState("")
+    const [discount, setDiscount] = useState<AppliedDiscount | null>(null)
+    const [discountMessage, setDiscountMessage] = useState<string | null>(null)
+    const [isApplyingCode, setIsApplyingCode] = useState(false)
+
+    // The works the discount is computed on
+    const availableIds = items.filter((item) => item.availability === "available").map((item) => item.artPieceId)
+    const availableKey = availableIds.join(",")
+    const appliedCode = discount?.code ?? null
+
+    // The cart changed (work removed, sold, price changed): compute the
+    // discount again, or drop the code when it no longer applies
+    useEffect(() => {
+        if (!appliedCode || !availableKey) return
+        let cancelled = false
+
+        previewDiscountCode(appliedCode, availableKey.split(","))
+            .then((result) => {
+                if (cancelled) return
+                if (result.ok) {
+                    setDiscount({ code: result.code, discountAmount: result.discountAmount })
+                } else {
+                    setDiscount(null)
+                    setDiscountMessage(result.message)
+                }
+            })
+            .catch(() => { })
+
+        return () => {
+            cancelled = true
+        }
+    }, [appliedCode, availableKey])
+
+    const applyCode = async () => {
+        if (!codeInput.trim()) {
+            setDiscountMessage("Vul een kortingscode in.")
+            return
+        }
+        setIsApplyingCode(true)
+        setDiscountMessage(null)
+        try {
+            const result = await previewDiscountCode(codeInput, availableIds)
+            if (result.ok) {
+                setDiscount({ code: result.code, discountAmount: result.discountAmount })
+                setCodeInput("")
+            } else {
+                setDiscountMessage(result.message)
+            }
+        } catch {
+            setDiscountMessage("De kortingscode kon niet gecontroleerd worden. Probeer het opnieuw.")
+        }
+        setIsApplyingCode(false)
+    }
+
+    const removeCode = () => {
+        setDiscount(null)
+        setDiscountMessage(null)
+        pendingDiscountStore.clear()
+    }
+
+    // A code picked up in the banner: applied as soon as the cart is loaded,
+    // or right away when it is clicked while this page is open
+    const [pendingCode, setPendingCode] = useState<string | null>(null)
+
+    useEffect(() => {
+        const readStored = setTimeout(() => setPendingCode(pendingDiscountStore.get()), 0)
+        const onPicked = (event: Event) => setPendingCode((event as CustomEvent<string>).detail)
+        window.addEventListener(PENDING_DISCOUNT_EVENT, onPicked)
+        return () => {
+            clearTimeout(readStored)
+            window.removeEventListener(PENDING_DISCOUNT_EVENT, onPicked)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (!pendingCode || !availableKey || pendingCode === appliedCode) return
+        let cancelled = false
+
+        previewDiscountCode(pendingCode, availableKey.split(","))
+            .then((result) => {
+                if (cancelled) return
+                if (result.ok) {
+                    setDiscount({ code: result.code, discountAmount: result.discountAmount })
+                    setDiscountMessage(null)
+                } else {
+                    // e.g. expired meanwhile: say so once and forget the code
+                    setDiscountMessage(result.message)
+                    pendingDiscountStore.clear()
+                }
+                setPendingCode(null)
+            })
+            .catch(() => { })
+
+        return () => {
+            cancelled = true
+        }
+    }, [pendingCode, availableKey, appliedCode])
 
     const update = <K extends keyof FormState>(key: K, value: FormState[K]) => {
         setForm((prev) => ({ ...prev, [key]: value }))
@@ -85,7 +190,8 @@ const CheckoutForm: FC<Props> = ({ rates, deliveryTimeText, pickupLocationText }
             : selectedRate
                 ? getShippingCost(selectedRate, items.map((item) => item.sizeClass))
                 : null
-    const total = subtotal + (shippingCost ?? 0)
+    const discountAmount = discount?.discountAmount ?? 0
+    const total = Math.round((subtotal - discountAmount + (shippingCost ?? 0)) * 100) / 100
 
     const showBillingAddress =
         (form.shippingMethod === "ship" && !form.billingSameAsShipping) ||
@@ -100,10 +206,12 @@ const CheckoutForm: FC<Props> = ({ rates, deliveryTimeText, pickupLocationText }
             const result = await placeOrder({
                 ...form,
                 artPieceIds: items.map((item) => item.artPieceId),
+                discountCode: discount?.code ?? "",
                 previousOrder: pendingOrderStore.get(),
             })
 
             if (result.ok) {
+                pendingDiscountStore.clear()
                 pendingOrderStore.set({
                     orderId: result.orderId,
                     orderNumber: result.orderNumber,
@@ -116,6 +224,11 @@ const CheckoutForm: FC<Props> = ({ rates, deliveryTimeText, pickupLocationText }
 
             setErrors(result.fieldErrors ?? {})
             setMessage(result.message)
+            if (result.fieldErrors?.discountCode) {
+                // The code stopped being valid (e.g. just used up): drop it
+                setDiscount(null)
+                setDiscountMessage(result.fieldErrors.discountCode)
+            }
             refresh()
         } catch {
             setMessage("Er ging iets mis. Controleer je internetverbinding en probeer het opnieuw.")
@@ -285,16 +398,80 @@ const CheckoutForm: FC<Props> = ({ rates, deliveryTimeText, pickupLocationText }
                                     <p className="text-red-700 font-sans">Niet meer beschikbaar</p>
                                 )}
                             </div>
-                            <p className="text-sm font-medium whitespace-nowrap">{formatPrice(item.price)}</p>
+                            <p className="text-sm font-medium whitespace-nowrap text-right">
+                                <PriceTag price={item.originalPrice} discountPercent={item.discountPercent} />
+                            </p>
                         </li>
                     ))}
                 </ul>
+
+                <div className="pt-4 border-t border-border">
+                    {discount ? (
+                        <div className="flex items-center justify-between gap-3 rounded-md border border-border bg-muted/40 px-3 py-2 text-sm font-sans">
+                            <span className="flex items-center gap-2 min-w-0">
+                                <Tag className="h-4 w-4 shrink-0 text-muted-foreground" />
+                                <span className="truncate">
+                                    Kortingscode <strong>{discount.code}</strong>
+                                </span>
+                            </span>
+                            <button
+                                type="button"
+                                onClick={removeCode}
+                                className="text-muted-foreground hover:text-foreground"
+                                aria-label="Kortingscode verwijderen"
+                            >
+                                <X className="h-4 w-4" />
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="text-sm">
+                            <span className="block mb-1 text-foreground">Kortingscode</span>
+                            <div className="flex gap-2">
+                                <Input
+                                    value={codeInput}
+                                    onChange={(e) => {
+                                        setCodeInput(e.target.value)
+                                        setDiscountMessage(null)
+                                    }}
+                                    onKeyDown={(e) => {
+                                        // Enter applies the code instead of placing the order
+                                        if (e.key === "Enter") {
+                                            e.preventDefault()
+                                            applyCode()
+                                        }
+                                    }}
+                                    autoComplete="off"
+                                    aria-label="Kortingscode"
+                                    className="uppercase"
+                                />
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={applyCode}
+                                    disabled={isApplyingCode || availableIds.length === 0}
+                                >
+                                    {isApplyingCode && <Loader2 className="h-4 w-4 animate-spin" />}
+                                    Toepassen
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+                    {discountMessage && (
+                        <p role="alert" className="mt-1 text-xs text-red-700 font-sans">{discountMessage}</p>
+                    )}
+                </div>
 
                 <dl className="space-y-2 pt-4 border-t border-border text-sm font-sans">
                     <div className="flex justify-between">
                         <dt className="text-muted-foreground">Subtotaal</dt>
                         <dd>{formatPrice(subtotal)}</dd>
                     </div>
+                    {discount && (
+                        <div className="flex justify-between text-red-800">
+                            <dt>Korting ({discount.code})</dt>
+                            <dd>– {formatPrice(discountAmount)}</dd>
+                        </div>
+                    )}
                     <div className="flex justify-between">
                         <dt className="text-muted-foreground">
                             {form.shippingMethod === "pickup" ? "Afhalen" : "Verzending"}

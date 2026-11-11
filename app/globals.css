@@ -157,3 +157,41 @@ h6 {
   0%, 100% { width: 1.5rem; opacity: 0.2; }
   50% { width: 4.5rem; opacity: 0.55; }
 }
+/* Announcement banner (components/announcements/announcement-bar.tsx) */
+.announcement-spacer {
+  height: 2.5rem;
+}
+
+/* Closed by the visitor or nothing to show: set on <html> before the page
+   paints (inline script in app/layout.tsx), so the bar never flashes */
+html[data-banner-hidden] .announcement-bar,
+html[data-banner-hidden] .announcement-spacer {
+  display: none;
+}
+
+.announcement-feest {
+  background-image: linear-gradient(110deg, #cc4b1b 0%, #ac4e16 25%, #6b4426 50%, #ac4e16 75%, #cc4b1b 100%);
+  background-size: 200% 100%;
+  animation: banner-shine 10s linear infinite;
+}
+
+@keyframes banner-shine {
+  from { background-position: 0% 50%; }
+  to { background-position: 200% 50%; }
+}
+
+.announcement-marquee {
+  animation: banner-marquee 8s ease-in-out infinite alternate;
+}
+
+@keyframes banner-marquee {
+  0%, 15% { transform: translateX(0); }
+  85%, 100% { transform: translateX(var(--marquee-distance, 0)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .announcement-feest,
+  .announcement-marquee {
+    animation: none;
+  }
+}

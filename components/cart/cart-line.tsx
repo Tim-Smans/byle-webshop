@@ -6,7 +6,7 @@ import { FC } from "react"
 import { Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { CartItem } from "@/lib/types"
-import { formatPrice } from "@/lib/utils"
+import PriceTag from "@/components/shared/price-tag"
 
 interface Props {
     item: CartItem
@@ -68,7 +68,9 @@ const CartLine: FC<Props> = ({ item, onRemove, onNavigate }) => {
                 <div className="mt-auto pt-2">
                     {item.availability === "available" ? (
                         <>
-                            <p className="font-medium">{formatPrice(item.price)}</p>
+                            <p>
+                                <PriceTag price={item.originalPrice} discountPercent={item.discountPercent} className="font-medium" />
+                            </p>
                             {item.reservedByMe && (
                                 <p className="text-xs font-sans text-muted-foreground">
                                     Je was dit werk aan het afrekenen, het is nog even voor jou gereserveerd.

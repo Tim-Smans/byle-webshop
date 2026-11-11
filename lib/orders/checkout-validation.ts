@@ -1,4 +1,5 @@
 import { getCountryName } from "../shop/countries"
+import { normalizeDiscountCode } from "../shop/discount"
 
 export interface CheckoutInput {
   artPieceIds: string[]
@@ -20,6 +21,8 @@ export interface CheckoutInput {
   billingPostalCode: string
   billingCity: string
   acceptTerms: boolean
+  // Optional discount code, already in capitals
+  discountCode: string
   // Honeypot: real visitors never fill this in
   website: string
 }
@@ -56,6 +59,7 @@ export function normalizeCheckoutInput(raw: Record<string, unknown>): CheckoutIn
     billingPostalCode: clean(raw.billingPostalCode, 20),
     billingCity: clean(raw.billingCity, 100),
     acceptTerms: raw.acceptTerms === true,
+    discountCode: normalizeDiscountCode(raw.discountCode),
     website: clean(raw.website),
   }
 }

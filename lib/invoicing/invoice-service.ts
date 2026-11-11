@@ -52,12 +52,27 @@ async function issue(
   return (data as { id: string }).id
 }
 
+const euro = new Intl.NumberFormat("nl-BE", { style: "currency", currency: "EUR" })
+
+// ", normale prijs € 200,00, korting 20%, kortingscode ZOMER – € 16,00"
+function describeItemDiscount(item: Row, discountCode: string | null): string {
+  const originalPrice = item.originalPrice == null ? null : Number(item.originalPrice)
+  const codeDiscount = Number(item.codeDiscount ?? 0)
+  const percent = item.discountPercent == null ? null : Number(item.discountPercent)
+  if (originalPrice == null || originalPrice <= Number(item.price)) return ""
+
+  const parts = [`normale prijs ${euro.format(originalPrice)}`]
+  if (percent) parts.push(`korting ${percent}%`)
+  if (codeDiscount > 0) parts.push(`kortingscode ${discountCode ?? ""} – ${euro.format(codeDiscount)}`.replace("  ", " "))
+  return ", " + parts.join(", ")
+}
+
 // Creates the invoice for a paid order. Idempotent: returns the existing
 // invoice id when there already is one.
 export async function ensureInvoiceForOrder(orderId: string): Promise<string> {
   const { data: order, error } = await createAdminClient()
     .from("Order")
-    .select("*, OrderItem (id, title, dimensions, price, vatRate)")
+    .select("*, OrderItem (id, title, dimensions, price, originalPrice, discountPercent, codeDiscount, vatRate)")
     .eq("id", orderId)
     .single()
   if (error) throw new Error(error.message)
@@ -71,7 +86,10 @@ export async function ensureInvoiceForOrder(orderId: string): Promise<string> {
     makeLine(
       "item",
       item.id as string,
-      [item.title, item.dimensions].filter(Boolean).join(" – ") + " (origineel kunstwerk)",
+      [item.title, item.dimensions].filter(Boolean).join(" – ") +
+        " (origineel kunstwerk)" +
+        describeItemDiscount(item, order.discountCode as string | null),
+      // What was paid for this work, after all discounts
       Number(item.price),
       Number(item.vatRate)
     )

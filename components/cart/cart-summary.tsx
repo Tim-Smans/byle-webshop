@@ -15,6 +15,12 @@ interface Props {
 const CartSummary: FC<Props> = ({ onNavigate }) => {
     const { items, subtotal, unavailableItems } = useCart()
     const canCheckout = unavailableItems.length === 0 && subtotal > 0
+    // What the sale prices save on the works that can still be bought
+    const savings = Math.round(
+        items
+            .filter((item) => item.availability === "available")
+            .reduce((sum, item) => sum + item.originalPrice - item.price, 0) * 100
+    ) / 100
     const checkoutLabel = items.some((item) => item.reservedByMe) ? "Verder afrekenen" : "Afrekenen"
 
     return (
@@ -24,8 +30,16 @@ const CartSummary: FC<Props> = ({ onNavigate }) => {
                 <span className="text-xl font-medium">{formatPrice(subtotal)}</span>
             </div>
 
+            {savings > 0 && (
+                <div className="flex items-center justify-between text-sm font-sans text-red-800">
+                    <span>Je bespaart</span>
+                    <span>{formatPrice(savings)}</span>
+                </div>
+            )}
+
             <p className="text-sm text-muted-foreground font-sans">
-                {PRICE_VAT_TEXT} Verzendkosten worden berekend bij het afrekenen.
+                {PRICE_VAT_TEXT} Verzendkosten worden berekend bij het afrekenen. Heb je een kortingscode?
+                Die vul je in bij het afrekenen.
             </p>
 
             <p className="text-sm text-muted-foreground font-sans">

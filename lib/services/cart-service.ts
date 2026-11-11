@@ -1,6 +1,7 @@
 import type { CartItem, SizeClass } from "../types"
 import { supabase } from "../supabase/client"
 import { getAvailability } from "../shop/availability"
+import { getSalePrice, normalizeDiscountPercent } from "../shop/discount"
 
 // The cart only keeps art piece ids in localStorage. Prices and availability
 // are always fetched fresh, and the checkout validates everything again
@@ -111,7 +112,7 @@ export async function fetchCartItems(artPieceIds: string[]): Promise<CartItem[]>
 
   const { data, error } = await supabase
     .from("ArtPiece")
-    .select("id, title, dimensions, price, isSold, status, reservedUntil, reservedByOrderId, sizeClass, Image (url, index)")
+    .select("id, title, dimensions, price, discountPercent, isSold, status, reservedUntil, reservedByOrderId, sizeClass, Image (url, index)")
     .in("id", artPieceIds)
 
   if (error) throw error
@@ -129,7 +130,9 @@ export async function fetchCartItems(artPieceIds: string[]): Promise<CartItem[]>
       artPieceId: piece.id,
       title: piece.title,
       dimensions: piece.dimensions ?? "",
-      price: Number(piece.price),
+      price: getSalePrice(Number(piece.price), piece.discountPercent),
+      originalPrice: Number(piece.price),
+      discountPercent: normalizeDiscountPercent(piece.discountPercent),
       imageUrl: images[0]?.url ?? null,
       sizeClass: (piece.sizeClass ?? "small") as SizeClass,
       availability: getAvailability(piece),

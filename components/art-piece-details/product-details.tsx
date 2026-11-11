@@ -6,7 +6,7 @@ import Specifications from "./specifications";
 import DetailsActions from "./details-actions";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { formatPrice } from "@/lib/utils";
+import PriceTag from "../shared/price-tag";
 
 interface Props {
     artPiece: ArtPiece
@@ -38,9 +38,14 @@ const ProductDetails: FC<Props> = ({ artPiece }) => {
 
             {/* Price */}
             <div className="mb-8">
-                <p className="text-4xl font-light text-foreground">
-                    {formatPrice(artPiece.price)}
+                <p className="text-4xl font-light">
+                    <PriceTag price={artPiece.price} discountPercent={artPiece.discountPercent} showPercent />
                 </p>
+                {artPiece.discountPercent && !artPiece.isSold && (
+                    <p className="text-sm text-red-800 font-sans mt-1">
+                        Dit werk staat {artPiece.discountPercent}% in korting.
+                    </p>
+                )}
                 {!artPiece.isSold && (
                     <>
                         {artPiece.shippingInfo && (
