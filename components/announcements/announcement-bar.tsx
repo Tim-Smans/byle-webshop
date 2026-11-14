@@ -6,7 +6,6 @@ import { Check, Clock, Copy, Sparkles, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { pendingDiscountStore } from "@/lib/shop/pending-discount"
 import {
-    BANNER_DISMISSED_KEY,
     BANNER_HIDDEN_ATTRIBUTE,
     type BannerData,
     type BannerMessage,
@@ -34,7 +33,7 @@ const SOFT_ON_THEME: Record<BannerTheme, string> = {
 
 interface Props {
     banner: BannerData
-    // Admin preview: no closing, no storage, not part of the page layout
+    // Admin preview: no closing, not part of the page layout
     preview?: boolean
 }
 
@@ -72,12 +71,9 @@ const AnnouncementBar: FC<Props> = ({ banner, preview = false }) => {
         return () => clearInterval(timer)
     }, [messages.length, isPaused])
 
+    // Hidden until the next page load: nothing is remembered, so after a
+    // refresh the visitor sees the banner again
     const dismiss = () => {
-        try {
-            localStorage.setItem(BANNER_DISMISSED_KEY, banner.version)
-        } catch {
-            // Storage blocked: hidden for this page view only
-        }
         document.documentElement.setAttribute(BANNER_HIDDEN_ATTRIBUTE, "")
     }
 

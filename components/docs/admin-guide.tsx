@@ -291,7 +291,7 @@ export default function AdminGuide() {
                             <li><strong>Aftelklok</strong>: telt af tot het einde van het bericht of van de kortingscode. Op de laatste dag tikken de seconden mee.</li>
                             <li><strong>Tonen vanaf / tot</strong>: plan een bericht vooraf. Het verschijnt en verdwijnt vanzelf (binnen een paar minuten).</li>
                             <li>De link <strong>Werken in korting</strong> opent de galerie met alleen de werken die in korting staan.</li>
-                            <li>Een bezoeker kan de banner wegklikken. Pas je daarna iets aan, dan ziet die bezoeker de banner opnieuw.</li>
+                            <li>Een bezoeker kan de banner wegklikken. Zolang die op de site rondklikt, blijft hij weg; bij een volgend bezoek of na het vernieuwen van de pagina staat hij er weer.</li>
                             <li>Hou de tekst kort. Op een gsm schuift een lange tekst langzaam heen en weer.</li>
                         </Bullets>
                     </Topic>

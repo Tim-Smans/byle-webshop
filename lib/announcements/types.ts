@@ -34,9 +34,6 @@ export interface BannerMessage {
 }
 
 export interface BannerData {
-  // Changes whenever a message changes: a visitor who closed the banner sees
-  // it again when there is something new
-  version: string
   messages: BannerMessage[]
 }
 
@@ -44,8 +41,6 @@ export interface BannerData {
 export const SALE_FILTER = "korting"
 export const SALE_GALLERY_URL = `/gallery?collectionId=${SALE_FILTER}`
 
-// localStorage key of the closed banner version, also read by the inline
-// script in app/layout.tsx
-export const BANNER_DISMISSED_KEY = "byle-banner-dismissed"
-// Set on <html> when the banner is closed or has nothing to show
+// Set on <html> when the banner is closed (until the next page load) or has
+// nothing left to show; hides the bar and the spacer under the header
 export const BANNER_HIDDEN_ATTRIBUTE = "data-banner-hidden"

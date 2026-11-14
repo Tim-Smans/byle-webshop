@@ -67,13 +67,6 @@ export async function getUsableCodes(codes: CodeRow[]): Promise<Set<string>> {
 const earliest = (...values: (string | null)[]) =>
   values.filter((value): value is string => !!value).sort()[0] ?? null
 
-// Short, stable fingerprint of what the banner shows
-function fingerprint(value: string): string {
-  let hash = 5381
-  for (let i = 0; i < value.length; i++) hash = ((hash << 5) + hash + value.charCodeAt(i)) | 0
-  return (hash >>> 0).toString(36)
-}
-
 // What the banner shows right now. ignoreSwitch: also when the banner is
 // switched off (admin preview).
 export async function loadBanner(options: { ignoreSwitch?: boolean } = {}): Promise<BannerData | null> {
@@ -102,7 +95,6 @@ export async function loadBanner(options: { ignoreSwitch?: boolean } = {}): Prom
     const usable = await getUsableCodes(codes)
 
     const messages: BannerMessage[] = []
-    const versionParts: string[] = []
     for (const row of rows) {
       const code = row.DiscountCode as CodeRow | null
       // A message about a code that can't be used would only disappoint
@@ -122,11 +114,10 @@ export async function loadBanner(options: { ignoreSwitch?: boolean } = {}): Prom
         countdownTo: row.showCountdown ? hideAt : null,
         hideAt,
       })
-      versionParts.push(`${row.id}:${row.updatedAt}`)
     }
 
     if (messages.length === 0) return null
-    return { version: fingerprint(versionParts.join("|")), messages }
+    return { messages }
   } catch (err) {
     // The banner must never break the site (e.g. migration not run yet)
     console.error("[banner] could not load announcements:", err)

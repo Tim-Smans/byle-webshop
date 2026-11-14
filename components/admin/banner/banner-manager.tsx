@@ -407,7 +407,6 @@ const AnnouncementForm: FC<{ announcement: AdminAnnouncement | null; codes: Code
     )
 
     const preview: BannerData = {
-        version: "preview",
         messages: [
             {
                 id: "preview",

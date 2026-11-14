@@ -162,8 +162,7 @@ h6 {
   height: 2.5rem;
 }
 
-/* Closed by the visitor or nothing to show: set on <html> before the page
-   paints (inline script in app/layout.tsx), so the bar never flashes */
+/* Closed by the visitor (until the next page load) or nothing left to show */
 html[data-banner-hidden] .announcement-bar,
 html[data-banner-hidden] .announcement-spacer {
   display: none;
