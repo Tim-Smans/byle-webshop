@@ -19,6 +19,8 @@ import FavoritesDrawer from "@/components/cart/favorites-drawer";
 import CartDrawer from "@/components/cart/cart-drawer";
 import { CartProvider } from "@/lib/context/cart-context";
 import { FeedbackProvider } from "@/lib/context/feedback-context";
+import AnnouncementBar from "@/components/announcements/announcement-bar";
+import { getAnnouncementBanner } from "@/lib/announcements/banner";
 
 const oldStandard = Old_Standard_TT({
   subsets: ["latin"],
@@ -59,11 +61,13 @@ export const metadata: Metadata = {
   description: "Art by Lé galery app"
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const banner = await getAnnouncementBanner();
+
   return (
     <html
       lang="en"
@@ -83,7 +87,9 @@ export default function RootLayout({
         <CartProvider>
           <FavoritesProvider>
             <FeedbackProvider>
-              <Header />
+              <Header banner={banner ? <AnnouncementBar banner={banner} /> : null} />
+              {/* Pushes the page down by the height of the banner */}
+              {banner && <div className="announcement-spacer shrink-0" aria-hidden />}
               {children}
               <Footer />
               <FavoritesDrawer />

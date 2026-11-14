@@ -2,6 +2,8 @@
 
 import { Locale } from "@mollie/api-client";
 import { after } from "next/server";
+import { revalidateTag } from "next/cache";
+import { ANNOUNCEMENTS_TAG } from "@/lib/announcements/banner";
 import { deleteOldUnpaidOrders } from "@/lib/orders/cleanup";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getMollieClient } from "@/lib/mollie/client";
@@ -11,6 +13,7 @@ import {
   type CheckoutErrors,
 } from "@/lib/orders/checkout-validation";
 import { getSiteUrl, RESERVATION_MINUTES, TERMS_VERSION, VAT_RATE } from "@/lib/shop/config";
+import { getDiscountErrorMessage, isDiscountError, normalizeDiscountCode } from "@/lib/shop/discount";
 
 export type PlaceOrderResult =
   | { ok: true; checkoutUrl: string; orderId: string; orderNumber: string; accessToken: string }
@@ -109,9 +112,14 @@ export async function placeOrder(raw: Record<string, unknown>): Promise<PlaceOrd
     p_vat_rate: VAT_RATE,
     p_terms_version: TERMS_VERSION,
     p_reservation_minutes: RESERVATION_MINUTES,
+    p_discount_code: input.discountCode || null,
   });
 
   if (error) {
+    if (isDiscountError(error.message)) {
+      const message = getDiscountErrorMessage(error.message, error.details);
+      return { ok: false, message, fieldErrors: { discountCode: message } };
+    }
     const known = RPC_ERRORS[error.message];
     if (!known) console.error("[checkout] create_order failed:", error);
     return { ok: false, message: known ?? GENERIC_ERROR };
@@ -152,6 +160,9 @@ export async function placeOrder(raw: Record<string, unknown>): Promise<PlaceOrd
     // Retention from the privacy policy, done after the response is sent
     after(deleteOldUnpaidOrders);
 
+    // A code with a maximum may now be used up: the banner checks again
+    if (input.discountCode) revalidateTag(ANNOUNCEMENTS_TAG, "max");
+
     return {
       ok: true,
       checkoutUrl,
@@ -170,4 +181,39 @@ export async function placeOrder(raw: Record<string, unknown>): Promise<PlaceOrd
       message: "De betaling kon niet gestart worden. Probeer het over een paar minuten opnieuw.",
     };
   }
+}
+
+export type DiscountPreviewResult =
+  | { ok: true; code: string; discountAmount: number }
+  | { ok: false; message: string };
+
+// Checks a discount code for the works in the cart and returns the discount,
+// computed by the same database function as the order itself. The order
+// checks the code again, so this is only a preview.
+export async function previewDiscountCode(rawCode: unknown, rawArtPieceIds: unknown): Promise<DiscountPreviewResult> {
+  const code = normalizeDiscountCode(rawCode);
+  if (!code) return { ok: false, message: "Vul een kortingscode in." };
+
+  const artPieceIds = Array.isArray(rawArtPieceIds)
+    ? rawArtPieceIds.filter((id): id is string => typeof id === "string").slice(0, 50)
+    : [];
+  if (artPieceIds.length === 0) return { ok: false, message: "Je winkelmand is leeg." };
+
+  const { data, error } = await createAdminClient().rpc("price_cart", {
+    p_art_piece_ids: artPieceIds,
+    p_discount_code: code,
+  });
+
+  if (error) {
+    if (isDiscountError(error.message)) {
+      return { ok: false, message: getDiscountErrorMessage(error.message, error.details) };
+    }
+    if (error.message !== "UNKNOWN_ART_PIECE") console.error("[checkout] price_cart failed:", error);
+    return { ok: false, message: "De kortingscode kon niet gecontroleerd worden. Probeer het opnieuw." };
+  }
+
+  const lines = (data ?? []) as { codeDiscount: number; discountCode: string | null }[];
+  const discountAmount = Math.round(lines.reduce((sum, line) => sum + Number(line.codeDiscount), 0) * 100) / 100;
+
+  return { ok: true, code: lines[0]?.discountCode ?? code, discountAmount };
 }

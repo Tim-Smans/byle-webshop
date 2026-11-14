@@ -10,6 +10,7 @@ import { syncMolliePayment } from "@/lib/orders/payment-sync";
 import { getCountryName } from "@/lib/shop/countries";
 import { DELIVERY_TIME_TEXT, PICKUP_LOCATION_TEXT } from "@/lib/shop/config";
 import { formatPrice } from "@/lib/utils";
+import { OrderLinePrice } from "@/components/shared/price-tag";
 import ClearCartOnPaid from "@/components/checkout/clear-cart-on-paid";
 import PaymentPendingRefresher from "@/components/checkout/payment-pending-refresher";
 import ForgetPendingOrder from "@/components/checkout/forget-pending-order";
@@ -225,7 +226,7 @@ function OrderSummary({ order }: { order: OrderView }) {
                             <p className="font-medium text-foreground">{item.title}</p>
                             {item.dimensions && <p className="text-muted-foreground font-sans">{item.dimensions}</p>}
                         </div>
-                        <p className="text-sm font-medium whitespace-nowrap">{formatPrice(item.price)}</p>
+                        <OrderLinePrice price={item.linePrice} originalPrice={item.originalPrice} className="text-sm font-medium whitespace-nowrap" />
                     </li>
                 ))}
             </ul>
@@ -235,6 +236,12 @@ function OrderSummary({ order }: { order: OrderView }) {
                     <dt className="text-muted-foreground">Subtotaal</dt>
                     <dd>{formatPrice(order.subtotal)}</dd>
                 </div>
+                {order.discountAmount > 0 && (
+                    <div className="flex justify-between text-red-800">
+                        <dt>Korting ({order.discountCode ?? "kortingscode"})</dt>
+                        <dd>– {formatPrice(order.discountAmount)}</dd>
+                    </div>
+                )}
                 <div className="flex justify-between">
                     <dt className="text-muted-foreground">{order.shippingMethod === "pickup" ? "Afhalen" : "Verzending"}</dt>
                     <dd>{order.shippingCost === 0 ? "Gratis" : formatPrice(order.shippingCost)}</dd>

@@ -101,6 +101,8 @@ export interface EmailOrderItem {
   dimensions: string | null
   imageUrl: string | null
   price: number
+  // Normal price; shown struck through when higher than price
+  originalPrice?: number | null
 }
 
 export function ItemsTable({ items }: { items: EmailOrderItem[] }) {
@@ -119,6 +121,11 @@ export function ItemsTable({ items }: { items: EmailOrderItem[] }) {
               {item.dimensions && <div style={{ fontSize: 13, color: colors.muted }}>{item.dimensions}</div>}
             </td>
             <td style={{ padding: "8px 0", verticalAlign: "top", textAlign: "right", fontSize: 15, fontFamily: "Arial, sans-serif", whiteSpace: "nowrap" }}>
+              {item.originalPrice != null && item.originalPrice > item.price + 0.001 && (
+                <div style={{ fontSize: 13, color: colors.muted, textDecoration: "line-through" }}>
+                  {formatMoney(item.originalPrice)}
+                </div>
+              )}
               {formatMoney(item.price)}
             </td>
           </tr>

@@ -7,7 +7,12 @@ export interface OrderItemView {
   title: string
   dimensions: string | null
   imageUrl: string | null
+  // What the customer paid for this work (also the refund amount)
   price: number
+  // Price before the discount code; with the sale already applied
+  linePrice: number
+  // Normal price, null for orders from before discounts existed
+  originalPrice: number | null
 }
 
 export interface OrderView {
@@ -23,6 +28,8 @@ export interface OrderView {
   shippingPostalCode: string | null
   shippingCity: string | null
   subtotal: number
+  discountCode: string | null
+  discountAmount: number
   shippingCost: number
   total: number
   vatAmount: number
@@ -43,7 +50,7 @@ export async function getOrderForCustomer(orderNumber: string, accessToken: stri
 
   const { data, error } = await createAdminClient()
     .from("Order")
-    .select("*, OrderItem (id, artPieceId, title, dimensions, imageUrl, price), Withdrawal (submittedAt, status, refundedAt)")
+    .select("*, OrderItem (id, artPieceId, title, dimensions, imageUrl, price, originalPrice, codeDiscount), Withdrawal (submittedAt, status, refundedAt)")
     .eq("orderNumber", orderNumber)
     .eq("accessToken", accessToken)
     .maybeSingle()
@@ -64,6 +71,8 @@ export async function getOrderForCustomer(orderNumber: string, accessToken: stri
     shippingPostalCode: data.shippingPostalCode,
     shippingCity: data.shippingCity,
     subtotal: Number(data.subtotal),
+    discountCode: data.discountCode ?? null,
+    discountAmount: Number(data.discountAmount ?? 0),
     shippingCost: Number(data.shippingCost),
     total: Number(data.total),
     vatAmount: Number(data.vatAmount),
@@ -82,6 +91,9 @@ export async function getOrderForCustomer(orderNumber: string, accessToken: stri
       dimensions: (item.dimensions as string | null) ?? null,
       imageUrl: (item.imageUrl as string | null) ?? null,
       price: Number(item.price),
+      // Price of the work before the discount code (the sale price when on sale)
+      linePrice: Number(item.price) + Number(item.codeDiscount ?? 0),
+      originalPrice: item.originalPrice == null ? null : Number(item.originalPrice),
     })),
   }
 }

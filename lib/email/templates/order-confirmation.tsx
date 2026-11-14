@@ -49,6 +49,9 @@ export default function OrderConfirmationEmail({
       <TotalsTable
         rows={[
           ["Subtotaal", formatMoney(order.subtotal)],
+          ...(order.discountAmount > 0
+            ? [[`Korting (${order.discountCode ?? "kortingscode"})`, `– ${formatMoney(order.discountAmount)}`] as [string, string]]
+            : []),
           [order.shippingMethod === "pickup" ? "Afhalen" : "Verzending", order.shippingCost === 0 ? "Gratis" : formatMoney(order.shippingCost)],
           ...(order.vatAmount > 0 ? [["Waarvan btw", formatMoney(order.vatAmount)] as [string, string]] : []),
         ]}

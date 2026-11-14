@@ -38,6 +38,8 @@ import { CSS } from "@dnd-kit/utilities";
 import { saveArtPiece } from "@/app/admin/artpiece/actions";
 import { createImageUploadUrls } from "@/app/admin/storage-actions";
 import type { SizeClass } from "@/lib/types";
+import { getSalePrice, normalizeDiscountPercent } from "@/lib/shop/discount";
+import { formatPrice } from "@/lib/utils";
 
 interface LabelType {
     id: string;
@@ -76,6 +78,11 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
     const [newCollectionDescription, setNewCollectionDescription] = useState("");
 
     const [images, setImages] = useState<ImageItem[]>([]);
+
+    // Sale: the percentage stays filled in when switched off, for convenience
+    const [isOnSale, setIsOnSale] = useState(false);
+    const [discountInput, setDiscountInput] = useState("");
+    const discountPercent = normalizeDiscountPercent(discountInput.trim());
 
     const [form, setForm] = useState({
         title: "",
@@ -171,6 +178,12 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
+
+        if (isOnSale && discountPercent === null) {
+            showError("Vul bij korting een heel getal tussen 1 en 99 in, of zet de korting uit.");
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -178,6 +191,7 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
 
             await saveArtPiece(isEditMode ? id : null, {
                 ...form,
+                discountPercent: isOnSale ? discountPercent : null,
                 imageUrls,
                 labelIds: selectedLabelIds,
                 newLabel,
@@ -233,6 +247,10 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
             shippingInfo: data.shippingInfo ?? "",
             sizeClass: data.sizeClass === "large" ? "large" : "small"
         });
+
+        const savedDiscount = normalizeDiscountPercent(data.discountPercent);
+        setIsOnSale(savedDiscount !== null);
+        setDiscountInput(savedDiscount === null ? "" : String(savedDiscount));
 
         setCollectionId(data.collectionId);
         console.log(data)
@@ -299,6 +317,55 @@ const AdminCreateArtPiecePage: FC<Props> = ({ id, isEditMode }) => {
                                             })
                                         }
                                     />
+                                </div>
+
+                                <div className="md:col-span-2 rounded-md border p-4">
+                                    <div className="flex items-center justify-between gap-4">
+                                        <div>
+                                            <LabelComponent>Korting</LabelComponent>
+                                            <p className="text-xs text-muted-foreground mt-1">
+                                                In de webshop staat de normale prijs dan doorstreept naast de nieuwe prijs.
+                                            </p>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            role="switch"
+                                            aria-checked={isOnSale}
+                                            aria-label="Korting aan of uit"
+                                            onClick={() => setIsOnSale(!isOnSale)}
+                                            className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${isOnSale ? "bg-emerald-600" : "bg-border"}`}
+                                        >
+                                            <span
+                                                className={`inline-block h-5 w-5 rounded-full bg-white shadow transition-transform ${isOnSale ? "translate-x-5" : "translate-x-0.5"}`}
+                                            />
+                                        </button>
+                                    </div>
+
+                                    {isOnSale && (
+                                        <div className="mt-4 flex flex-wrap items-center gap-4">
+                                            <div className="relative w-28">
+                                                <Input
+                                                    inputMode="numeric"
+                                                    placeholder="20"
+                                                    value={discountInput}
+                                                    onChange={(e) => setDiscountInput(e.target.value.replace(/[^0-9]/g, ""))}
+                                                    className="pr-8"
+                                                    aria-label="Kortingspercentage"
+                                                />
+                                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">%</span>
+                                            </div>
+                                            <p className="text-sm">
+                                                {discountPercent === null ? (
+                                                    <span className="text-red-700">Kies een getal tussen 1 en 99</span>
+                                                ) : (
+                                                    <>
+                                                        <s className="text-muted-foreground">{formatPrice(form.price)}</s>{" "}
+                                                        <strong className="text-red-800">{formatPrice(getSalePrice(form.price, discountPercent))}</strong>
+                                                    </>
+                                                )}
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div>

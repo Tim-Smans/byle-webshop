@@ -11,6 +11,7 @@ import {
 import { getCountryName } from "@/lib/shop/countries"
 import { CARRIER_NAME, getTrackingUrl } from "@/lib/shop/tracking"
 import { formatPrice } from "@/lib/utils"
+import { OrderLinePrice } from "@/components/shared/price-tag"
 import OrderStatusBadge from "@/components/admin/orders/order-status-badge"
 import OrderNextStep from "@/components/admin/orders/order-next-step"
 import OrderNoteForm from "@/components/admin/orders/order-note-form"
@@ -163,7 +164,7 @@ export default async function OrderAdminDetailPage({ params }: { params: Promise
                                             <p className="text-xs text-muted-foreground">Maatwerk – geen herroepingsrecht</p>
                                         )}
                                     </div>
-                                    <p className="text-sm whitespace-nowrap">{formatPrice(item.price)}</p>
+                                    <OrderLinePrice price={item.linePrice} originalPrice={item.originalPrice} className="text-sm whitespace-nowrap" />
                                 </li>
                             ))}
                         </ul>
@@ -172,6 +173,12 @@ export default async function OrderAdminDetailPage({ params }: { params: Promise
                                 <dt className="text-muted-foreground">Subtotaal</dt>
                                 <dd>{formatPrice(order.subtotal)}</dd>
                             </div>
+                            {order.discountAmount > 0 && (
+                                <div className="flex justify-between text-red-800">
+                                    <dt>Kortingscode {order.discountCode}</dt>
+                                    <dd>– {formatPrice(order.discountAmount)}</dd>
+                                </div>
+                            )}
                             <div className="flex justify-between">
                                 <dt className="text-muted-foreground">{order.shippingMethod === "pickup" ? "Afhalen" : "Verzending"}</dt>
                                 <dd>{formatPrice(order.shippingCost)}</dd>

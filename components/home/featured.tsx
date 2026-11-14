@@ -12,7 +12,7 @@ import Link from "next/link"
 import { FaStar } from "react-icons/fa"
 import { useAdmin } from "@/lib/hooks/use-admin"
 import { primeCache } from "@/lib/client/image-cache"
-import { formatPrice } from "@/lib/utils"
+import PriceTag, { SaleBadge } from "@/components/shared/price-tag"
 import { useRouter } from "next/navigation";
 
 const FeaturedPieces: FC = () => {
@@ -173,15 +173,16 @@ const FeaturedPieces: FC = () => {
                   </div>
 
                   {/* Category Badge */}
-                  {
-                    piece.labels?.length > 0 && (
-                      <div className="absolute top-4 left-4">
-                        <span className="px-3 py-1 text-xs font-sans font-medium tracking-wide bg-background/90 backdrop-blur-sm rounded-full">
-                          {piece.labels[0].title}
-                        </span>
-                      </div>
-                    )
-                  }
+                  <div className="absolute top-4 left-4 flex flex-col gap-2">
+                    {piece.labels?.length > 0 && (
+                      <span className="px-3 py-1 text-xs font-sans font-medium tracking-wide bg-background/90 backdrop-blur-sm rounded-full">
+                        {piece.labels[0].title}
+                      </span>
+                    )}
+                    {piece.discountPercent && !piece.isSold && (
+                      <SaleBadge percent={piece.discountPercent} className="px-3 py-1 shadow self-start" />
+                    )}
+                  </div>
                 </div>
 
                 {/* Details */}
@@ -198,9 +199,11 @@ const FeaturedPieces: FC = () => {
                         niet beschikbaar
                       </span>
                     ) : (
-                      <span className="text-lg font-light text-foreground">
-                        {formatPrice(piece.price)}
-                      </span>
+                      <PriceTag
+                        price={piece.price}
+                        discountPercent={piece.discountPercent}
+                        className="text-lg font-light"
+                      />
                     )}
                     <button
                       className="text-xs font-sans tracking-wide text-muted-foreground hover:text-foreground underline underline-offset-4 transition-colors"

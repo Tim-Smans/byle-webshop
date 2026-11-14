@@ -5,6 +5,8 @@ export interface Product {
   artist: string,
   dimensions: string,
   price: number,
+  // Sale percentage (1-99), null when not on sale
+  discountPercent?: number | null,
   description: string,
   isFeatured: boolean,
   frame: string,
@@ -33,7 +35,11 @@ export interface CartItem {
   artPieceId: string
   title: string
   dimensions: string
+  // Price to pay: the sale price when the work is on sale
   price: number
+  // Normal price; differs from price when the work is on sale
+  originalPrice: number
+  discountPercent: number | null
   imageUrl: string | null
   sizeClass: SizeClass
   availability: Availability
@@ -114,6 +120,8 @@ export interface ArtPiece {
   artist: string,
   dimensions: string,
   price: number,
+  // Sale percentage (1-99), null when not on sale
+  discountPercent: number | null,
   description: string,
   isFeatured: boolean,
   frame: string,

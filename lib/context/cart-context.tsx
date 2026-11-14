@@ -99,9 +99,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
           : item
       )
     const unavailableItems = visibleItems.filter((item) => item.availability !== "available")
-    const subtotal = visibleItems
-      .filter((item) => item.availability === "available")
-      .reduce((sum, item) => sum + item.price, 0)
+    // Sale prices can have cents: round away floating point noise
+    const subtotal = Math.round(
+      visibleItems
+        .filter((item) => item.availability === "available")
+        .reduce((sum, item) => sum + item.price, 0) * 100
+    ) / 100
 
     return {
       items: visibleItems,

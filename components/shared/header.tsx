@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { FC, useState } from "react"
+import { FC, ReactNode, useState } from "react"
 import { Menu, X, Heart, ShoppingBag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useFavorites } from "@/lib/context/favorites-context"
@@ -20,7 +20,12 @@ const navigation = [
   { name: "Contact", href: "/contact" },
 ]
 
-const Header: FC = () => {
+interface Props {
+  // Announcement banner under the navigation (rendered by the root layout)
+  banner?: ReactNode
+}
+
+const Header: FC<Props> = ({ banner }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false)
   const { favorites, openFavorites } = useFavorites()
   const { itemCount, openCart } = useCart()
@@ -98,6 +103,8 @@ const Header: FC = () => {
           </Button>
         </div>
       </nav>
+
+      {banner}
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
